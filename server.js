@@ -156,6 +156,81 @@ app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 
 // Serve static assets
 app.use(express.static(__dirname));
+
+// Persistent Payment Screenshot Streaming (recovers image from MongoDB Atlas if disk was cleared)
+app.get('/uploads/payments/:filename', async (req, res, next) => {
+  const filename = req.params.filename;
+  const filePath = path.join(uploadsDir, filename);
+  if (fs.existsSync(filePath)) {
+    return res.sendFile(filePath);
+  }
+
+  // If local file was deleted due to Render container redeploy, fetch from MongoDB
+  try {
+    const doc = await Registration.findOne({
+      $or: [
+        { 'payment.screenshotPath': `/uploads/payments/${filename}` },
+        { 'payment.screenshotPath': { $regex: filename, $options: 'i' } }
+      ]
+    }).select('payment');
+
+    if (doc && doc.payment && doc.payment.screenshotData && doc.payment.screenshotData.startsWith('data:')) {
+      const matches = doc.payment.screenshotData.match(/^data:([^;]+);base64,(.+)$/);
+      if (matches) {
+        const mime = matches[1];
+        const imgBuffer = Buffer.from(matches[2], 'base64');
+        try { fs.writeFileSync(filePath, imgBuffer); } catch (e) {}
+        res.set('Content-Type', mime);
+        res.set('Cache-Control', 'public, max-age=86400');
+        return res.send(imgBuffer);
+      }
+    }
+  } catch (err) {
+    console.error('Error recovering payment screenshot from MongoDB:', err.message);
+  }
+  next();
+});
+
+// Dedicated API to stream payment proof directly from MongoDB
+app.get('/api/registrations/:id/payment-proof', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const doc = await Registration.findOne({
+      $or: [
+        { registrationId: id },
+        ...(mongoose.Types.ObjectId.isValid(id) ? [{ _id: id }] : [])
+      ]
+    }).select('payment teamName');
+
+    if (!doc || !doc.payment) {
+      return res.status(404).send('Payment proof record not found.');
+    }
+
+    if (doc.payment.screenshotData && doc.payment.screenshotData.startsWith('data:')) {
+      const matches = doc.payment.screenshotData.match(/^data:([^;]+);base64,(.+)$/);
+      if (matches) {
+        const mime = matches[1];
+        const imgBuffer = Buffer.from(matches[2], 'base64');
+        res.set('Content-Type', mime);
+        res.set('Cache-Control', 'public, max-age=86400');
+        return res.send(imgBuffer);
+      }
+    }
+
+    if (doc.payment.screenshotPath) {
+      const cleanPath = doc.payment.screenshotPath.replace(/^\//, '');
+      const diskPath = path.join(__dirname, cleanPath);
+      if (fs.existsSync(diskPath)) {
+        return res.sendFile(diskPath);
+      }
+    }
+
+    return res.status(404).send('Payment screenshot not available on disk or in database.');
+  } catch (err) {
+    return res.status(500).send('Error retrieving payment proof.');
+  }
+});
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Synchronize College Quotas with Database State
@@ -566,6 +641,19 @@ app.post('/api/register', rateLimitRegistrations, uploadScreenshot, async (req, 
     const registrationId = `${prefix}-${colCode}-${randomHex}`;
     const registeredDate = new Date();
 
+    // Convert payment screenshot to Base64 to store directly and permanently in MongoDB Atlas
+    let screenshotData = '';
+    let screenshotContentType = '';
+    if (req.file && req.file.path && fs.existsSync(req.file.path)) {
+      try {
+        const fileBuf = fs.readFileSync(req.file.path);
+        screenshotContentType = req.file.mimetype || 'image/jpeg';
+        screenshotData = `data:${screenshotContentType};base64,${fileBuf.toString('base64')}`;
+      } catch (encodeErr) {
+        console.error('Failed to encode screenshot to Base64 for MongoDB:', encodeErr.message);
+      }
+    }
+
     const newRegistration = new Registration({
       registrationId,
       college,
@@ -587,6 +675,8 @@ app.post('/api/register', rateLimitRegistrations, uploadScreenshot, async (req, 
         amount: expectedFee,
         transactionId,
         screenshotPath,
+        screenshotData,
+        screenshotContentType,
         status: isWaitlist ? (isLastSeatRaceContention ? 'waitlist_paid' : 'waitlist') : 'pending',
         adminNotes: isLastSeatRaceContention
           ? 'Submitted during concurrent last-seat race. Placed in priority waitlist with paid reference.'
@@ -665,7 +755,7 @@ app.post('/api/admin/login', (req, res) => {
 // 2. Fetch All Registrations (Protected)
 app.get('/api/admin/registrations', requireAdmin, async (req, res) => {
   try {
-    const list = await Registration.find().sort({ registeredAt: -1 }).lean();
+    const list = await Registration.find().select('-payment.screenshotData').sort({ registeredAt: -1 }).lean();
     return res.json({ success: true, count: list.length, registrations: list });
   } catch (err) {
     return res.status(500).json({ error: err.message });
@@ -718,6 +808,46 @@ app.patch('/api/admin/registrations/:id/status', requireAdmin, async (req, res) 
 
     if (!updated) return res.status(404).json({ error: 'Registration not found' });
     return res.json({ success: true, registration: updated });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 4b. Admin Upload/Replace Payment Screenshot (Protected — stores Base64 directly into MongoDB)
+app.post('/api/admin/registrations/:id/payment-proof', requireAdmin, uploadScreenshot, async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Please select an image file (JPG, PNG, WEBP).' });
+    }
+    const id = req.params.id;
+    const fileBuf = fs.readFileSync(req.file.path);
+    const mime = req.file.mimetype || 'image/jpeg';
+    const screenshotData = `data:${mime};base64,${fileBuf.toString('base64')}`;
+    const screenshotPath = `/uploads/payments/${req.file.filename}`;
+
+    const query = mongoose.Types.ObjectId.isValid(id) ? { $or: [{ _id: id }, { registrationId: id }] } : { registrationId: id };
+    const doc = await Registration.findOneAndUpdate(
+      query,
+      {
+        $set: {
+          'payment.screenshotData': screenshotData,
+          'payment.screenshotContentType': mime,
+          'payment.screenshotPath': screenshotPath
+        }
+      },
+      { returnDocument: 'after' }
+    );
+
+    if (!doc) {
+      return res.status(404).json({ error: 'Registration not found.' });
+    }
+
+    return res.json({
+      success: true,
+      message: `Payment proof saved directly into MongoDB Atlas for ${doc.teamName}!`,
+      screenshotPath,
+      screenshotData
+    });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }

@@ -1148,12 +1148,24 @@
           <div
             style="border: var(--border-ink); box-shadow: 3px 3px 0 var(--ink); background: #FFFFFF; padding: 10px; margin-bottom: 16px;">
             <div
-              style="font: 700 10px var(--mono); color: var(--muted); text-transform: uppercase; margin-bottom: 6px;">
-              PAYMENT RECEIPT (CLICK TO ZOOM)</div>
-            <a id="modalScreenshotLink" href="#" target="_blank">
+              style="font: 700 10px var(--mono); color: var(--muted); text-transform: uppercase; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+              <span>PAYMENT RECEIPT (STORED IN MONGODB)</span>
+              <span id="proofBadgeDb" style="font-size: 9px; padding: 2px 6px; background: var(--green-pale); border: 1px solid var(--green); color: var(--green-dark);">MONGODB SYNCED</span>
+            </div>
+            <div id="modalNoProofNotice" style="display: none; padding: 14px; background: #FFFBEB; border: 1.5px dashed var(--ink); text-align: center; font: 700 11px var(--mono); color: #B45309; margin-bottom: 8px;">
+              <i class="fa-solid fa-triangle-exclamation" style="margin-right: 6px;"></i> Receipt file missing from disk. You can upload the screenshot below or verify with the UTR above.
+            </div>
+            <a id="modalScreenshotLink" href="#" target="_blank" style="display: block;">
               <img id="modalScreenshotImg" src="" alt="Receipt"
                 style="width: 100%; max-height: 240px; object-fit: contain; border: 1px solid var(--line); display: block;" />
             </a>
+            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--line); display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+              <label for="adminProofInput" class="button button-outline" style="font-size: 10px; padding: 5px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-cloud-arrow-up"></i>Upload / Replace Proof (Save to MongoDB)
+              </label>
+              <input type="file" id="adminProofInput" accept="image/*" style="display: none;" />
+              <span id="adminProofStatus" style="font: 700 10.5px var(--mono); color: var(--muted);"></span>
+            </div>
           </div>
 
           <!-- Status Controls -->
@@ -1579,17 +1591,104 @@
       document.getElementById('modalPayAmount').textContent = '₹' + (doc.payment ? doc.payment.amount : 0);
       document.getElementById('modalPayUtr').textContent = doc.payment ? doc.payment.transactionId : '—';
       document.getElementById('modalAdminNotes').value = (doc.payment && doc.payment.adminNotes) || '';
+      document.getElementById('adminProofStatus').textContent = '';
 
       const shotImg = document.getElementById('modalScreenshotImg');
       const shotLink = document.getElementById('modalScreenshotLink');
-      if (doc.payment && doc.payment.screenshotPath) {
-        shotImg.src = doc.payment.screenshotPath;
-        shotLink.href = doc.payment.screenshotPath;
-      } else {
-        shotImg.src = '';
+      const noProofNotice = document.getElementById('modalNoProofNotice');
+      const proofBadgeDb = document.getElementById('proofBadgeDb');
+
+      function renderProof(targetDoc) {
+        const hasDbProof = Boolean(targetDoc.payment && targetDoc.payment.screenshotData);
+        if (proofBadgeDb) proofBadgeDb.style.display = hasDbProof ? 'inline-block' : 'none';
+
+        const proofSrc = hasDbProof
+          ? targetDoc.payment.screenshotData
+          : (targetDoc.payment && targetDoc.payment.screenshotPath)
+            ? targetDoc.payment.screenshotPath
+            : '';
+
+        if (proofSrc) {
+          shotImg.src = proofSrc;
+          shotLink.href = hasDbProof ? `/api/registrations/${targetDoc.registrationId}/payment-proof` : proofSrc;
+          shotImg.style.display = 'block';
+          if (noProofNotice) noProofNotice.style.display = 'none';
+          shotImg.onerror = () => {
+            shotImg.style.display = 'none';
+            if (noProofNotice) noProofNotice.style.display = 'block';
+          };
+        } else {
+          shotImg.src = '';
+          shotImg.style.display = 'none';
+          if (noProofNotice) noProofNotice.style.display = 'block';
+        }
       }
 
+      renderProof(doc);
+
+      // Asynchronously fetch full registration to retrieve Base64 screenshotData from MongoDB if not cached
+      fetch(`/api/admin/registrations/${doc.registrationId || doc._id}`, {
+        headers: { 'Authorization': 'Bearer ' + authToken }
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.registration && currentActiveDoc && currentActiveDoc._id === data.registration._id) {
+          currentActiveDoc = data.registration;
+          renderProof(data.registration);
+        }
+      })
+      .catch(() => {});
+
       inspectorBackdrop.style.display = 'flex';
+    }
+
+    // Handle Admin uploading payment proof directly to MongoDB Atlas
+    const adminProofInput = document.getElementById('adminProofInput');
+    if (adminProofInput) {
+      adminProofInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file || !currentActiveDoc) return;
+        const statusEl = document.getElementById('adminProofStatus');
+        statusEl.textContent = 'Uploading to MongoDB...';
+        statusEl.style.color = 'var(--ink)';
+
+        const formData = new FormData();
+        formData.append('paymentScreenshot', file);
+
+        try {
+          const res = await fetch(`/api/admin/registrations/${currentActiveDoc._id}/payment-proof`, {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + authToken },
+            body: formData
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Failed to upload proof');
+
+          currentActiveDoc.payment = currentActiveDoc.payment || {};
+          currentActiveDoc.payment.screenshotData = data.screenshotData;
+          currentActiveDoc.payment.screenshotPath = data.screenshotPath;
+
+          const shotImg = document.getElementById('modalScreenshotImg');
+          const shotLink = document.getElementById('modalScreenshotLink');
+          const noProofNotice = document.getElementById('modalNoProofNotice');
+          const proofBadgeDb = document.getElementById('proofBadgeDb');
+
+          shotImg.src = data.screenshotData;
+          shotLink.href = `/api/registrations/${currentActiveDoc.registrationId}/payment-proof`;
+          shotImg.style.display = 'block';
+          if (noProofNotice) noProofNotice.style.display = 'none';
+          if (proofBadgeDb) proofBadgeDb.style.display = 'inline-block';
+
+          statusEl.textContent = 'Saved in MongoDB Atlas!';
+          statusEl.style.color = 'var(--green)';
+          showToast('Payment proof permanently stored in MongoDB Atlas!');
+          loadRegistrations();
+        } catch (err) {
+          statusEl.textContent = 'Error: ' + err.message;
+          statusEl.style.color = 'var(--red)';
+        }
+        e.target.value = '';
+      });
     }
 
     function closeInspector() {

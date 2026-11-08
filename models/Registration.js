@@ -67,6 +67,8 @@ const RegistrationSchema = new mongoose.Schema({
     amount: { type: Number, default: 0 },
     transactionId: { type: String, default: '', trim: true },
     screenshotPath: { type: String, default: '' },
+    screenshotData: { type: String, default: '' },
+    screenshotContentType: { type: String, default: '' },
     status: {
       type: String,
       enum: ['pending', 'verified', 'rejected', 'waitlist', 'waitlist_paid', 'waived'],
