@@ -1,6 +1,6 @@
 export const S4_CONFIG = {
   eventName: 'HackSprint 3.0', organizer: 'COMPASS × GLUE', venue: { name: 'Government Engineering College, Hassan', city: 'Hassan', state: 'Karnataka' }, location: 'Hassan, Karnataka',
-  eventStart: '2026-11-14T14:00:00+05:30', eventEnd: '2026-11-15T14:00:00+05:30', ideationDeadline: 'NOV 10, 2026', contactEmail: 'hacksprint3@gechassan.ac.in',
+  eventStart: '2026-11-14T15:00:00+05:30', eventEnd: '2026-11-15T15:00:00+05:30', ideationDeadline: 'NOV 10, 2026', contactEmail: 'hacksprint3@gechassan.ac.in',
   instagramHandle: '@compass_gech', instagramUrl: null, contactEmail: 'hacksprint3@gechassan.ac.in',
   countdownStates: {
     before: 'THE 24-HOUR BUILD BEGINS IN',
@@ -54,18 +54,18 @@ export const S4_CONFIG = {
     ]
   },
   timeline: [
-    { day: 'day1', time: '02:00 PM – 03:00 PM', datetime: '2026-11-14T14:00', title: 'Team Registration & Desk Setup', desc: 'Teams arrive at the venue, complete check-in, and set up their laptops.', tag: 'REGISTRATION', venue: 'LIBRARY BLOCK', color: 'blue' },
-    { day: 'day1', time: '03:00 PM – 03:30 PM', datetime: '2026-11-14T15:00', title: 'Opening & Welcome Ceremony', desc: 'Welcome speech, introduction of mentors, and event guidelines.', tag: 'INAUGURATION', venue: 'LIBRARY BLOCK', color: 'green' },
-    { day: 'day1', time: '03:30 PM SHARP', datetime: '2026-11-14T15:30', title: 'Problem Statements Launch & Hacking Starts', desc: 'Problem statements are revealed and the 24-hour coding sprint officially begins.', tag: 'HACKATHON START', venue: 'LIBRARY BLOCK', color: 'red', hero: true },
-    { day: 'day1', time: '05:00 PM – 05:30 PM', datetime: '2026-11-14T17:00', title: 'Tea & Snacks Break', desc: 'Hot tea and snacks served with initial mentor discussions.', tag: 'TEA BREAK', venue: 'LIBRARY BLOCK', color: 'yellow' },
-    { day: 'day1', time: '08:30 PM – 09:30 PM', datetime: '2026-11-14T20:30', title: 'Dinner Break', desc: 'Dinner break for all participants and team progress check.', tag: 'DINNER', venue: 'LIBRARY BLOCK', color: 'green' },
-    { day: 'day1', time: '10:00 PM – 11:30 PM', datetime: '2026-11-14T22:00', title: 'Mentoring Round 1', desc: 'Mentors visit teams to check ideas, architecture, and project setup.', tag: 'MENTORING', venue: 'LIBRARY BLOCK', color: 'blue' },
-    { day: 'day2', time: '12:00 AM MIDNIGHT', datetime: '2026-11-15T00:00', title: 'Midnight Snacks & Short Break', desc: 'Hot Maggi, tea, coffee, and short fun activities to recharge energy.', tag: 'MIDNIGHT SNACK', venue: 'LIBRARY BLOCK', color: 'yellow' },
-    { day: 'day2', time: '03:30 AM – 04:30 AM', datetime: '2026-11-15T03:30', title: 'Night Coding Sprint', desc: 'Teams build core project features with hot coffee available all night.', tag: 'CODING SPRINT', venue: 'LIBRARY BLOCK', color: 'ink' },
-    { day: 'day2', time: '07:30 AM – 08:30 AM', datetime: '2026-11-15T07:30', title: 'Morning Breakfast', desc: 'Fresh morning breakfast and coffee to start the final build hours.', tag: 'BREAKFAST', venue: 'LIBRARY BLOCK', color: 'green' },
-    { day: 'day2', time: '10:00 AM – 11:30 AM', datetime: '2026-11-15T10:00', title: 'Mentoring Round 2', desc: 'Mentors review working prototypes and give final demo tips.', tag: 'MENTORING', venue: 'LIBRARY BLOCK', color: 'blue' },
-    { day: 'day2', time: '12:30 PM – 01:00 PM', datetime: '2026-11-15T12:30', title: 'Code Freeze & Final Project Submission', desc: 'All coding stops. Teams submit their GitHub repository and demo link.', tag: 'CODE FREEZE', venue: 'LIBRARY BLOCK', color: 'red' },
-    { day: 'day2', time: '01:00 PM – 02:00 PM', datetime: '2026-11-15T13:00', title: 'Final Presentations & Prize Distribution', desc: 'Finalist project presentations, winner announcements, and prize distribution.', tag: 'VALEDICTORY', venue: 'LIBRARY BLOCK', color: 'yellow', finale: true }
+    { day: 'day1', time: '03:00 PM – 04:00 PM', datetime: '2026-11-14T15:00', title: 'Team Registration & Desk Setup', desc: 'Teams arrive at the venue, complete check-in, and set up their laptops.', tag: 'REGISTRATION', venue: 'LIBRARY BLOCK', color: 'blue' },
+    { day: 'day1', time: '04:00 PM – 04:30 PM', datetime: '2026-11-14T16:00', title: 'Opening & Welcome Ceremony', desc: 'Welcome speech, introduction of mentors, and event guidelines.', tag: 'INAUGURATION', venue: 'LIBRARY BLOCK', color: 'green' },
+    { day: 'day1', time: '04:30 PM SHARP', datetime: '2026-11-14T16:30', title: 'Problem Statements Launch & Hacking Starts', desc: 'Problem statements are revealed and the 24-hour coding sprint officially begins.', tag: 'HACKATHON START', venue: 'LIBRARY BLOCK', color: 'red', hero: true },
+    { day: 'day1', time: '06:00 PM – 06:30 PM', datetime: '2026-11-14T18:00', title: 'Tea & Snacks Break', desc: 'Hot tea and snacks served with initial mentor discussions.', tag: 'TEA BREAK', venue: 'LIBRARY BLOCK', color: 'yellow' },
+    { day: 'day1', time: '09:00 PM – 10:00 PM', datetime: '2026-11-14T21:00', title: 'Dinner Break', desc: 'Dinner break for all participants and team progress check.', tag: 'DINNER', venue: 'LIBRARY BLOCK', color: 'green' },
+    { day: 'day1', time: '10:30 PM – 12:00 AM', datetime: '2026-11-14T22:30', title: 'Mentoring Round 1', desc: 'Mentors visit teams to check ideas, architecture, and project setup.', tag: 'MENTORING', venue: 'LIBRARY BLOCK', color: 'blue' },
+    { day: 'day2', time: '12:30 AM – 01:00 AM', datetime: '2026-11-15T00:30', title: 'Midnight Snacks & Short Break', desc: 'Hot Maggi, tea, coffee, and short fun activities to recharge energy.', tag: 'MIDNIGHT SNACK', venue: 'LIBRARY BLOCK', color: 'yellow' },
+    { day: 'day2', time: '04:00 AM – 05:00 AM', datetime: '2026-11-15T04:00', title: 'Night Coding Sprint', desc: 'Teams build core project features with hot coffee available all night.', tag: 'CODING SPRINT', venue: 'LIBRARY BLOCK', color: 'ink' },
+    { day: 'day2', time: '08:00 AM – 09:00 AM', datetime: '2026-11-15T08:00', title: 'Morning Breakfast', desc: 'Fresh morning breakfast and coffee to start the final build hours.', tag: 'BREAKFAST', venue: 'LIBRARY BLOCK', color: 'green' },
+    { day: 'day2', time: '10:30 AM – 12:00 PM', datetime: '2026-11-15T10:30', title: 'Mentoring Round 2', desc: 'Mentors review working prototypes and give final demo tips.', tag: 'MENTORING', venue: 'LIBRARY BLOCK', color: 'blue' },
+    { day: 'day2', time: '01:30 PM – 02:00 PM', datetime: '2026-11-15T13:30', title: 'Code Freeze & Final Project Submission', desc: 'All coding stops. Teams submit their GitHub repository and demo link.', tag: 'CODE FREEZE', venue: 'LIBRARY BLOCK', color: 'red' },
+    { day: 'day2', time: '02:00 PM – 03:00 PM', datetime: '2026-11-15T14:00', title: 'Final Presentations & Prize Distribution', desc: 'Finalist project presentations, winner announcements, and prize distribution.', tag: 'VALEDICTORY', venue: 'LIBRARY BLOCK', color: 'yellow', finale: true }
   ],
   experience: [
     {
