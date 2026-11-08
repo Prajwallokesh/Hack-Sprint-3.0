@@ -1,6 +1,6 @@
 export const S4_CONFIG = {
   eventName: 'HackSprint 3.0', organizer: 'COMPASS × GLUE', venue: { name: 'Government Engineering College, Hassan', city: 'Hassan', state: 'Karnataka' }, location: 'Hassan, Karnataka',
-  eventStart: '2026-11-14T15:00:00+05:30', eventEnd: '2026-11-15T15:00:00+05:30', ideationDeadline: 'NOV 10, 2026', contactEmail: 'hacksprint3@gechassan.ac.in',
+  eventStart: '2026-11-14T15:00:00+05:30', eventEnd: '2026-11-15T15:00:00+05:30', ideationDeadline: 'NOV 12, 2026', contactEmail: 'hacksprint3@gechassan.ac.in',
   instagramHandle: '@compass_gech', instagramUrl: null, contactEmail: 'hacksprint3@gechassan.ac.in',
   countdownStates: {
     before: 'THE 24-HOUR BUILD BEGINS IN',
@@ -31,8 +31,8 @@ export const S4_CONFIG = {
         tagline: 'Submit your vision.',
         body: 'Participants submit their project idea in PPT format. Selection focuses on the strength of the idea, problem understanding, innovation, and potential impact.',
         meta: 'PPT SUBMISSION',
-        deadline: 'DEADLINE — NOV 10, 2026',
-        deadlineDatetime: '2026-11-10T23:59:59+05:30',
+        deadline: 'DEADLINE — NOV 12, 2026, 11:59:00 PM',
+        deadlineDatetime: '2026-11-12T23:59:00+05:30',
         note: 'A working prototype is a plus, but not required for Round 1.'
       },
       {

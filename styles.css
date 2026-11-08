@@ -5483,7 +5483,52 @@ body.modal-open {
 .modal-lead {
   font: 500 clamp(0.92rem, 1.35vw, 1.02rem) / 1.5 var(--body);
   color: #334155;
+  margin-bottom: 14px;
+}
+
+/* Registration Deadline Urgency Banner in Modal */
+.modal-deadline-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--yellow-light, #FEF7E0);
+  border: 2px solid var(--ink);
+  box-shadow: 2.5px 2.5px 0 var(--ink);
+  padding: 10px 14px;
   margin-bottom: 18px;
+}
+
+.modal-deadline-icon {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--yellow, #FBBC04);
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  font-size: 15px;
+  flex-shrink: 0;
+  box-shadow: 1.5px 1.5px 0 var(--ink);
+}
+
+.modal-deadline-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.modal-deadline-tag {
+  font: 800 10px / 1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #B06000;
+}
+
+.modal-deadline-val {
+  font: 800 clamp(0.92rem, 1.3vw, 1.02rem) / 1.25 var(--display);
+  color: #B06000;
+  letter-spacing: -0.01em;
 }
 
 /* Modal Facts Grid */
