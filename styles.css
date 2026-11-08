@@ -2272,10 +2272,12 @@ em {
   transform: translate(-2px, -2px);
 }
 
-/* Mobile / Responsive Screen: Hide "Explore the Hackathon" button */
-.hero-btn-explore,
-.hero-actions .button-ghost[href="#about"] {
-  display: none !important;
+/* Mobile / Responsive Screen ONLY (< 900px): Hide "Explore the Hackathon" button */
+@media (max-width: 899px) {
+  .hero-btn-explore,
+  .hero-actions .button-ghost[href="#about"] {
+    display: none !important;
+  }
 }
 
 /* =============================================================
