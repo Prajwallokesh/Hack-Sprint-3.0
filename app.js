@@ -12,9 +12,9 @@ export const S4_CONFIG = {
     bodyExtended: ' An intensive, high-energy crucible where passionate student developers, designers, and innovators turn bold ideas into working, impactful technology through non-stop making, expert mentorship, and collaborative engineering.',
     sub: 'From humble beginnings to a multi-college engineering movement — explore the evolution of HackSprint through the years.',
     principles: [
-      { num: '1.0', color: 'green', title: 'HackSprint 1.0', body: 'The Genesis: The inaugural hackathon that sparked the student developer and maker movement across GEC Hassan, proving that passionate students can build transformative software in a single sprint.' },
-      { num: '2.0', color: 'green', title: 'HackSprint 2.0', body: 'The Scale: Expanded cross-department competition, midnight prototyping, faculty mentorship, and celebrating triumphant champions like Team Straw-Hats!' },
-      { num: '3.0', color: 'green', title: 'HackSprint 3.0', body: 'The Trifecta: Expanding across three colleges (GEC Hassan, GEC Arsikere, GEC Mosalehosahalli) for a 24-hour non-stop offline sprint with 1st-year mentorship pairing!' }
+      { num: '1.0', color: 'green', title: 'HackSprint 1.0', body: 'Where it all started. The first offline hackathon at GEC Hassan, where students came together to build real software projects, learn new skills, and start an active coding culture on campus.' },
+      { num: '2.0', color: 'green', title: 'HackSprint 2.0', body: 'Bigger and better. Students from different engineering branches worked through the night with guidance from faculty mentors, celebrating great teamwork and winning projects like Team Straw-Hats.' },
+      { num: '3.0', color: 'green', title: 'HackSprint 3.0', body: 'The biggest edition yet. A 24-hour offline hackathon bringing together students from 3 government colleges (Hassan, Arsikere, and Mosalehosahalli), pairing senior coders with 1st-year students to innovate together.' }
     ]
   },
   innovation: {
