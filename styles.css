@@ -1325,11 +1325,11 @@ em {
 /* Mobile / Responsive Screen: Centered boy planted right on the marquee top border, enlarged */
 .hw-student-wrap {
   position: absolute;
-  bottom: clamp(-10px, -2vw, -6px);
+  bottom: clamp(-14px, -2.5vw, -8px);
   left: 50%;
   transform: translateX(-50%);
-  width: clamp(150px, 39vw, 200px);
-  height: clamp(230px, 60vw, 310px);
+  width: clamp(170px, 46vw, 225px);
+  height: clamp(260px, 70vw, 345px);
   z-index: 26;
   pointer-events: auto !important;
   cursor: pointer !important;
@@ -1745,6 +1745,12 @@ em {
     color: #5F6368 !important;
     border-color: #5F6368 !important;
     box-shadow: 2px 2px 0 #5F6368 !important;
+  }
+
+  /* Desktop Screen: Keep "Explore the Hackathon" button visible */
+  .hero-btn-explore,
+  .hero-actions .button-ghost[href="#about"] {
+    display: inline-flex !important;
   }
 }
 
@@ -2264,6 +2270,12 @@ em {
   background: #FFFFFF;
   box-shadow: 5px 5px 0 var(--ink);
   transform: translate(-2px, -2px);
+}
+
+/* Mobile / Responsive Screen: Hide "Explore the Hackathon" button */
+.hero-btn-explore,
+.hero-actions .button-ghost[href="#about"] {
+  display: none !important;
 }
 
 /* =============================================================
