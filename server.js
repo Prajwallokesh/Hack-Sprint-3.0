@@ -226,8 +226,6 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     message: 'Hack Sprint backend is running',
     database: dbStatusMap[dbState] || 'unknown',
-    adminUser: ADMIN_USERNAME,
-    adminPassLength: ADMIN_PASSWORD ? ADMIN_PASSWORD.length : 0,
     uptime: Math.floor(process.uptime()),
     timestamp: new Date().toISOString()
   });
