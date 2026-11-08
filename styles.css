@@ -4591,6 +4591,12 @@ section h2 em,
   border-color: #7C3AED;
 }
 
+.secretary-tag {
+  background: #FCE8E6;
+  color: #C5221F;
+  border-color: #EA4335;
+}
+
 .org-card-content {
   display: flex;
   flex-direction: column;
@@ -5505,6 +5511,20 @@ section h2 em,
   .archive-grid, .venue, .register { grid-template-columns: 1fr; }
   .archive-gallery { grid-template-rows: repeat(2, 120px); }
   .faq-list { margin-top: 40px; margin-left: 0; }
+  /* Section 09 (Powered By), 10 (Where We Build), 11 (FAQ) — Single line headings on responsive only */
+  #sponsors-heading br,
+  #venue-heading br,
+  #faq-heading br,
+  .desktop-only-br {
+    display: none !important;
+  }
+  #sponsors-heading,
+  #venue-heading,
+  #faq-heading {
+    white-space: nowrap !important;
+    font-size: clamp(1.5rem, 5.8vw, 2.35rem) !important;
+    line-height: 1.15 !important;
+  }
   /* Responsive Minimal Footer — Event Name + Designed By only */
   .site-footer {
     padding: 22px var(--section-x) 20px;
@@ -5593,6 +5613,11 @@ section h2 em,
   .perks-grid { grid-template-columns: 1fr; }
   #rewards-heading {
     font-size: clamp(1.85rem, 8.5vw, 2.2rem) !important;
+  }
+  #sponsors-heading,
+  #venue-heading,
+  #faq-heading {
+    font-size: clamp(1.3rem, 6.2vw, 1.6rem) !important;
   }
   .date-lockup strong { font-size: clamp(2.8rem, 14vw, 4rem); }
 
