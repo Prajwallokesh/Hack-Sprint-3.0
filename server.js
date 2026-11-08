@@ -1,4 +1,10 @@
 require('dotenv').config();
+const dns = require('dns');
+// Ensure SRV records for MongoDB Atlas resolve reliably across local ISPs and cloud environments
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (e) {}
+
 const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
@@ -13,7 +19,7 @@ const CollegeQuota = require('./models/CollegeQuota');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/hacksprint3';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://hacksprint-3:Qwert%40123@cluster0.ntr55o.mongodb.net/hacksprint3?retryWrites=true&w=majority';
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'HackSprint2026!';
 const ADMIN_TOKEN = Buffer.from(`${ADMIN_USERNAME}:${ADMIN_PASSWORD}`).toString('base64');
