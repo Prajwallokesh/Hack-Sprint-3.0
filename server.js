@@ -214,6 +214,27 @@ app.get('/admin', (req, res) => {
 });
 
 // --------------------------------------------------------------------------
+// Public API: Health Status Check
+// --------------------------------------------------------------------------
+app.get('/api/health', (req, res) => {
+  const dbState = mongoose.connection.readyState;
+  const dbStatusMap = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting'
+  };
+
+  res.status(200).json({
+    status: 'ok',
+    message: 'Hack Sprint backend is running',
+    database: dbStatusMap[dbState] || 'unknown',
+    uptime: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString()
+  });
+});
+
+// --------------------------------------------------------------------------
 // Public API: Seat Quotas & Live Availability Status
 // --------------------------------------------------------------------------
 app.get('/api/seats-status', async (req, res) => {
