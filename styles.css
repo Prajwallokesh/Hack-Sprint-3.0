@@ -3916,6 +3916,148 @@ section h2 em,
   }
 }
 
+/* --- Timeline Mobile Responsiveness --- */
+@media (max-width: 767px) {
+  .timeline-controls {
+    padding: 10px 12px;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .timeline-tabs {
+    width: 100%;
+    display: flex;
+    gap: 6px;
+  }
+  .tl-tab-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 7px 6px;
+    font-size: 11px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .timeline-meta-badge {
+    width: 100%;
+    justify-content: center;
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+  .tl-card {
+    padding: 14px 15px;
+    gap: 10px;
+  }
+  .tl-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+    padding-bottom: 8px;
+  }
+  .tl-time-box {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .tl-tag-row {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 640px) {
+  .timeline-spine {
+    left: 14px;
+    width: 3px;
+  }
+  .tl-node-flag {
+    left: 4.5px;
+    width: 21px;
+    height: 21px;
+    border-width: 2px;
+    box-shadow: 1.5px 1.5px 0 var(--ink);
+  }
+  .tl-flag-dot {
+    width: 7px;
+    height: 7px;
+  }
+  .tl-flag-dot.hero-dot,
+  .tl-flag-dot.trophy-dot {
+    width: 9px;
+    height: 9px;
+  }
+  .tl-item {
+    padding-left: 36px;
+  }
+  .timeline-cards-list {
+    gap: 14px;
+  }
+  .tl-card {
+    padding: 12px 13px 11px;
+    gap: 8px;
+    box-shadow: 2.5px 2.5px 0 var(--ink);
+  }
+  .tl-time-val {
+    font-size: 11.5px;
+    padding: 2.5px 6px;
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .tl-day-pill {
+    font-size: 9px;
+    padding: 2.5px 6px;
+  }
+  .tl-category-tag {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+  .tl-venue-tag {
+    font-size: 10px;
+  }
+  .tl-item-title {
+    font-size: clamp(0.98rem, 3.8vw, 1.15rem);
+    line-height: 1.25;
+  }
+  .tl-item-desc {
+    font-size: 12.5px;
+    line-height: 1.48;
+  }
+  .tl-hero-ribbon {
+    margin: -12px -13px 4px -13px;
+    padding: 4px 10px;
+    font-size: 9.5px;
+  }
+}
+
+@media (max-width: 375px) {
+  .timeline-spine {
+    left: 11px;
+  }
+  .tl-node-flag {
+    left: 2px;
+    width: 19px;
+    height: 19px;
+  }
+  .tl-item {
+    padding-left: 30px;
+  }
+  .tl-card {
+    padding: 11px 11px 10px;
+  }
+  .tl-hero-ribbon {
+    margin: -11px -11px 4px -11px;
+  }
+  .tl-tab-btn {
+    padding: 6px 3px;
+    font-size: 10px;
+    gap: 4px;
+  }
+  .tl-tab-dot {
+    width: 7px;
+    height: 7px;
+  }
+  .tl-time-val {
+    font-size: 10.5px;
+    padding: 2px 5px;
+  }
+}
+
 /* =============================================================
    06 / MORE THAN A HACKATHON (EXPERIENCE)
    ============================================================= */
