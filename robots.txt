@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api/
 
-Sitemap: https://hack-with-gdg-s4.vercel.app/sitemap.xml
+Sitemap: https://hack-sprint-3-0.vercel.app/sitemap.xml

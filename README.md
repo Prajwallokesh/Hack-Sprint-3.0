@@ -1,6 +1,8 @@
-# HackSprint 3.0 — Source Code & Design System
+# HackSprint 3.0 — 24-Hour Offline Hackathon
 
-Extracted from [hack-with-gdg-s4.vercel.app](https://hack-with-gdg-s4.vercel.app/) using pure, zero-dependency **HTML5**, **CSS3**, and **ES6+ JavaScript**.
+Official web platform for **HackSprint 3.0**, presented by **COMPASS** (Computer Science Students Association) in collaboration with **GLUE** at **Government Engineering College, Hassan (GECH)** on November 14–15, 2026.
+
+Built with pure, high-performance **HTML5**, **CSS3**, and **ES6+ JavaScript**, featuring a Neo-Brutalist living digital world theme with real-time seat quota management, payment proof verification, and administrative control.
 
 ---
 
@@ -8,72 +10,42 @@ Extracted from [hack-with-gdg-s4.vercel.app](https://hack-with-gdg-s4.vercel.app
 
 ```
 HackSprint 3.0/
-├── index.html                  # Main markup, semantic sections, SEO & metadata
-├── styles.css                  # Complete Neo-Brutalist CSS styling & animations
-├── app.js                      # Central configuration, dynamic rendering & interactions
-├── serve.js                    # Zero-dependency local development server
-├── package.json                # npm scripts for running the local server
-├── gdg-ksrce-logo.svg          # Header and footer brand logo
-├── devfolio-logo.svg           # Devfolio partner logo
-├── og-image.png                # Social media preview card (1200x630)
-├── robots.txt                  # Search crawler configuration
-├── sitemap.xml                 # SEO sitemap
-└── images/
-    ├── hackathon-glimpse-1.jpg # Photo carousel image 1
-    ├── hackathon-glimpse-2.jpg # Photo carousel image 2
-    └── hackathon-glimpse-3.jpg # Photo carousel image 3
+├── index.html                  # Landing page, tracks, timeline, interactive mascots & SEO
+├── register.html               # Registration portal with dynamic team member validation
+├── admin.html                  # Secure admin dashboard for reviewing teams & CSV/Excel export
+├── styles.css                  # Neo-Brutalist CSS design system & responsive styling
+├── app.js                      # Event configuration, audio synthesis, and interactive logic
+├── server.js                   # Node.js + Express + MongoDB Atlas backend
+├── vercel.json                 # Vercel routing, clean URLs & Render API proxy rewrites
+├── robots.txt                  # Search engine crawler directives
+├── sitemap.xml                 # XML sitemap for SEO discovery
+└── images/                     # HackSprint 3.0 visual assets, logos, and gallery photos
 ```
 
 ---
 
-## 🚀 Quick Start (Local Preview)
+## 🚀 Architecture
 
-Run either of the following commands in this directory:
-
-```bash
-npm start
-```
-*or directly with Node.js:*
-```bash
-node serve.js
-```
-
-Then open [http://localhost:3000](http://localhost:3000) in your web browser.
+- **Frontend**: Hosted on [Vercel](https://vercel.com) (Static Edge CDN with `vercel.json` proxy rewrites).
+- **Backend API**: Hosted on [Render](https://render.com) (`https://hack-sprint-3-0.onrender.com`), managing:
+  - Atomic seat allocation across 4 college tiers (GECH, Malnad, Hassan District, Outstation).
+  - USN duplicate verification across teams.
+  - Payment screenshot upload handling (`multer`).
+  - MongoDB Atlas persistence (`mongoose`).
+  - Admin team management and Excel export (`xlsx`).
 
 ---
 
-## 🎨 Customizing for HackSprint 3.0
+## 🛠️ Local Development
 
-The design system is **config-driven**. The vast majority of content, dates, tracks, prizes, and FAQs can be modified directly in [`app.js`](app.js):
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-### 1. Event Details & Countdown (`app.js`)
-Edit the top-level configuration object:
-```javascript
-export const S4_CONFIG = {
-  eventName: 'HackSprint 3.0',
-  organizer: 'Your Organization Name',
-  venue: { 
-    name: 'Your Venue Name', 
-    city: 'City', 
-    state: 'State' 
-  },
-  eventStart: '2026-11-15T09:00:00+05:30', // Sets the countdown clock target
-  eventEnd: '2026-11-16T18:00:00+05:30',
-  contactEmail: 'contact@hacksprint.org',
-  // ...
-};
-```
+2. Start the local server:
+   ```bash
+   npm start
+   ```
 
-### 2. Rounds, Timeline & Schedule (`app.js`)
-* `journey.rounds`: Update the registration and hackathon rounds.
-* `timeline`: Add or modify timeline stages and dates.
-* `experience`: Highlight mentorship, workshops, networking, or planning sprints.
-
-### 3. FAQs & Information (`app.js`)
-* `faq`: Add or edit question and answer pairs displayed in the interactive accordion.
-
-### 4. Visual Styling & Color Accents (`styles.css`)
-* Font families (`Outfit` and `Space Mono`) are loaded via Google Fonts in [`index.html`](index.html).
-* Color variables and styling can be customized in [`styles.css`](styles.css):
-  * `--bg`: Dark theme background
-  * Google 4-color motif: Blue (`#4285F4`), Red (`#EA4335`), Yellow (`#FBBC04`), Green (`#34A853`)
+3. Open [http://localhost:3000](http://localhost:3000) in your browser.

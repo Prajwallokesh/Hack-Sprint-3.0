@@ -1,11 +1,11 @@
 /* =============================================================
-   HACK WITH GDG S4 — GLOBAL DESIGN SYSTEM & STYLESHEET
-   Living Digital World · Neo-Brutalist Visual Identity · Google Palette
+   HACKSPRINT 3.0 — GLOBAL DESIGN SYSTEM & STYLESHEET
+   Living Digital World · Neo-Brutalist Visual Identity · COMPASS × GLUE
    ============================================================= */
 
 /* === DESIGN TOKENS === */
 :root {
-  /* Google GDG Brand Colors */
+  /* Brand Accent Colors */
   --blue:         #4285F4;
   --blue-dark:    #1967D2;
   --blue-light:   #E8F0FE;
@@ -2023,7 +2023,7 @@ em {
   100% { transform: translate(-5px, 8px) rotate(12deg) scale(0.95); }
 }
 
-/* HERO TITLE — IMPACTFUL (HACK WITH GDG S4) */
+/* HERO TITLE — IMPACTFUL (HACKSPRINT 3.0) */
 .hero-stage h1 {
   font: 900 clamp(4.6rem, 11vw, 9.6rem) / 0.86 var(--display);
   letter-spacing: -0.05em;

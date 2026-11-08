@@ -124,16 +124,16 @@ export const S4_CONFIG = {
   },
   archives: {
     s2: [
-      { id: 's2-01', alt: 'Hack With GDG S2 — teams collaborating during the hackathon', caption: 'HACK WITH GDG S2 / 01', src: null, feature: true },
-      { id: 's2-02', alt: 'Hack With GDG S2 — participants presenting their project', caption: 'HACK WITH GDG S2 / 02', src: null, feature: false },
-      { id: 's2-03', alt: 'Hack With GDG S2 — mentors and builders at work', caption: 'HACK WITH GDG S2 / 03', src: null, feature: false },
-      { id: 's2-04', alt: 'Hack With GDG S2 — closing ceremony and awards', caption: 'HACK WITH GDG S2 / 04', src: null, feature: false }
+      { id: 's2-01', alt: 'HackSprint 1.0 — teams collaborating during the hackathon', caption: 'HACKSPRINT 1.0 / 01', src: null, feature: true },
+      { id: 's2-02', alt: 'HackSprint 1.0 — participants presenting their project', caption: 'HACKSPRINT 1.0 / 02', src: null, feature: false },
+      { id: 's2-03', alt: 'HackSprint 1.0 — mentors and builders at work', caption: 'HACKSPRINT 1.0 / 03', src: null, feature: false },
+      { id: 's2-04', alt: 'HackSprint 1.0 — closing ceremony and awards', caption: 'HACKSPRINT 1.0 / 04', src: null, feature: false }
     ],
     s3: [
-      { id: 's3-01', alt: 'Hack With GDG S3 — team collaboration and laptop demo review', caption: 'HACK WITH GDG S3 / TEAM COLLAB', src: 'images/hackathon-glimpse-2.jpg', feature: true },
-      { id: 's3-02', alt: 'Hack With GDG S3 — builder deep in the 36-hour sprint coding workstation', caption: 'HACK WITH GDG S3 / BUILD WORKSTATION', src: 'images/hackathon-glimpse-1.jpg', feature: false },
-      { id: 's3-03', alt: 'Hack With GDG S3 — hackathon hall with teams, mentor guidance, and building sprint', caption: 'HACK WITH GDG S3 / THE ARENA', src: 'images/hackathon-glimpse-3.jpg', feature: false },
-      { id: 's3-04', alt: 'Hack With GDG S3 — final demo day and celebration', caption: 'HACK WITH GDG S3 / CELEBRATION', src: null, feature: false }
+      { id: 's3-01', alt: 'HackSprint 2.0 — team collaboration and laptop demo review', caption: 'HACKSPRINT 2.0 / TEAM COLLAB', src: 'images/hackathon-glimpse-2.jpg', feature: true },
+      { id: 's3-02', alt: 'HackSprint 2.0 — builder deep in the 24-hour sprint coding workstation', caption: 'HACKSPRINT 2.0 / BUILD WORKSTATION', src: 'images/hackathon-glimpse-1.jpg', feature: false },
+      { id: 's3-03', alt: 'HackSprint 2.0 — hackathon hall with teams, mentor guidance, and building sprint', caption: 'HACKSPRINT 2.0 / THE ARENA', src: 'images/hackathon-glimpse-3.jpg', feature: false },
+      { id: 's3-04', alt: 'HackSprint 2.0 — final demo day and celebration', caption: 'HACKSPRINT 2.0 / CELEBRATION', src: null, feature: false }
     ]
   },
   organizers: [],
@@ -1188,8 +1188,8 @@ if (typeof document !== 'undefined') {
       const grid = document.getElementById('archiveGrid');
       if (!grid) return;
 
-      // On-brand SVG placeholder — GDG 4-color pattern frame, unique per slot
-      // colors cycle through the 4 GDG brand colors
+      // On-brand SVG placeholder frame, unique per slot
+      // colors cycle through the 4 brand colors
       const COLORS = ['blue', 'red', 'yellow', 'green'];
       const COLOR_VARS = { blue: 'var(--blue)', red: 'var(--red)', yellow: 'var(--yellow)', green: 'var(--green)' };
 
@@ -1220,8 +1220,8 @@ if (typeof document !== 'undefined') {
       }
 
       const seasons = [
-        { key: 's2', label: 'SEASON 2', title: 'Hack With GDG S2' },
-        { key: 's3', label: 'SEASON 3', title: 'Hack With GDG S3' }
+        { key: 's2', label: 'EDITION 1.0', title: 'HackSprint 1.0' },
+        { key: 's3', label: 'EDITION 2.0', title: 'HackSprint 2.0' }
       ];
 
       // Flat list of all items for lightbox navigation
