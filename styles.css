@@ -2306,6 +2306,7 @@ section h2,
 .foundation-head h2,
 .foundation-copy h2,
 .rulebook-head h2,
+.flow-head h2,
 .problem-head h2,
 .timeline-head h2,
 .rewards-head h2,
@@ -2322,6 +2323,7 @@ section h2,
 #countdown-label,
 #about-heading,
 #rulebook-heading,
+#flow-heading,
 #problem-heading,
 #timeline-heading,
 #rewards-heading,
@@ -2342,6 +2344,7 @@ section h2 em,
 .foundation-head h2 em,
 .foundation-copy h2 em,
 .rulebook-head h2 em,
+.flow-head h2 em,
 .problem-head h2 em,
 .timeline-head h2 em,
 .rewards-head h2 em,
@@ -2355,6 +2358,7 @@ section h2 em,
 .faq .section-intro h2 em,
 #about-heading em,
 #rulebook-heading em,
+#flow-heading em,
 #problem-heading em,
 #timeline-heading em,
 #rewards-heading em,
@@ -3073,7 +3077,207 @@ section h2 em,
 }
 
 /* =============================================================
-   04 / ON-SPOT CHALLENGE & PROBLEM STATEMENTS (MINIMAL & IMPACTFUL)
+   04 / EVENT FLOW ROADMAP SECTION
+   ============================================================= */
+.event-flow {
+  border-bottom: var(--border-ink);
+  background: var(--bg);
+}
+
+.flow-head {
+  margin-bottom: var(--sp-6);
+}
+
+.flow-sub {
+  font: 400 15px / 1.55 var(--body);
+  color: var(--gray-600);
+  max-width: 720px;
+  margin-top: 10px;
+}
+
+.flow-track {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  max-width: 1200px;
+}
+
+.flow-card {
+  flex: 1;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  transition: transform var(--dur-fast), box-shadow var(--dur-fast);
+}
+
+.flow-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.flow-card.accent-blue {
+  border-top: 6px solid var(--blue);
+}
+
+.flow-card.accent-green {
+  border-top: 6px solid var(--green);
+}
+
+.flow-card.accent-yellow {
+  border-top: 6px solid var(--yellow);
+}
+
+.flow-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.flow-step-badge {
+  font: 800 11px var(--mono);
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border: 1.5px solid var(--ink);
+  border-radius: 0;
+  text-transform: uppercase;
+}
+
+.flow-step-badge.tag-blue {
+  background: var(--blue-light);
+  color: var(--blue-dark);
+}
+
+.flow-step-badge.tag-green {
+  background: #E8F5E9;
+  color: #1E8E3E;
+}
+
+.flow-step-badge.tag-yellow {
+  background: #FEF7E0;
+  color: #B06000;
+}
+
+.flow-date-badge {
+  font: 700 11.5px var(--mono);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--paper);
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+}
+
+.flow-icon-box {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+  font-size: 19px;
+  margin-top: 2px;
+}
+
+.flow-card.accent-blue .flow-icon-box {
+  background: var(--blue-light);
+  color: var(--blue-dark);
+}
+
+.flow-card.accent-green .flow-icon-box {
+  background: #E8F5E9;
+  color: #1E8E3E;
+}
+
+.flow-card.accent-yellow .flow-icon-box {
+  background: #FEF7E0;
+  color: #B06000;
+}
+
+.flow-card-title {
+  font: 800 clamp(1.18rem, 1.6vw, 1.38rem) / 1.2 var(--display);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.flow-card-desc {
+  font: 400 13.5px / 1.6 var(--body);
+  color: var(--gray-600);
+  margin: 0;
+  flex: 1;
+}
+
+.flow-card-desc strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.flow-card-footer {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1.5px solid var(--line);
+}
+
+.flow-chip {
+  font: 700 11px var(--mono);
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+}
+
+.flow-chip.tag-green {
+  color: #1E8E3E;
+  font-weight: 800;
+}
+
+/* Connectors */
+.flow-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  font-size: 20px;
+  flex-shrink: 0;
+  padding: 0 4px;
+}
+
+.flow-arrow-desktop {
+  display: block;
+}
+
+.flow-arrow-mobile {
+  display: none;
+}
+
+@media (max-width: 899px) {
+  .flow-track {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .flow-arrow-desktop {
+    display: none;
+  }
+  .flow-arrow-mobile {
+    display: block;
+    margin: 4px 0;
+    color: var(--green);
+    text-align: center;
+  }
+}
+
+/* =============================================================
+   05 / ON-SPOT CHALLENGE & PROBLEM STATEMENTS (MINIMAL & IMPACTFUL)
    ============================================================= */
 .problem-statements {
   border-bottom: var(--border-ink);
