@@ -5491,6 +5491,14 @@ section h2 em,
   .exp-grid { grid-template-columns: 1fr; }
   .prize-grid { grid-template-columns: 1fr; }
   .rewards-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+  #rewards-heading {
+    font-size: clamp(2.1rem, 8vw, 2.9rem) !important;
+    line-height: 1.12 !important;
+    white-space: normal !important;
+  }
+  #rewards-heading em {
+    white-space: normal !important;
+  }
   .rewards-note { text-align: left; max-width: 100%; align-self: flex-start; }
   .perks-grid { grid-template-columns: repeat(2, 1fr); }
   .details { grid-template-columns: 1fr; }
@@ -5583,6 +5591,9 @@ section h2 em,
     font-size: 8px;
   }
   .perks-grid { grid-template-columns: 1fr; }
+  #rewards-heading {
+    font-size: clamp(1.85rem, 8.5vw, 2.2rem) !important;
+  }
   .date-lockup strong { font-size: clamp(2.8rem, 14vw, 4rem); }
 
   /* Chronometer deck ultra-compact screens refinement (down to 320px) */
