@@ -1,0 +1,27 @@
+{
+  "name": "hacksprint-3.0",
+  "version": "1.0.0",
+  "description": "HackSprint 3.0 event and planning website with MongoDB registration and admin management",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "hackathon",
+    "landing-page",
+    "hacksprint",
+    "mongodb",
+    "admin-portal"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.10.1",
+    "multer": "^1.4.5-lts.1",
+    "xlsx": "^0.18.5"
+  }
+}

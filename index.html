@@ -1,0 +1,1691 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#34A853" />
+  <meta name="description"
+    content="HackSprint 3.0 is a 24-hour offline hackathon presented by COMPASS (Computer Science Students Association, GECH) in collaboration with GLUE at Government Engineering College, Hassan on November 14–15, 2026." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="http://localhost:3000/" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="HackSprint 3.0" />
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:title" content="HackSprint 3.0 | 24-Hour Offline Hackathon | GEC Hassan" />
+  <meta property="og:description"
+    content="HackSprint 3.0 is a 24-hour offline hackathon presented by COMPASS (Computer Science Students Association, GECH) in collaboration with GLUE at Government Engineering College, Hassan on November 14–15, 2026." />
+  <meta property="og:url" content="http://localhost:3000/" />
+  <meta property="og:image" content="images/hacksprint-logo.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt"
+    content="HackSprint 3.0 — 24-Hour Offline Hackathon at Government Engineering College, Hassan" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@compass_gech" />
+  <meta name="twitter:title" content="HackSprint 3.0 | 24-Hour Offline Hackathon | GEC Hassan" />
+  <meta name="twitter:description"
+    content="HackSprint 3.0 is a 24-hour offline hackathon presented by COMPASS in collaboration with GLUE at Government Engineering College, Hassan on November 14–15, 2026." />
+  <meta name="twitter:image" content="images/hacksprint-logo.png" />
+  <meta name="twitter:image:alt"
+    content="HackSprint 3.0 — 24-Hour Offline Hackathon at Government Engineering College, Hassan" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
+  <link rel="apple-touch-icon" href="images/hacksprint-icon-192.png" />
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "HackSprint 3.0",
+      "url": "http://localhost:3000/",
+      "description": "HackSprint 3.0 is a 24-hour offline hackathon presented by COMPASS in collaboration with GLUE at Government Engineering College, Hassan."
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "COMPASS × GLUE",
+      "alternateName": "COMPASS GECH",
+      "email": "hacksprint3@gechassan.ac.in",
+      "url": "http://localhost:3000/"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "HackSprint 3.0",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "startDate": "2026-11-14T14:00:00+05:30",
+      "endDate": "2026-11-15T14:00:00+05:30",
+      "location": {
+        "@type": "Place",
+        "name": "Government Engineering College, Hassan",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "B.M. Road",
+          "addressLocality": "Hassan",
+          "addressRegion": "Karnataka",
+          "postalCode": "573201",
+          "addressCountry": "IN"
+        }
+      },
+      "organizer": {
+        "@type": "Organization",
+        "name": "COMPASS × GLUE",
+        "email": "hacksprint3@gechassan.ac.in"
+      },
+      "description": "HackSprint 3.0 is a 24-hour offline hackathon hosted by COMPASS × GLUE at Government Engineering College, Hassan, featuring Open Innovation, collaboration, mentorship, and building.",
+      "url": "http://localhost:3000/",
+      "image": "images/hacksprint-logo.png",
+      "keywords": "HackSprint 3.0, HackSprint, GEC Hassan, Government Engineering College Hassan, COMPASS, GLUE, hackathon Karnataka"
+    }
+  ]
+  </script>
+  <title>HackSprint 3.0 | 24-Hour Offline Hackathon | GEC Hassan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- =============================================================
+       HACKSPRINT 3.0 REGISTRATION MODAL (POPS UP ON SITE VISIT)
+       ============================================================= -->
+  <div class="modal-backdrop" id="postponedModal" role="dialog" aria-modal="true" aria-labelledby="postponedTitle"
+    aria-describedby="postponedDesc">
+    <div class="modal-dialog">
+      <!-- Top Color Accent Bar -->
+      <div class="modal-top-accent" aria-hidden="true"></div>
+
+      <!-- Close Button -->
+      <button type="button" class="modal-close-btn" id="modalCloseBtn"
+        aria-label="Close notification modal">&times;</button>
+
+      <div class="modal-content">
+        <div class="modal-badge">
+          <span class="modal-badge-dot" aria-hidden="true"></span>
+          <span>REGISTRATIONS LIVE</span>
+        </div>
+
+        <h2 class="modal-title" id="postponedTitle">
+          REGISTER FOR<br /><span class="modal-title-accent">HACKSPRINT 3.0</span>
+        </h2>
+
+        <p class="modal-lead" id="postponedDesc">
+          Team registrations are officially open! Join passionate student developers, designers, and innovators for
+          <strong>24 hours of non-stop building</strong> at Government Engineering College, Hassan.
+        </p>
+
+        <!-- Hackathon Key Highlights -->
+        <div class="modal-facts-grid" role="list" aria-label="Event Highlights">
+          <div class="modal-fact-card" role="listitem">
+            <span class="modal-fact-icon" aria-hidden="true"><i class="fa-solid fa-clock"></i></span>
+            <div class="modal-fact-info">
+              <span class="modal-fact-label">Duration</span>
+              <strong class="modal-fact-val">24h Offline Sprint</strong>
+            </div>
+          </div>
+          <div class="modal-fact-card" role="listitem">
+            <span class="modal-fact-icon" aria-hidden="true"><i class="fa-solid fa-users"></i></span>
+            <div class="modal-fact-info">
+              <span class="modal-fact-label">Team Size</span>
+              <strong class="modal-fact-val">5 Members</strong>
+            </div>
+          </div>
+          <div class="modal-fact-card" role="listitem">
+            <span class="modal-fact-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+            <div class="modal-fact-info">
+              <span class="modal-fact-label">Venue</span>
+              <strong class="modal-fact-val">GEC Hassan</strong>
+            </div>
+          </div>
+          <div class="modal-fact-card" role="listitem">
+            <span class="modal-fact-icon" aria-hidden="true"><i class="fa-solid fa-lightbulb"></i></span>
+            <div class="modal-fact-info">
+              <span class="modal-fact-label">Theme</span>
+              <strong class="modal-fact-val">Open Innovation</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <a href="/register" class="button button-primary modal-action-btn modal-btn-register">
+            Register Your Team Now <span aria-hidden="true">&rarr;</span>
+          </a>
+          <button type="button" class="button button-ghost modal-action-btn modal-btn-explore" id="modalAcknowledgeBtn">
+            Explore Hackathon &darr;
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="page-grid" aria-hidden="true"></div>
+  <header class="site-header" id="navbar">
+    <a class="brand" href="/" aria-label="HackSprint 3.0 — home">
+      <img class="brand-logo" src="images/hacksprint-logo.png" alt="HackSprint 3.0" />
+      <span class="brand-text">HACKSPRINT <span class="brand-accent">3.0</span></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="#about" data-section="about">About</a>
+      <a href="#rulebook" data-section="rulebook">Rulebook</a>
+      <a href="#problem-statements" data-section="problem-statements">Challenge</a>
+      <a href="#timeline" data-section="timeline">Timeline</a>
+      <a href="#prizes" data-section="prizes">Prizes</a>
+      <a href="/register" class="nav-cta-btn">Register ➔</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false"
+      aria-controls="mobileNav">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+  </header>
+  <div class="mobile-nav" id="mobileNav" aria-hidden="true" inert>
+    <div class="mobile-nav-inner">
+      <nav class="mnav-links" aria-label="Mobile navigation">
+        <a href="/register" class="mnav-simple-card mnav-simple-cta">
+          <span class="mnav-simple-name">Register Your Team</span>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
+
+        <a href="#about" class="mnav-simple-card" data-section="about">
+          <span class="mnav-simple-name">About</span>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
+        <a href="#rulebook" class="mnav-simple-card" data-section="rulebook">
+          <span class="mnav-simple-name">Rulebook</span>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
+
+        <a href="#timeline" class="mnav-simple-card" data-section="timeline">
+          <span class="mnav-simple-name">Timeline</span>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
+
+        <a href="#prizes" class="mnav-simple-card" data-section="prizes">
+          <span class="mnav-simple-name">Prizes</span>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
+        <a href="#venue" class="mnav-simple-card" data-section="venue">
+          <span class="mnav-simple-name">Venue</span>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
+        <a href="#organizers" class="mnav-simple-card" data-section="organizers">
+          <span class="mnav-simple-name">Contact</span>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
+      </nav>
+    </div>
+  </div>
+  <div class="nav-toast" id="navToast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <main id="main-content">
+    <section class="hero" id="hero" aria-labelledby="hero-heading">
+
+      <!-- ═══════════════════════════════════════════════════
+           LIVING GREEN DIGITAL FOREST — S4 NATURE HERO SCENE
+           ═══════════════════════════════════════════════════ -->
+      <div class="hero-world" aria-hidden="true" id="heroWorld">
+
+        <!-- LAYER 0: Sky / Ambient Glow -->
+        <div class="hw-sky"></div>
+
+        <!-- LAYER 1: Hanging Top Canopy Vines (Framing corners like reference image) -->
+        <div class="hw-canopy hw-canopy-left">
+          <svg viewBox="0 0 360 260" fill="none" preserveAspectRatio="none">
+            <!-- Main branch vine -->
+            <path d="M-20, -20 Q120,40 180,120 Q220,180 240,240" stroke="#1E4D2B" stroke-width="8"
+              stroke-linecap="round" />
+            <path d="M60,10 Q140,80 160,160" stroke="#1E4D2B" stroke-width="5" stroke-linecap="round" />
+            <path d="M120,40 Q220,90 290,140" stroke="#1E4D2B" stroke-width="5" stroke-linecap="round" />
+            <!-- Big lush leaves (layered tones) -->
+            <path d="M-10,10 C30,20 60,70 40,110 C20,90 0,60 -10,10Z" fill="#1E8E3E" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M40,30 C90,30 130,80 100,130 C70,110 50,70 40,30Z" fill="#2D9E4A" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M90,60 C150,50 190,110 160,160 C120,140 100,100 90,60Z" fill="#34A853" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M140,90 C200,80 250,140 220,190 C180,170 150,130 140,90Z" fill="#47C769" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M180,140 C240,130 280,190 260,240 C220,220 190,180 180,140Z" fill="#34A853" stroke="#0a0a0a"
+              stroke-width="2" />
+            <!-- Leaf details -->
+            <path d="M20,60 C70,90 90,150 70,180 C40,160 30,110 20,60Z" fill="#2D9E4A" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M70,100 C130,120 150,180 120,220 C90,190 80,140 70,100Z" fill="#1E8E3E" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M130,150 C190,170 210,230 180,260 C150,230 140,190 130,150Z" fill="#2D9E4A" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M210,80 C270,90 310,140 290,180 C250,160 230,120 210,80Z" fill="#47C769" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M260,110 C320,120 350,170 330,210 C290,190 270,150 260,110Z" fill="#34A853" stroke="#0a0a0a"
+              stroke-width="2" />
+          </svg>
+        </div>
+
+        <div class="hw-canopy hw-canopy-right">
+          <svg viewBox="0 0 360 260" fill="none" preserveAspectRatio="none">
+            <!-- Main branch vine -->
+            <path d="M380,-20 Q240,40 180,120 Q140,180 120,240" stroke="#1E4D2B" stroke-width="8"
+              stroke-linecap="round" />
+            <path d="M300,10 Q220,80 200,160" stroke="#1E4D2B" stroke-width="5" stroke-linecap="round" />
+            <path d="M240,40 Q140,90 70,140" stroke="#1E4D2B" stroke-width="5" stroke-linecap="round" />
+            <!-- Big lush leaves -->
+            <path d="M370,10 C330,20 300,70 320,110 C340,90 360,60 370,10Z" fill="#1E8E3E" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M320,30 C270,30 230,80 260,130 C290,110 310,70 320,30Z" fill="#2D9E4A" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M270,60 C210,50 170,110 200,160 C240,140 260,100 270,60Z" fill="#34A853" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M220,90 C160,80 110,140 140,190 C180,170 210,130 220,90Z" fill="#47C769" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M180,140 C120,130 80,190 100,240 C140,220 170,180 180,140Z" fill="#34A853" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M340,60 C290,90 270,150 290,180 C320,160 330,110 340,60Z" fill="#2D9E4A" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M290,100 C230,120 210,180 240,220 C270,190 280,140 290,100Z" fill="#1E8E3E" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M230,150 C170,170 150,230 180,260 C210,230 220,190 230,150Z" fill="#2D9E4A" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M150,80 C90,90 50,140 70,180 C110,160 130,120 150,80Z" fill="#47C769" stroke="#0a0a0a"
+              stroke-width="2" />
+            <path d="M100,110 C40,120 10,170 30,210 C70,190 90,150 100,110Z" fill="#34A853" stroke="#0a0a0a"
+              stroke-width="2" />
+          </svg>
+        </div>
+
+        <!-- LAYER 2: Drifting Cartoon Clouds -->
+        <div class="hw-clouds">
+          <div class="hw-cloud hw-cloud-1">
+            <svg viewBox="0 0 160 64" fill="none">
+              <ellipse cx="80" cy="38" rx="72" ry="24" fill="white" stroke="#0a0a0a" stroke-width="2.5" />
+              <ellipse cx="50" cy="30" rx="36" ry="22" fill="white" stroke="#0a0a0a" stroke-width="2.5" />
+              <ellipse cx="110" cy="32" rx="30" ry="18" fill="white" stroke="#0a0a0a" stroke-width="2.5" />
+              <ellipse cx="80" cy="42" rx="60" ry="16" fill="#E6F4EA" />
+            </svg>
+          </div>
+          <div class="hw-cloud hw-cloud-2">
+            <svg viewBox="0 0 130 54" fill="none">
+              <ellipse cx="65" cy="32" rx="58" ry="19" fill="white" stroke="#0a0a0a" stroke-width="2.5" />
+              <ellipse cx="42" cy="26" rx="28" ry="17" fill="white" stroke="#0a0a0a" stroke-width="2.5" />
+              <ellipse cx="90" cy="28" rx="24" ry="15" fill="white" stroke="#0a0a0a" stroke-width="2.5" />
+              <ellipse cx="65" cy="36" rx="46" ry="12" fill="#E6F4EA" />
+            </svg>
+          </div>
+          <div class="hw-cloud hw-cloud-3">
+            <svg viewBox="0 0 110 46" fill="none">
+              <ellipse cx="55" cy="28" rx="48" ry="16" fill="white" stroke="#0a0a0a" stroke-width="2" />
+              <ellipse cx="36" cy="22" rx="24" ry="14" fill="white" stroke="#0a0a0a" stroke-width="2" />
+              <ellipse cx="76" cy="24" rx="20" ry="12" fill="white" stroke="#0a0a0a" stroke-width="2" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- LAYER 3: 3-Layer Rolling Green Hills (100% Seamless Infinite Flow — Pure Top Waves) -->
+        <div class="hw-hills">
+          <!-- Distant Pale Mountains -->
+          <div class="hw-scroll-wrap hw-scroll-far">
+            <svg class="hw-terrain-svg" viewBox="0 0 2880 340" preserveAspectRatio="none" fill="none">
+              <path
+                d="M0,180 C240,120 480,240 720,180 C960,120 1200,240 1440,180 C1680,120 1920,240 2160,180 C2400,120 2640,240 2880,180 L2880,340 L0,340 Z"
+                fill="#A8DBB4" opacity="0.6" />
+              <path
+                d="M0,200 C360,140 720,260 1080,200 C1440,140 1800,260 2160,200 C2520,140 2700,220 2880,200 L2880,340 L0,340 Z"
+                fill="#93D4A3" opacity="0.5" />
+            </svg>
+            <svg class="hw-terrain-svg" viewBox="0 0 2880 340" preserveAspectRatio="none" fill="none">
+              <path
+                d="M0,180 C240,120 480,240 720,180 C960,120 1200,240 1440,180 C1680,120 1920,240 2160,180 C2400,120 2640,240 2880,180 L2880,340 L0,340 Z"
+                fill="#A8DBB4" opacity="0.6" />
+              <path
+                d="M0,200 C360,140 720,260 1080,200 C1440,140 1800,260 2160,200 C2520,140 2700,220 2880,200 L2880,340 L0,340 Z"
+                fill="#93D4A3" opacity="0.5" />
+            </svg>
+          </div>
+
+          <!-- Midground Rolling Forest Hills (Solid fill + Top crest curve ONLY) -->
+          <div class="hw-scroll-wrap hw-scroll-mid">
+            <svg class="hw-terrain-svg" viewBox="0 0 2880 300" preserveAspectRatio="none" fill="none">
+              <path
+                d="M0,140 C240,70 480,210 720,140 C960,70 1200,210 1440,140 C1680,70 1920,210 2160,140 C2400,70 2640,210 2880,140 L2880,300 L0,300 Z"
+                fill="#58C274" />
+              <path
+                d="M0,140 C240,70 480,210 720,140 C960,70 1200,210 1440,140 C1680,70 1920,210 2160,140 C2400,70 2640,210 2880,140"
+                stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="square" />
+            </svg>
+            <svg class="hw-terrain-svg" viewBox="0 0 2880 300" preserveAspectRatio="none" fill="none">
+              <path
+                d="M0,140 C240,70 480,210 720,140 C960,70 1200,210 1440,140 C1680,70 1920,210 2160,140 C2400,70 2640,210 2880,140 L2880,300 L0,300 Z"
+                fill="#58C274" />
+              <path
+                d="M0,140 C240,70 480,210 720,140 C960,70 1200,210 1440,140 C1680,70 1920,210 2160,140 C2400,70 2640,210 2880,140"
+                stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="square" />
+            </svg>
+          </div>
+
+          <!-- Foreground Meadow Crest (Solid fill + Top crest curve ONLY) -->
+          <div class="hw-scroll-wrap hw-scroll-fore">
+            <svg class="hw-terrain-svg" viewBox="0 0 2880 250" preserveAspectRatio="none" fill="none">
+              <path
+                d="M0,90 C240,20 480,160 720,90 C960,20 1200,160 1440,90 C1680,20 1920,160 2160,90 C2400,20 2640,160 2880,90 L2880,250 L0,250 Z"
+                fill="#34A853" />
+              <path
+                d="M0,90 C240,20 480,160 720,90 C960,20 1200,160 1440,90 C1680,20 1920,160 2160,90 C2400,20 2640,160 2880,90"
+                stroke="#0a0a0a" stroke-width="3" stroke-linecap="square" />
+            </svg>
+            <svg class="hw-terrain-svg" viewBox="0 0 2880 250" preserveAspectRatio="none" fill="none">
+              <path
+                d="M0,90 C240,20 480,160 720,90 C960,20 1200,160 1440,90 C1680,20 1920,160 2160,90 C2400,20 2640,160 2880,90 L2880,250 L0,250 Z"
+                fill="#34A853" />
+              <path
+                d="M0,90 C240,20 480,160 720,90 C960,20 1200,160 1440,90 C1680,20 1920,160 2160,90 C2400,20 2640,160 2880,90"
+                stroke="#0a0a0a" stroke-width="3" stroke-linecap="square" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- LAYER 4: Asymmetrical Lush Forest Trees (Organic Natural Depths) -->
+        <div class="hw-forest-trees" aria-hidden="true">
+          <!-- Left Forest Tree (Majestic Grand Oak) -->
+          <div class="hw-forest-tree hw-tree-left">
+            <svg viewBox="0 0 280 400" fill="none">
+              <!-- Trunk (Stationary, Firmly Rooted) -->
+              <g class="hw-tree-trunk">
+                <path d="M120,400 L125,230 Q120,180 95,150 Q135,180 140,230 L155,400 Z" fill="#6E4327" stroke="#0a0a0a"
+                  stroke-width="3" />
+                <path d="M140,240 Q165,195 200,170 Q165,200 148,245 Z" fill="#6E4327" stroke="#0a0a0a"
+                  stroke-width="2.5" />
+                <path d="M115,250 Q85,205 50,190 Q85,210 108,255 Z" fill="#6E4327" stroke="#0a0a0a"
+                  stroke-width="2.5" />
+                <path d="M108,400 Q138,380 168,400" stroke="#0a0a0a" stroke-width="3" />
+              </g>
+              <!-- Layered Foliage Clouds -->
+              <g class="hw-tree-crown hw-crown-left">
+                <circle cx="135" cy="95" r="72" fill="#1E8E3E" stroke="#0a0a0a" stroke-width="3" />
+                <circle cx="75" cy="140" r="62" fill="#2D9E4A" stroke="#0a0a0a" stroke-width="3" />
+                <circle cx="195" cy="140" r="60" fill="#2D9E4A" stroke="#0a0a0a" stroke-width="3" />
+                <circle cx="135" cy="175" r="68" fill="#34A853" stroke="#0a0a0a" stroke-width="3" />
+                <circle cx="105" cy="120" r="50" fill="#47C769" stroke="#0a0a0a" stroke-width="2.5" />
+                <circle cx="165" cy="125" r="50" fill="#34A853" stroke="#0a0a0a" stroke-width="2.5" />
+                <path d="M90,110 Q108,98 126,110" stroke="#1E8E3E" stroke-width="2" stroke-linecap="round" />
+                <path d="M145,145 Q162,132 180,145" stroke="#1E8E3E" stroke-width="2" stroke-linecap="round" />
+              </g>
+            </svg>
+          </div>
+
+          <!-- Right Midground Tree (Subtle Depth in Perspective) -->
+          <div class="hw-forest-tree hw-tree-right-mid">
+            <svg viewBox="0 0 180 320" fill="none">
+              <g class="hw-tree-trunk">
+                <path d="M85,320 L88,180 Q80,145 65,120 Q95,145 95,180 L100,320 Z" fill="#5C381E" stroke="#0a0a0a"
+                  stroke-width="2.5" />
+              </g>
+              <g class="hw-tree-crown hw-crown-right-mid">
+                <circle cx="90" cy="80" r="55" fill="#1E8E3E" stroke="#0a0a0a" stroke-width="2.5" />
+                <circle cx="50" cy="115" r="45" fill="#2D9E4A" stroke="#0a0a0a" stroke-width="2.5" />
+                <circle cx="130" cy="115" r="45" fill="#2D9E4A" stroke="#0a0a0a" stroke-width="2.5" />
+                <circle cx="90" cy="140" r="50" fill="#34A853" stroke="#0a0a0a" stroke-width="2.5" />
+              </g>
+            </svg>
+          </div>
+
+          <!-- Right Foreground Tree (Slender Woodland Cedar) -->
+          <div class="hw-forest-tree hw-tree-right-fore">
+            <svg viewBox="0 0 200 360" fill="none">
+              <g class="hw-tree-trunk">
+                <path d="M95,360 L98,190 Q105,150 125,125 Q102,150 102,190 L108,360 Z" fill="#6E4327" stroke="#0a0a0a"
+                  stroke-width="3" />
+                <path d="M98,200 Q80,165 55,150 Q80,170 94,205 Z" fill="#6E4327" stroke="#0a0a0a" stroke-width="2.5" />
+              </g>
+              <g class="hw-tree-crown hw-crown-right-fore">
+                <circle cx="100" cy="80" r="58" fill="#1E8E3E" stroke="#0a0a0a" stroke-width="3" />
+                <circle cx="140" cy="120" r="50" fill="#2D9E4A" stroke="#0a0a0a" stroke-width="3" />
+                <circle cx="60" cy="120" r="48" fill="#2D9E4A" stroke="#0a0a0a" stroke-width="3" />
+                <circle cx="100" cy="150" r="52" fill="#34A853" stroke="#0a0a0a" stroke-width="3" />
+                <circle cx="120" cy="100" r="42" fill="#47C769" stroke="#0a0a0a" stroke-width="2.5" />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- LAYER 5: Falling & Swirling Forest Leaves -->
+        <div class="hw-leaves" aria-hidden="true">
+          <span class="hw-leaf hw-leaf-1"><svg viewBox="0 0 20 24" fill="none">
+              <path d="M10,2 C16,5 18,12 10,22 C2,12 4,5 10,2Z" fill="#34A853" stroke="#0a0a0a" stroke-width="1.5" />
+              <line x1="10" y1="4" x2="10" y2="20" stroke="#1E4D2B" stroke-width="1" />
+            </svg></span>
+          <span class="hw-leaf hw-leaf-2"><svg viewBox="0 0 18 22" fill="none">
+              <path d="M9,2 C14,5 16,11 9,20 C2,11 4,5 9,2Z" fill="#47C769" stroke="#0a0a0a" stroke-width="1.5" />
+              <line x1="9" y1="4" x2="9" y2="18" stroke="#1E4D2B" stroke-width="1" />
+            </svg></span>
+          <span class="hw-leaf hw-leaf-3"><svg viewBox="0 0 20 24" fill="none">
+              <path d="M10,2 C16,5 18,12 10,22 C2,12 4,5 10,2Z" fill="#2D9E4A" stroke="#0a0a0a" stroke-width="1.5" />
+              <line x1="10" y1="4" x2="10" y2="20" stroke="#1E4D2B" stroke-width="1" />
+            </svg></span>
+          <span class="hw-leaf hw-leaf-4"><svg viewBox="0 0 18 22" fill="none">
+              <path d="M9,2 C14,5 16,11 9,20 C2,11 4,5 9,2Z" fill="#34A853" stroke="#0a0a0a" stroke-width="1.5" />
+            </svg></span>
+          <span class="hw-leaf hw-leaf-5"><svg viewBox="0 0 20 24" fill="none">
+              <path d="M10,2 C16,5 18,12 10,22 C2,12 4,5 10,2Z" fill="#47C769" stroke="#0a0a0a" stroke-width="1.5" />
+            </svg></span>
+          <span class="hw-leaf hw-leaf-6"><svg viewBox="0 0 18 22" fill="none">
+              <path d="M9,2 C14,5 16,11 9,20 C2,11 4,5 9,2Z" fill="#2D9E4A" stroke="#0a0a0a" stroke-width="1.5" />
+            </svg></span>
+          <span class="hw-leaf hw-leaf-7"><svg viewBox="0 0 20 24" fill="none">
+              <path d="M10,2 C16,5 18,12 10,22 C2,12 4,5 10,2Z" fill="#34A853" stroke="#0a0a0a" stroke-width="1.5" />
+            </svg></span>
+          <span class="hw-leaf hw-leaf-8"><svg viewBox="0 0 18 22" fill="none">
+              <path d="M9,2 C14,5 16,11 9,20 C2,11 4,5 9,2Z" fill="#47C769" stroke="#0a0a0a" stroke-width="1.5" />
+            </svg></span>
+        </div>
+
+        <!-- LAYER 6: Foreground Wildflowers & Grass (Full-Width Bottom Strip) -->
+        <div class="hw-flowers" aria-hidden="true">
+          <svg class="hw-flower-strip" viewBox="0 0 1440 90" fill="none" preserveAspectRatio="none">
+            <!-- Grass Tufts -->
+            <path d="M10,90 Q12,50 18,30 M18,90 Q22,45 28,25 M28,90 Q30,55 35,35" stroke="#1E8E3E" stroke-width="2.5"
+              stroke-linecap="round" />
+            <path d="M90,90 Q92,50 98,30 M98,90 Q102,45 108,25 M108,90 Q110,55 115,35" stroke="#2D9E4A"
+              stroke-width="2.5" stroke-linecap="round" />
+            <path d="M220,90 Q222,50 228,30 M228,90 Q232,45 238,25" stroke="#1E8E3E" stroke-width="2.5"
+              stroke-linecap="round" />
+            <path d="M380,90 Q382,50 388,30 M388,90 Q392,45 398,25" stroke="#2D9E4A" stroke-width="2.5"
+              stroke-linecap="round" />
+            <path d="M520,90 Q522,50 528,30 M528,90 Q532,45 538,25" stroke="#1E8E3E" stroke-width="2.5"
+              stroke-linecap="round" />
+            <path d="M700,90 Q702,50 708,30 M708,90 Q712,45 718,25" stroke="#2D9E4A" stroke-width="2.5"
+              stroke-linecap="round" />
+            <path d="M860,90 Q862,50 868,30 M868,90 Q872,45 878,25" stroke="#1E8E3E" stroke-width="2.5"
+              stroke-linecap="round" />
+            <path d="M1020,90 Q1022,50 1028,30 M1028,90 Q1032,45 1038,25" stroke="#2D9E4A" stroke-width="2.5"
+              stroke-linecap="round" />
+            <path d="M1200,90 Q1202,50 1208,30 M1208,90 Q1212,45 1218,25" stroke="#1E8E3E" stroke-width="2.5"
+              stroke-linecap="round" />
+            <path d="M1360,90 Q1362,50 1368,30 M1368,90 Q1372,45 1378,25" stroke="#2D9E4A" stroke-width="2.5"
+              stroke-linecap="round" />
+
+            <!-- Cartoon Daisy 1 (White & Yellow) -->
+            <circle cx="58" cy="40" r="12" fill="white" stroke="#0a0a0a" stroke-width="2" />
+            <circle cx="58" cy="40" r="5" fill="#FBBC04" stroke="#0a0a0a" stroke-width="1.5" />
+            <line x1="58" y1="52" x2="58" y2="90" stroke="#1E8E3E" stroke-width="2.5" />
+
+            <!-- Cartoon Flower 2 (Google Red) -->
+            <circle cx="160" cy="45" r="10" fill="#EA4335" stroke="#0a0a0a" stroke-width="2" />
+            <circle cx="160" cy="45" r="4" fill="#FBBC04" stroke="#0a0a0a" stroke-width="1.5" />
+            <line x1="160" y1="55" x2="160" y2="90" stroke="#1E8E3E" stroke-width="2.5" />
+
+            <!-- Cartoon Flower 3 (Google Blue) -->
+            <circle cx="310" cy="42" r="11" fill="#4285F4" stroke="#0a0a0a" stroke-width="2" />
+            <circle cx="310" cy="42" r="4.5" fill="white" stroke="#0a0a0a" stroke-width="1.5" />
+            <line x1="310" y1="53" x2="310" y2="90" stroke="#1E8E3E" stroke-width="2.5" />
+
+            <!-- Cartoon Flower 4 (White Daisy) -->
+            <circle cx="610" cy="38" r="12" fill="white" stroke="#0a0a0a" stroke-width="2" />
+            <circle cx="610" cy="38" r="5" fill="#FBBC04" stroke="#0a0a0a" stroke-width="1.5" />
+            <line x1="610" y1="50" x2="610" y2="90" stroke="#1E8E3E" stroke-width="2.5" />
+
+            <!-- Cartoon Flower 5 (Google Yellow) -->
+            <circle cx="790" cy="44" r="10" fill="#FBBC04" stroke="#0a0a0a" stroke-width="2" />
+            <circle cx="790" cy="44" r="4" fill="#EA4335" stroke="#0a0a0a" stroke-width="1.5" />
+            <line x1="790" y1="54" x2="790" y2="90" stroke="#1E8E3E" stroke-width="2.5" />
+
+            <!-- Cartoon Flower 6 (Google Red) -->
+            <circle cx="950" cy="40" r="11" fill="#EA4335" stroke="#0a0a0a" stroke-width="2" />
+            <circle cx="950" cy="40" r="4.5" fill="#FBBC04" stroke="#0a0a0a" stroke-width="1.5" />
+            <line x1="950" y1="51" x2="950" y2="90" stroke="#1E8E3E" stroke-width="2.5" />
+
+            <!-- Cartoon Flower 7 (Google Blue) -->
+            <circle cx="1120" cy="42" r="10" fill="#4285F4" stroke="#0a0a0a" stroke-width="2" />
+            <circle cx="1120" cy="42" r="4" fill="white" stroke="#0a0a0a" stroke-width="1.5" />
+            <line x1="1120" y1="52" x2="1120" y2="90" stroke="#1E8E3E" stroke-width="2.5" />
+
+            <!-- Cartoon Flower 8 (White Daisy) -->
+            <circle cx="1290" cy="38" r="12" fill="white" stroke="#0a0a0a" stroke-width="2" />
+            <circle cx="1290" cy="38" r="5" fill="#FBBC04" stroke="#0a0a0a" stroke-width="1.5" />
+            <line x1="1290" y1="50" x2="1290" y2="90" stroke="#1E8E3E" stroke-width="2.5" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Hero Stage — Centered Neo-Brutalist Composition -->
+      <div class="hero-stage">
+        <!-- GOVERNMENT ENGINEERING COLLEGE HASSAN -->
+        <div class="hero-college-banner">
+          <div class="hero-college-badge">
+            <span class="clg-dot-wrap"><span class="live-dot" aria-hidden="true"></span></span>
+            <span class="clg-title">GOVERNMENT ENGINEERING COLLEGE, HASSAN</span>
+            <span class="clg-dot-wrap"><span class="live-dot" aria-hidden="true"></span></span>
+          </div>
+          <div class="hero-dept-row">
+            <span class="clg-dept">
+              <span class="dept-desktop">Department of Computer Science &amp; Engineering</span>
+              <span class="dept-mobile">Department of CSE</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="hero-heading-wrap">
+
+          <!-- COMPASS x GLUE PRESENTS -->
+          <div class="hero-presents-wrap"
+            aria-label="Computer Science Students Association, GECH COMPASS x GLUE Presents">
+            <img src="images/compass-glue-presents.png" alt="COMPASS x GLUE Presents" class="hero-presents-img" />
+          </div>
+
+          <h1 id="hero-heading" class="hero-heading-single">
+            <span class="h1-line-single">HACKSPRINT <span class="h1-s4">3.0</span></span>
+          </h1>
+
+          <!-- POP-OUT ORBITAL ELEMENTS (Exact elements from Hack With GDG S4 Illustration) -->
+          <div class="popout-orbit-container" aria-hidden="true">
+            <!-- 1. Light Bulb — Ideation (Top-Left) -->
+            <div class="popout-item popout-bulb" title="Ideation & Innovation">
+              <svg viewBox="0 0 54 62" fill="none" class="popout-art">
+                <!-- Rays -->
+                <line x1="27" y1="2" x2="27" y2="8" stroke="#FBBC04" stroke-width="2.5" stroke-linecap="round" />
+                <line x1="10" y1="9" x2="15" y2="14" stroke="#FBBC04" stroke-width="2.5" stroke-linecap="round" />
+                <line x1="44" y1="9" x2="39" y2="14" stroke="#FBBC04" stroke-width="2.5" stroke-linecap="round" />
+                <line x1="3" y1="25" x2="9" y2="25" stroke="#FBBC04" stroke-width="2.5" stroke-linecap="round" />
+                <line x1="51" y1="25" x2="45" y2="25" stroke="#FBBC04" stroke-width="2.5" stroke-linecap="round" />
+                <!-- Bulb -->
+                <path
+                  d="M17,37 C12,32 11,23 15,16 C19,9 27,8 33,11 C39,15 42,23 39,29 C37,33 33,37 31,41 L23,41 C21,37 18,35 17,37Z"
+                  fill="#FFF8E1" stroke="#0a0a0a" stroke-width="2.5" />
+                <path d="M23,31 L25,22 L29,22 L31,31" stroke="#FBBC04" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <rect x="22" y="42" width="10" height="4" rx="1.5" fill="#4285F4" stroke="#0a0a0a" stroke-width="2" />
+                <rect x="23" y="47" width="8" height="3" rx="1" fill="#EA4335" stroke="#0a0a0a" stroke-width="1.5" />
+                <circle cx="27" cy="52" r="2" fill="#0a0a0a" />
+              </svg>
+            </div>
+
+            <!-- 2. Puzzle Pieces — Problem Solving (Middle-Left) -->
+            <div class="popout-item popout-puzzle" title="Problem Solving & Modular Architecture">
+              <svg viewBox="0 0 62 52" fill="none" class="popout-art">
+                <circle cx="36" cy="7" r="4.5" fill="#EA4335" stroke="#0a0a0a" stroke-width="1.5" />
+                <circle cx="48" cy="14" r="3" fill="#4285F4" stroke="#0a0a0a" stroke-width="1.5" />
+                <!-- Red Piece -->
+                <path
+                  d="M8,16 L22,16 C22,16 23,10 27,10 C31,10 32,16 32,16 L32,24 C32,24 37,25 37,29 C37,33 32,34 32,34 L32,44 L20,44 C20,44 19,40 15,40 C11,40 10,44 10,44 L8,44 Z"
+                  fill="#EA4335" stroke="#0a0a0a" stroke-width="2.5" />
+                <!-- Blue Piece -->
+                <path
+                  d="M32,16 L48,16 L48,26 C48,26 53,27 53,31 C53,35 48,36 48,36 L48,46 L34,46 L34,34 C34,34 37,33 37,29 C37,25 32,24 32,24 Z"
+                  fill="#4285F4" stroke="#0a0a0a" stroke-width="2.5" />
+              </svg>
+            </div>
+
+            <!-- 3. Community Team — Collaboration (Bottom-Left) -->
+            <div class="popout-item popout-team" title="Team Collaboration">
+              <svg viewBox="0 0 66 42" fill="none" class="popout-art">
+                <!-- Left (Green) -->
+                <circle cx="15" cy="14" r="7" fill="#34A853" stroke="#0a0a0a" stroke-width="2" />
+                <path d="M4,38 C4,29 9,26 15,26 C21,26 26,29 26,38 Z" fill="#34A853" stroke="#0a0a0a"
+                  stroke-width="2" />
+                <!-- Right (Yellow) -->
+                <circle cx="51" cy="14" r="7" fill="#FBBC04" stroke="#0a0a0a" stroke-width="2" />
+                <path d="M40,38 C40,29 45,26 51,26 C57,26 62,29 62,38 Z" fill="#FBBC04" stroke="#0a0a0a"
+                  stroke-width="2" />
+                <!-- Center (Blue) -->
+                <circle cx="33" cy="11" r="8" fill="#4285F4" stroke="#0a0a0a" stroke-width="2.5" />
+                <path d="M20,38 C20,27 25,24 33,24 C41,24 46,27 46,38 Z" fill="#4285F4" stroke="#0a0a0a"
+                  stroke-width="2.5" />
+              </svg>
+            </div>
+
+            <!-- 4. Rocket Ship — 24h Velocity & Launch (Top-Right) -->
+            <div class="popout-item popout-rocket" title="Rapid 24-Hour Sprint">
+              <svg viewBox="0 0 58 58" fill="none" class="popout-art">
+                <!-- Flames -->
+                <path d="M15,43 Q8,52 6,56 Q14,52 19,45 Z" fill="#EA4335" stroke="#0a0a0a" stroke-width="1.8" />
+                <path d="M13,44 Q9,49 8,52 Q12,49 16,45 Z" fill="#FBBC04" />
+                <!-- Wings -->
+                <path d="M22,34 L11,38 L18,27 Z" fill="#4285F4" stroke="#0a0a0a" stroke-width="2" />
+                <path d="M34,22 L38,11 L27,18 Z" fill="#4285F4" stroke="#0a0a0a" stroke-width="2" />
+                <!-- Body -->
+                <path d="M19,39 C16,30 20,18 42,6 C48,28 36,32 27,35 Z" fill="white" stroke="#0a0a0a"
+                  stroke-width="2.5" />
+                <path d="M38,10 C41,7 44,5 44,5 C44,5 42,8 39,11 Z" fill="#EA4335" stroke="#0a0a0a"
+                  stroke-width="1.5" />
+                <!-- Porthole -->
+                <circle cx="30" cy="18" r="4.5" fill="#4285F4" stroke="#0a0a0a" stroke-width="2" />
+                <circle cx="29" cy="17" r="1.5" fill="white" />
+              </svg>
+            </div>
+
+            <!-- 5. Target & Dart Arrow — Precision & Impact (Middle-Right) -->
+            <div class="popout-item popout-target" title="Precision & Real-World Impact">
+              <svg viewBox="0 0 58 54" fill="none" class="popout-art">
+                <circle cx="28" cy="28" r="22" fill="white" stroke="#4285F4" stroke-width="4" />
+                <circle cx="28" cy="28" r="22" stroke="#0a0a0a" stroke-width="2" />
+                <circle cx="28" cy="28" r="12" fill="white" stroke="#34A853" stroke-width="3" />
+                <circle cx="28" cy="28" r="5" fill="#34A853" />
+                <line x1="28" y1="28" x2="52" y2="8" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M52,8 L44,7 L48,15 Z" fill="#EA4335" stroke="#0a0a0a" stroke-width="1.5" />
+                <path d="M52,8 L53,16 L45,12 Z" fill="#EA4335" stroke="#0a0a0a" stroke-width="1.5" />
+              </svg>
+            </div>
+
+            <!-- 6. Laptop with </> — Coding & Building (Bottom-Right) -->
+            <div class="popout-item popout-laptop" title="Code & Build">
+              <svg viewBox="0 0 60 48" fill="none" class="popout-art">
+                <rect x="10" y="8" width="40" height="26" rx="2" fill="white" stroke="#0a0a0a" stroke-width="2.5" />
+                <!-- Brackets -->
+                <path d="M22,17 L17,21 L22,25" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <line x1="26" y1="26" x2="30" y2="16" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M34,17 L39,21 L34,25" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <!-- Base -->
+                <path d="M4,34 L56,34 C56,34 54,39 50,39 L10,39 C6,39 4,34 4,34 Z" fill="#FBBC04" stroke="#0a0a0a"
+                  stroke-width="2.5" />
+                <rect x="25" y="35" width="10" height="2" rx="0.5" fill="#0a0a0a" />
+              </svg>
+            </div>
+
+            <!-- 7. Google 4-point Sparkles ✦ -->
+            <div class="popout-item popout-sparkle-1">
+              <svg viewBox="0 0 24 24" fill="none" class="popout-sparkle-svg">
+                <path d="M12,0 C12,6 18,12 24,12 C18,12 12,18 12,24 C12,18 6,12 0,12 C6,12 12,6 12,0Z" fill="#34A853"
+                  stroke="#0a0a0a" stroke-width="1.5" />
+              </svg>
+            </div>
+            <div class="popout-item popout-sparkle-2">
+              <svg viewBox="0 0 24 24" fill="none" class="popout-sparkle-svg">
+                <path d="M12,0 C12,6 18,12 24,12 C18,12 12,18 12,24 C12,18 6,12 0,12 C6,12 12,6 12,0Z" fill="#FBBC04"
+                  stroke="#0a0a0a" stroke-width="1.5" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <p class="hero-lede" data-hero-lede>24 Hours of Innovation, Building, and Impact!</p>
+        <!-- Date highlight pill -->
+        <div class="hero-stats" aria-label="Event date">
+          <div class="hero-stat">
+            <span class="stat-val">NOV 14–15, 2026</span>
+            <span class="stat-label">24-HOUR OFFLINE HACKATHON</span>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <a class="button button-primary" href="/register">
+            Register for HackSprint 3.0 <span aria-hidden="true">→</span>
+          </a>
+          <a class="button button-ghost" href="#about">
+            Explore the Hackathon <span aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- FOREGROUND INTERACTIVE ANIME CHARACTERS LAYER (UNBLOCKED, FULL IMAGE CLICKABLE) -->
+      <div class="hero-characters-layer" id="heroCharactersLayer" aria-label="Interactive HackSprint characters">
+        <!-- Boy Character -->
+        <div class="hw-student-wrap" id="hwStudent" role="button" tabindex="0"
+          aria-label="Anime boy student developer. Click anywhere on character to chat!" title="Click me to chat!">
+          <div class="hw-speech-bubble hw-dialog-bubble hw-boy-bubble" id="studentSpeech">
+            <span class="hw-speech-text" id="studentSpeechText">Are you Registered ?</span>
+            <span class="hw-speech-tail"></span>
+            <span class="hw-speech-tail-inner"></span>
+          </div>
+          <img class="hw-student-img" id="hwStudentImg" src="images/anime-coder-boy.png"
+            alt="Anime boy student developer with laptop and backpack" loading="eager" draggable="false" />
+          <span class="hw-char-hint">💬 Tap to chat</span>
+        </div>
+
+        <!-- Girl Character -->
+        <div class="hw-girl-wrap" id="hwGirl" role="button" tabindex="0"
+          aria-label="Anime girl student developer. Click anywhere on character to chat!" title="Click me to chat!">
+          <div class="hw-speech-bubble hw-dialog-bubble hw-girl-bubble" id="girlSpeech">
+            <span class="hw-speech-text" id="girlSpeechText">Im Lready registered .</span>
+            <span class="hw-speech-tail"></span>
+            <span class="hw-speech-tail-inner"></span>
+          </div>
+          <img class="hw-girl-img" id="hwGirlImg" src="images/anime-coder-girl.png"
+            alt="Anime girl student developer with laptop and headphones" loading="eager" draggable="false" />
+          <span class="hw-char-hint">💬 Tap to chat</span>
+        </div>
+
+        <!-- Interactive Voice / Sound Pill Toggle -->
+        <button class="hw-sound-pill" id="hwSoundToggle" type="button" aria-label="Toggle anime dialogue voice sound" title="Click to toggle anime sound effects">
+          <span class="hw-sound-icon" aria-hidden="true">🔊</span>
+          <span class="hw-sound-text">SOUND ON</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- S3-STYLE MARQUEE TICKER BANNER (HIGH-ENERGY BORDER TRANSITION) -->
+    <div class="marquee-banner" aria-hidden="true">
+      <div class="marquee-track">
+        <div class="marquee-content">
+          <span class="marquee-item">COLLABORATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CODE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CREATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">INNOVATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">BUILD</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">COLLABORATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CODE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CREATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">INNOVATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">BUILD</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">COLLABORATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CODE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CREATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">INNOVATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">BUILD</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">COLLABORATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CODE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CREATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">INNOVATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">BUILD</span>
+          <span class="marquee-sep">•</span>
+        </div>
+        <div class="marquee-content" aria-hidden="true">
+          <span class="marquee-item">COLLABORATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CODE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CREATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">INNOVATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">BUILD</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">COLLABORATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CODE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CREATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">INNOVATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">BUILD</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">COLLABORATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CODE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CREATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">INNOVATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">BUILD</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">COLLABORATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CODE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">CREATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">INNOVATE</span>
+          <span class="marquee-sep">•</span>
+          <span class="marquee-item">BUILD</span>
+          <span class="marquee-sep">•</span>
+        </div>
+      </div>
+    </div>
+    <section class="countdown-section section-pad" id="countdown-section" aria-labelledby="countdown-label">
+      <div class="countdown-heading reveal">
+        <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>01 / THE CLOCK IS RUNNING</p>
+        <h2 id="countdown-label" class="countdown-state" data-countdown-state>THE 24-HOUR BUILD BEGINS IN</h2>
+      </div>
+
+      <!-- Unique Neo-Brutalist Chronometer Deck -->
+      <div class="clock-deck-card reveal reveal-delay">
+        <!-- Top Status Bar -->
+        <div class="clock-deck-header">
+          <div class="clock-status-pill">
+            <span class="clock-pulse-dot" aria-hidden="true"></span>
+            <span class="clock-status-label">OFFICIAL HACKSPRINT 3.0 TIMER</span>
+          </div>
+          <div class="clock-location-pill">
+            <i class="fa-solid fa-location-dot" aria-hidden="true" style="color: var(--green);"></i>
+            <span>GEC HASSAN &bull; NOV 14, 2:00 PM IST</span>
+          </div>
+        </div>
+
+        <!-- Scoreboard Digit Blocks -->
+        <div class="countdown-digits" aria-hidden="true">
+          <!-- DAYS -->
+          <div class="cd-unit" data-cd-unit="days">
+            <div class="cd-slot">
+              <div class="cd-split-groove" aria-hidden="true"></div>
+              <span class="cd-cur">00</span>
+              <span class="cd-next"></span>
+            </div>
+            <span class="cd-unit-tag cd-tag-green">DAYS</span>
+          </div>
+
+          <div class="cd-sep-block" aria-hidden="true">
+            <span class="cd-sep-dot"></span>
+            <span class="cd-sep-dot"></span>
+          </div>
+
+          <!-- HOURS -->
+          <div class="cd-unit" data-cd-unit="hours">
+            <div class="cd-slot">
+              <div class="cd-split-groove" aria-hidden="true"></div>
+              <span class="cd-cur">00</span>
+              <span class="cd-next"></span>
+            </div>
+            <span class="cd-unit-tag">HOURS</span>
+          </div>
+
+          <div class="cd-sep-block" aria-hidden="true">
+            <span class="cd-sep-dot"></span>
+            <span class="cd-sep-dot"></span>
+          </div>
+
+          <!-- MINUTES -->
+          <div class="cd-unit" data-cd-unit="minutes">
+            <div class="cd-slot">
+              <div class="cd-split-groove" aria-hidden="true"></div>
+              <span class="cd-cur">00</span>
+              <span class="cd-next"></span>
+            </div>
+            <span class="cd-unit-tag">MINUTES</span>
+          </div>
+
+          <div class="cd-sep-block" aria-hidden="true">
+            <span class="cd-sep-dot"></span>
+            <span class="cd-sep-dot"></span>
+          </div>
+
+          <!-- SECONDS -->
+          <div class="cd-unit" data-cd-unit="seconds">
+            <div class="cd-slot">
+              <div class="cd-split-groove" aria-hidden="true"></div>
+              <span class="cd-cur">00</span>
+              <span class="cd-next"></span>
+            </div>
+            <span class="cd-unit-tag">SECONDS</span>
+          </div>
+        </div>
+
+        <!-- Bottom Mission Bar -->
+
+      </div>
+
+      <!-- Screen-reader summary -->
+      <p class="cd-sr-summary" aria-live="polite" aria-atomic="true" data-countdown-summary>HackSprint 3.0 starts
+        November 14, 2026 at 2:00 PM IST.</p>
+    </section>
+    <section class="foundation section-pad" id="about" aria-labelledby="about-heading">
+      <div class="foundation-layout">
+
+        <!-- left: editorial copy & event facts -->
+        <div class="foundation-copy">
+          <div class="section-intro reveal">
+            <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>02 / THE HACKSPRINT LEGACY</p>
+            <h2 id="about-heading">24 HOURS. ONE BUILD.<br /><em>THREE EDITIONS.</em></h2>
+          </div>
+          <div class="foundation-text reveal reveal-delay">
+            <p class="big-copy" data-about-body></p>
+            <p class="about-support" data-about-sub></p>
+
+            <!-- Quick Event Facts Card with Brand Green Indicators -->
+            <div class="about-facts-card">
+              <div class="about-fact-item">
+                <span class="fact-dot fact-dot-green"></span>
+                <span class="fact-text"><strong>November 14–15, 2026</strong> <span class="fact-detail">(24h Offline
+                    Hackathon)</span></span>
+              </div>
+              <div class="about-fact-item">
+                <span class="fact-dot fact-dot-green"></span>
+                <span class="fact-text"><strong>Government Engineering College, Hassan</strong> <span
+                    class="fact-detail">(Offline Venue)</span></span>
+              </div>
+              <div class="about-fact-item">
+                <span class="fact-dot fact-dot-green"></span>
+                <span class="fact-text"><strong>Participating Colleges:</strong> <span class="fact-detail">GEC Hassan •
+                    GEC Arsikere • GEC Mosalehosahalli</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="principles reveal reveal-delay" id="principlesGrid" role="list"></div>
+        </div>
+
+        <!-- right: HackSprint Memory Showcase & Photo Archive -->
+        <div class="foundation-graphic reveal reveal-delay" aria-label="HackSprint archival memories">
+          <!-- Archival Header Pill -->
+          <div class="archive-header-badge">
+            <span class="archive-badge-pill">
+              <span class="archive-badge-dot"></span>
+              <span class="archive-badge-text">// HACKSPRINT ARCHIVES</span>
+            </span>
+            <span class="archive-badge-count">EDITIONS 1.0 &bull; 2.0</span>
+          </div>
+
+          <!-- Tilted Polaroid Memory Cards Collage -->
+          <div class="polaroid-collage">
+            <!-- Polaroid 1: Top Left Tilt -->
+            <div class="polaroid-card polaroid-1" title="HackSprint '24 Inauguration & Keynote">
+              <div class="washi-tape washi-tape-left"></div>
+              <div class="polaroid-img-box polaroid-img-1">
+                <div class="polaroid-tag">HS '24 &bull; INAUGURATION</div>
+              </div>
+              <div class="polaroid-info">
+                <p class="polaroid-caption">Mentors & Keynote Stage</p>
+                <span class="polaroid-sub">GECH AUDITORIUM</span>
+              </div>
+            </div>
+
+            <!-- Polaroid 2: Right Tilt -->
+            <div class="polaroid-card polaroid-2" title="HackSprint '24 Winners - Team Straw-Hats">
+              <div class="washi-tape washi-tape-right"></div>
+              <div class="polaroid-img-box polaroid-img-2">
+                <div class="polaroid-tag">HS '24 &bull; CHAMPIONS</div>
+              </div>
+              <div class="polaroid-info">
+                <p class="polaroid-caption">Team Straw-Hats Victory</p>
+                <span class="polaroid-sub">CASH PRIZE WINNERS</span>
+              </div>
+            </div>
+
+            <!-- Polaroid 3: Bottom Overlap Tilt -->
+            <div class="polaroid-card polaroid-3" title="HackSprint Community Cohort">
+              <div class="washi-tape washi-tape-center"></div>
+              <div class="polaroid-img-box polaroid-img-3">
+                <div class="polaroid-tag">HS COMMUNITY COHORT</div>
+              </div>
+              <div class="polaroid-info">
+                <p class="polaroid-caption">The HackSprint Builders</p>
+                <span class="polaroid-sub">STUDENTS &bull; MENTORS &bull; COMPASS</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Archival Legacy Card -->
+          <div class="archive-note-card">
+            <div class="archive-note-header">
+              <span class="note-pin" aria-hidden="true"><i class="fa-solid fa-camera"
+                  style="color: var(--green);"></i></span>
+              <span class="note-title">MOMENTS FROM THE HACKSPRINT ARCHIVES</span>
+            </div>
+
+            <div class="archive-note-stats">
+              <span class="archive-stat-item"><span class="stat-num">2+</span> <span
+                  class="stat-lbl">Editions</span></span>
+              <span class="archive-stat-sep">&bull;</span>
+              <span class="archive-stat-item"><span class="stat-num">150+</span> <span
+                  class="stat-lbl">Builders</span></span>
+              <span class="archive-stat-sep">&bull;</span>
+              <span class="archive-stat-item"><span class="stat-num">3</span> <span class="stat-lbl">Colleges in
+                  3.0</span></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- =============================================================
+         03 / RULEBOOK FOR HACKSPRINT 3.0
+         ============================================================= -->
+    <section class="rulebook section-pad" id="rulebook" aria-labelledby="rulebook-heading">
+      <div class="rulebook-head reveal">
+        <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>03 / THE REGULATIONS</p>
+        <h2 id="rulebook-heading">RULEBOOK FOR<br /><em>HACKSPRINT 3.0</em></h2>
+        <p class="rulebook-sub">Official competition rules and guidelines established by COMPASS × GLUE for all
+          participating teams at Government Engineering College, Hassan.</p>
+      </div>
+
+      <div class="rules-simple-container reveal reveal-delay">
+        <ul class="rules-points-list">
+          <li class="rule-point-item">
+            <span class="rule-point-num">01</span>
+            <p class="rule-point-text"><strong>GEC Hassan teams:</strong> Maximum 3 members per team (2 first-year
+              students will be added by the organizers).</p>
+          </li>
+          <li class="rule-point-item">
+            <span class="rule-point-num">02</span>
+            <p class="rule-point-text"><strong>COMPASS association preference:</strong> Students who have paid the
+              COMPASS association fee will get first preference during team selection and slot allotment.</p>
+          </li>
+          <li class="rule-point-item">
+            <span class="rule-point-num">03</span>
+            <p class="rule-point-text"><strong>Other college teams:</strong> 3 to 5 members per team with valid physical
+              college ID.</p>
+          </li>
+          <li class="rule-point-item">
+            <span class="rule-point-num">04</span>
+            <p class="rule-point-text"><strong>Fresh code only:</strong> All code must be written from scratch during
+              the hackathon—no pre-built code allowed.</p>
+          </li>
+          <li class="rule-point-item">
+            <span class="rule-point-num">05</span>
+            <p class="rule-point-text"><strong>Problem statements:</strong> Official problem statements will be revealed
+              live on spot at the venue.</p>
+          </li>
+          <li class="rule-point-item">
+            <span class="rule-point-num">06</span>
+            <p class="rule-point-text"><strong>24-hour offline build:</strong> All participants must stay on campus at
+              GEC Hassan for the full 24 hours.</p>
+          </li>
+          <li class="rule-point-item">
+            <span class="rule-point-num">07</span>
+            <p class="rule-point-text"><strong>Mentor reviews:</strong> Every team must attend 3 progress review
+              checkpoints with mentors during the sprint.</p>
+          </li>
+          <li class="rule-point-item">
+            <span class="rule-point-num">08</span>
+            <p class="rule-point-text"><strong>Working demo:</strong> Teams must present a working project demo to the
+              judges—slides only are not accepted.</p>
+          </li>
+          <li class="rule-point-item">
+            <span class="rule-point-num">09</span>
+            <p class="rule-point-text"><strong>Fair play:</strong> Any copying, cheating, or misconduct will lead to
+              immediate disqualification.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- =============================================================
+         04 / ON-SPOT CHALLENGE & PROBLEM STATEMENTS
+         ============================================================= -->
+    <section class="problem-statements section-pad" id="problem-statements" aria-labelledby="problem-heading">
+      <div class="problem-head reveal">
+        <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>04 / THE CHALLENGE</p>
+        <h2 id="problem-heading">PROBLEM STATEMENTS<br /><em>REVEALED ON SPOT.</em></h2>
+      </div>
+
+      <div class="problem-body reveal reveal-delay">
+        <div class="onspot-reveal-card">
+          <div class="onspot-reveal-top">
+            <span class="onspot-lock-pill">
+              <span class="live-dot" aria-hidden="true"></span>
+              LOCKED UNTIL KICKOFF CEREMONY
+            </span>
+            <span class="onspot-venue-pill">GECH LIBRARY</span>
+          </div>
+
+          <h3 class="onspot-reveal-heading">
+            Official problem statements will be revealed live on spot at the venue.
+          </h3>
+
+
+
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================================================
+         05 / EVENT TIMELINE & 24-HOUR SPRINT SCHEDULE
+         ============================================================= -->
+    <section class="timeline-section section-pad" id="timeline" aria-labelledby="timeline-heading">
+      <div class="timeline-head reveal">
+        <div class="timeline-head-left">
+          <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>05 / EVENT TIMELINE</p>
+          <h2 id="timeline-heading">EVENT SCHEDULE.<br /><em>24-HOUR TIMELINE.</em></h2>
+        </div>
+        <p class="timeline-head-desc reveal reveal-delay">
+          All events and activities take place at the <strong>Library Block</strong> from 2:00 PM on Nov 14 to 2:00 PM
+          on Nov 15.
+        </p>
+      </div>
+
+      <!-- Timeline Control Bar: Filter Tabs + 24H Live Tracker Pill -->
+      <div class="timeline-controls reveal reveal-delay">
+        <div class="timeline-tabs" role="tablist" aria-label="Timeline day filter">
+          <button class="tl-tab-btn active" data-filter="all" role="tab" aria-selected="true" id="tab-all">
+            <i class="fa-solid fa-clock" aria-hidden="true"></i> ALL 24 HOURS (12)
+          </button>
+          <button class="tl-tab-btn" data-filter="day1" role="tab" aria-selected="false" id="tab-day1">
+            <span class="tl-tab-dot green" aria-hidden="true"></span> NOV 14 &bull; DAY 1
+          </button>
+          <button class="tl-tab-btn" data-filter="day2" role="tab" aria-selected="false" id="tab-day2">
+            <span class="tl-tab-dot yellow" aria-hidden="true"></span> NOV 15 &bull; DAY 2
+          </button>
+        </div>
+
+        <div class="timeline-meta-badge">
+          <span class="pulse-indicator" aria-hidden="true"></span>
+          <span class="tl-meta-text">VENUE: <strong>LIBRARY BLOCK</strong></span>
+        </div>
+      </div>
+
+      <!-- The Neo-Brutalist Timeline Track -->
+      <div class="timeline-track-wrap reveal">
+        <div class="timeline-spine" aria-hidden="true"></div>
+
+        <ol class="timeline-cards-list" id="timelineCardsList">
+          <!-- 1. Nov 14, 2:00 PM - 3:00 PM -->
+          <li class="tl-item" data-day="day1" data-accent="blue">
+            <div class="tl-node-flag" aria-hidden="true">
+              <span class="tl-flag-dot"></span>
+            </div>
+            <article class="tl-card">
+              <header class="tl-card-header">
+                <div class="tl-time-box">
+                  <span class="tl-clock-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
+                  <time class="tl-time-val" datetime="2026-11-14T14:00">02:00 PM &ndash; 03:00 PM</time>
+                  <span class="tl-day-pill">NOV 14 &bull; DAY 1</span>
+                </div>
+                <div class="tl-tag-row">
+                  <span class="tl-category-tag tag-blue">REGISTRATION</span>
+                  <span class="tl-venue-tag"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> LIBRARY
+                    BLOCK</span>
+                </div>
+              </header>
+              <div class="tl-card-body">
+                <h3 class="tl-item-title">Team Registration &amp; Desk Setup</h3>
+                <p class="tl-item-desc">Teams arrive at the venue, complete check-in, and set up their laptops.</p>
+              </div>
+            </article>
+          </li>
+
+          <!-- 2. Nov 14, 3:00 PM - 3:30 PM -->
+          <li class="tl-item" data-day="day1" data-accent="green">
+            <div class="tl-node-flag" aria-hidden="true">
+              <span class="tl-flag-dot"></span>
+            </div>
+            <article class="tl-card">
+              <header class="tl-card-header">
+                <div class="tl-time-box">
+                  <span class="tl-clock-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
+                  <time class="tl-time-val" datetime="2026-11-14T15:00">03:00 PM &ndash; 03:30 PM</time>
+                  <span class="tl-day-pill">NOV 14 &bull; DAY 1</span>
+                </div>
+                <div class="tl-tag-row">
+                  <span class="tl-category-tag tag-green">INAUGURATION</span>
+                  <span class="tl-venue-tag"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> LIBRARY
+                    BLOCK</span>
+                </div>
+              </header>
+              <div class="tl-card-body">
+                <h3 class="tl-item-title">Opening &amp; Welcome Ceremony</h3>
+                <p class="tl-item-desc">Welcome speech, introduction of mentors, and event guidelines.</p>
+              </div>
+            </article>
+          </li>
+
+          <!-- 3. Nov 14, 3:30 PM SHARP (HERO CARD) -->
+          <li class="tl-item tl-item-hero" data-day="day1" data-accent="red">
+            <div class="tl-node-flag" aria-hidden="true">
+              <span class="tl-flag-dot hero-dot"></span>
+            </div>
+            <article class="tl-card card-hero-spot">
+              <div class="tl-hero-ribbon">
+                <i class="fa-solid fa-bolt" aria-hidden="true"></i> 24-HOUR HACKATHON BEGINS
+              </div>
+              <header class="tl-card-header">
+                <div class="tl-time-box hero-time-box">
+                  <span class="tl-clock-icon"><i class="fa-solid fa-flag-checkered" aria-hidden="true"></i></span>
+                  <time class="tl-time-val" datetime="2026-11-14T15:30">03:30 PM SHARP</time>
+                  <span class="tl-day-pill hero-pill">NOV 14 &bull; DAY 1</span>
+                </div>
+                <div class="tl-tag-row">
+                  <span class="tl-category-tag tag-red">HACKATHON START</span>
+                  <span class="tl-venue-tag"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> LIBRARY
+                    BLOCK</span>
+                </div>
+              </header>
+              <div class="tl-card-body">
+                <h3 class="tl-item-title">Problem Statements Launch &amp; Hacking Starts</h3>
+                <p class="tl-item-desc">Problem statements are revealed and the 24-hour coding sprint officially begins.
+                </p>
+              </div>
+            </article>
+          </li>
+
+          <!-- 4. Nov 14, 5:00 PM - 5:30 PM -->
+          <li class="tl-item" data-day="day1" data-accent="yellow">
+            <div class="tl-node-flag" aria-hidden="true">
+              <span class="tl-flag-dot"></span>
+            </div>
+            <article class="tl-card">
+              <header class="tl-card-header">
+                <div class="tl-time-box">
+                  <span class="tl-clock-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
+                  <time class="tl-time-val" datetime="2026-11-14T17:00">05:00 PM &ndash; 05:30 PM</time>
+                  <span class="tl-day-pill">NOV 14 &bull; DAY 1</span>
+                </div>
+                <div class="tl-tag-row">
+                  <span class="tl-category-tag tag-yellow">TEA BREAK</span>
+                  <span class="tl-venue-tag"><i class="fa-solid fa-mug-hot" aria-hidden="true"></i> LIBRARY BLOCK</span>
+                </div>
+              </header>
+              <div class="tl-card-body">
+                <h3 class="tl-item-title">Tea &amp; Snacks Break</h3>
+                <p class="tl-item-desc">Hot tea and snacks served with initial mentor discussions.</p>
+              </div>
+            </article>
+          </li>
+
+          <!-- 5. Nov 14, 8:30 PM - 9:30 PM -->
+          <li class="tl-item" data-day="day1" data-accent="green">
+            <div class="tl-node-flag" aria-hidden="true">
+              <span class="tl-flag-dot"></span>
+            </div>
+            <article class="tl-card">
+              <header class="tl-card-header">
+                <div class="tl-time-box">
+                  <span class="tl-clock-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
+                  <time class="tl-time-val" datetime="2026-11-14T20:30">08:30 PM &ndash; 09:30 PM</time>
+                  <span class="tl-day-pill">NOV 14 &bull; DAY 1</span>
+                </div>
+                <div class="tl-tag-row">
+                  <span class="tl-category-tag tag-green">DINNER</span>
+                  <span class="tl-venue-tag"><i class="fa-solid fa-utensils" aria-hidden="true"></i> LIBRARY
+                    BLOCK</span>
+                </div>
+              </header>
+              <div class="tl-card-body">
+                <h3 class="tl-item-title">Dinner Break</h3>
+                <p class="tl-item-desc">Dinner break for all participants and team progress check.</p>
+              </div>
+            </article>
+          </li>
+
+          <!-- 6. Nov 14, 10:00 PM - 11:30 PM -->
+          <li class="tl-item" data-day="day1" data-accent="blue">
+            <div class="tl-node-flag" aria-hidden="true">
+              <span class="tl-flag-dot"></span>
+            </div>
+            <article class="tl-card">
+              <header class="tl-card-header">
+                <div class="tl-time-box">
+                  <span class="tl-clock-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
+                  <time class="tl-time-val" datetime="2026-11-14T22:00">10:00 PM &ndash; 11:30 PM</time>
+                  <span class="tl-day-pill">NOV 14 &bull; DAY 1</span>
+                </div>
+                <div class="tl-tag-row">
+                  <span class="tl-category-tag tag-blue">MENTORING</span>
+                  <span class="tl-venue-tag"><i class="fa-solid fa-code-branch" aria-hidden="true"></i> LIBRARY
+                    BLOCK</span>
+                </div>
+              </header>
+              <div class="tl-card-body">
+                <h3 class="tl-item-title">Mentoring Round 1</h3>
+                <p class="tl-item-desc">Mentors visit teams to check ideas, architecture, and project setup.</p>
+              </div>
+            </article>
+          </li>
+
+          <!-- 7. Nov 15, 12:00 AM (Midnight) -->
+          <li class="tl-item" data-day="day2" data-accent="yellow">
+            <div class="tl-node-flag" aria-hidden="true">
+              <span class="tl-flag-dot"></span>
+            </div>
+            <article class="tl-card">
+              <header class="tl-card-header">
+                <div class="tl-time-box">
+                  <span class="tl-clock-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
+                  <time class="tl-time-val" datetime="2026-11-15T00:00">12:00 AM MIDNIGHT</time>
+                  <span class="tl-day-pill">NOV 15 &bull; DAY 2</span>
+                </div>
+                <div class="tl-tag-row">
+                  <span class="tl-category-tag tag-yellow">MIDNIGHT SNACK</span>
+                  <span class="tl-venue-tag"><i class="fa-solid fa-moon" aria-hidden="true"></i> LIBRARY BLOCK</span>
+                </div>
+              </header>
+              <div class="tl-card-body">
+                <h3 class="tl-item-title">Midnight Snacks &amp; Short Break</h3>
+                <p class="tl-item-desc">Hot Maggi, tea, coffee, and short fun activities to recharge energy.</p>
+              </div>
+            </article>
+          </li>
+
+          <!-- 8. Nov 15, 03:30 AM - 04:30 AM -->
+          <li class="tl-item" data-day="day2" data-accent="ink">
+            <div class="tl-node-flag" aria-hidden="true">
+              <span class="tl-flag-dot"></span>
+            </div>
+            <article class="tl-card">
+              <header class="tl-card-header">
+                <div class="tl-time-box">
+                  <span class="tl-clock-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
+                  <time class="tl-time-val" datetime="2026-11-15T03:30">03:30 AM &ndash; 04:30 AM</time>
+                  <span class="tl-day-pill">NOV 15 &bull; DAY 2</span>
+                </div>
+                <div class="tl-tag-row">
+                  <span class="tl-category-tag tag-ink">CODING SPRINT</span>
+                  <span class="tl-venue-tag"><i class="fa-solid fa-laptop-code" aria-hidden="true"></i> LIBRARY
+                    BLOCK</span>
+                </div>
+              </header>
+              <div class="tl-card-body">
+                <h3 class="tl-item-title">Night Coding Sprint</h3>
+                <p class="tl-item-desc">Teams build core project features with hot coffee available all night.</p>
+              </div>
+            </article>
+          </li>
+
+          <!-- 9. Nov 15, 07:30 AM - 08:30 AM -->
+          <li class="tl-item" data-day="day2" data-accent="green">
+            <div class="tl-node-flag" aria-hidden="true">
+              <span class="tl-flag-dot"></span>
+            </div>
+            <article class="tl-card">
+              <header class="tl-card-header">
+                <div class="tl-time-box">
+                  <span class="tl-clock-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
+                  <time class="tl-time-val" datetime="2026-11-15T07:30">07:30 AM &ndash; 08:30 AM</time>
+                  <span class="tl-day-pill">NOV 15 &bull; DAY 2</span>
+                </div>
+                <div class="tl-tag-row">
+                  <span class="tl-category-tag tag-green">BREAKFAST</span>
+                  <span class="tl-venue-tag"><i class="fa-solid fa-sun" aria-hidden="true"></i> LIBRARY BLOCK</span>
+                </div>
+              </header>
+              <div class="tl-card-body">
+                <h3 class="tl-item-title">Morning Breakfast</h3>
+                <p class="tl-item-desc">Fresh morning breakfast and coffee to start the final build hours.</p>
+              </div>
+            </article>
+          </li>
+
+          <!-- 10. Nov 15, 10:00 AM - 11:30 AM -->
+          <li class="tl-item" data-day="day2" data-accent="blue">
+            <div class="tl-node-flag" aria-hidden="true">
+              <span class="tl-flag-dot"></span>
+            </div>
+            <article class="tl-card">
+              <header class="tl-card-header">
+                <div class="tl-time-box">
+                  <span class="tl-clock-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
+                  <time class="tl-time-val" datetime="2026-11-15T10:00">10:00 AM &ndash; 11:30 AM</time>
+                  <span class="tl-day-pill">NOV 15 &bull; DAY 2</span>
+                </div>
+                <div class="tl-tag-row">
+                  <span class="tl-category-tag tag-blue">MENTORING</span>
+                  <span class="tl-venue-tag"><i class="fa-solid fa-list-check" aria-hidden="true"></i> LIBRARY
+                    BLOCK</span>
+                </div>
+              </header>
+              <div class="tl-card-body">
+                <h3 class="tl-item-title">Mentoring Round 2</h3>
+                <p class="tl-item-desc">Mentors review working prototypes and give final demo tips.</p>
+              </div>
+            </article>
+          </li>
+
+          <!-- 11. Nov 15, 12:30 PM - 01:00 PM -->
+          <li class="tl-item" data-day="day2" data-accent="red">
+            <div class="tl-node-flag" aria-hidden="true">
+              <span class="tl-flag-dot"></span>
+            </div>
+            <article class="tl-card card-freeze-alert">
+              <header class="tl-card-header">
+                <div class="tl-time-box">
+                  <span class="tl-clock-icon"><i class="fa-solid fa-lock" aria-hidden="true"></i></span>
+                  <time class="tl-time-val" datetime="2026-11-15T12:30">12:30 PM &ndash; 01:00 PM</time>
+                  <span class="tl-day-pill">NOV 15 &bull; DAY 2</span>
+                </div>
+                <div class="tl-tag-row">
+                  <span class="tl-category-tag tag-red">CODE FREEZE</span>
+                  <span class="tl-venue-tag"><i class="fa-brands fa-github" aria-hidden="true"></i> LIBRARY BLOCK</span>
+                </div>
+              </header>
+              <div class="tl-card-body">
+                <h3 class="tl-item-title">Code Freeze &amp; Final Project Submission</h3>
+                <p class="tl-item-desc">All coding stops. Teams submit their GitHub repository and demo link.</p>
+              </div>
+            </article>
+          </li>
+
+          <!-- 12. Nov 15, 01:00 PM - 02:00 PM -->
+          <li class="tl-item tl-item-hero" data-day="day2" data-accent="yellow">
+            <div class="tl-node-flag" aria-hidden="true">
+              <span class="tl-flag-dot trophy-dot"></span>
+            </div>
+            <article class="tl-card card-hero-finale">
+              <div class="tl-hero-ribbon finale-ribbon">
+                <i class="fa-solid fa-trophy" aria-hidden="true"></i> GRAND FINALE &amp; PRIZES
+              </div>
+              <header class="tl-card-header">
+                <div class="tl-time-box hero-time-box">
+                  <span class="tl-clock-icon"><i class="fa-solid fa-award" aria-hidden="true"></i></span>
+                  <time class="tl-time-val" datetime="2026-11-15T13:00">01:00 PM &ndash; 02:00 PM</time>
+                  <span class="tl-day-pill hero-pill">NOV 15 &bull; DAY 2</span>
+                </div>
+                <div class="tl-tag-row">
+                  <span class="tl-category-tag tag-yellow">VALEDICTORY</span>
+                  <span class="tl-venue-tag"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> LIBRARY
+                    BLOCK</span>
+                </div>
+              </header>
+              <div class="tl-card-body">
+                <h3 class="tl-item-title">Final Presentations &amp; Prize Distribution</h3>
+                <p class="tl-item-desc">Finalist project presentations, winner announcements, and prize distribution.
+                </p>
+              </div>
+            </article>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="rewards section-pad" id="prizes" aria-labelledby="rewards-heading">
+      <div class="rewards-head reveal">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>06 / REWARDS &amp; PERKS</p>
+          <h2 id="rewards-heading">BUILD BIG. <em>WIN BIGGER.</em></h2>
+        </div>
+        <p class="rewards-note reveal reveal-delay" role="note">Prize amounts will be announced before the event.</p>
+      </div>
+      <!-- Prize tier cards -->
+      <ul class="prize-grid" id="prizeGrid" role="list"></ul>
+      <!-- Perks strip -->
+      <ul class="perks-grid" id="perksGrid" role="list"></ul>
+    </section>
+    <section class="organizers section-pad" id="organizers" aria-labelledby="org-heading">
+      <div class="section-intro reveal">
+        <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>07 / CONTACT THE ORGANIZERS</p>
+        <h2 id="org-heading">CONTACT<br /><em>THE ORGANIZERS.</em></h2>
+        <p class="section-subtext"
+          style="max-width: 640px; margin-top: 10px; font-size: clamp(14px, 1.2vw, 16px); color: var(--muted); line-height: 1.5;">
+          Have questions regarding team registrations, COMPASS membership preferences, rules, or logistics? Connect
+          directly with the organizing leads.
+        </p>
+      </div>
+
+      <!-- 4 Organizer Contact Cards Grid -->
+      <div class="org-contact-grid reveal reveal-delay">
+
+        <!-- 1st Card: Vani V G -->
+        <div class="org-person-card">
+          <div class="org-card-top">
+            <span class="org-role-tag faculty-tag">
+              <i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i> HEAD OF DEPARTMENT &bull; CSE
+            </span>
+          </div>
+          <div class="org-card-content">
+            <h3 class="org-person-name">Vani V G</h3>
+            <p class="org-person-role">Head of the Department, CSE &bull; GEC Hassan</p>
+          </div>
+          <div class="org-card-bottom">
+            <a href="tel:+919482532154" class="org-phone-btn">
+              <i class="fa-solid fa-phone" aria-hidden="true"></i>
+              <span>+91 94825 32154</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 2nd Card: Vikas S P -->
+        <div class="org-person-card">
+          <div class="org-card-top">
+            <span class="org-role-tag president-tag">
+              <i class="fa-solid fa-crown" aria-hidden="true"></i> PRESIDENT
+            </span>
+          </div>
+          <div class="org-card-content">
+            <h3 class="org-person-name">Vikas S P</h3>
+            <p class="org-person-role">Final Year CSE &bull; GEC Hassan</p>
+          </div>
+          <div class="org-card-bottom">
+            <a href="tel:+919019559744" class="org-phone-btn">
+              <i class="fa-solid fa-phone" aria-hidden="true"></i>
+              <span>+91 90195 59744</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 3rd Card: Prajwal K L -->
+        <div class="org-person-card">
+          <div class="org-card-top">
+            <span class="org-role-tag vp-tag">
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i> VICE PRESIDENT
+            </span>
+          </div>
+          <div class="org-card-content">
+            <h3 class="org-person-name">Prajwal K L</h3>
+            <p class="org-person-role">Final Year CSE &bull; GEC Hassan</p>
+          </div>
+          <div class="org-card-bottom">
+            <a href="tel:+917676795409" class="org-phone-btn">
+              <i class="fa-solid fa-phone" aria-hidden="true"></i>
+              <span>+91 76767 95409</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 4th Card: Akash -->
+        <div class="org-person-card">
+          <div class="org-card-top">
+            <span class="org-role-tag treasurer-tag">
+              <i class="fa-solid fa-coins" aria-hidden="true"></i> TREASURER
+            </span>
+          </div>
+          <div class="org-card-content">
+            <h3 class="org-person-name">Akash C O</h3>
+            <p class="org-person-role">Final Year CSE &bull; GEC Hassan</p>
+          </div>
+          <div class="org-card-bottom">
+            <a href="tel:+916361540806" class="org-phone-btn">
+              <i class="fa-solid fa-phone" aria-hidden="true"></i>
+              <span>+91 63615 40806</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Simple WhatsApp and Instagram Action Buttons -->
+      <div class="org-social-actions reveal reveal-delay">
+        <a href="https://chat.whatsapp.com/Bi80datgINKKFP3mgYJlJi?s=cl&p=a&mlu=4&ilr=4&iam=2" target="_blank"
+          rel="noopener noreferrer" class="org-action-pill wa-pill">
+          <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+          <span>Join WhatsApp Group</span>
+          <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.instagram.com/__.compass._/" target="_blank" rel="noopener noreferrer"
+          class="org-action-pill ig-pill">
+          <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+          <span>Follow on Instagram (__.compass._)</span>
+          <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+        </a>
+      </div>
+    </section>
+    <section class="sponsors section-pad" id="sponsors" aria-labelledby="sponsors-heading">
+      <div class="sponsor-top reveal">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>07 / THE SUPPORT SYSTEM</p>
+          <h2 id="sponsors-heading">POWERED<br /><em>BY.</em></h2>
+        </div>
+      </div>
+      <div id="sponsorsMount" class="reveal reveal-delay"></div>
+    </section>
+    <section class="venue section-pad" id="venue" aria-labelledby="venue-heading">
+      <div class="venue-head reveal">
+        <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>08 / WHERE WE BUILD</p>
+        <h2 id="venue-heading">WHERE WE<br /><em>BUILD.</em></h2>
+        <div id="venueDetails">
+          <p class="venue-name">Government Engineering College, Hassan</p>
+          <p class="venue-location"><i class="fa-solid fa-location-dot" aria-hidden="true"
+              style="color: var(--green); margin-right: 6px;"></i>B.M. Road, Hassan, Karnataka - 573201</p>
+          <p class="venue-meta"><strong>NOVEMBER 14–15, 2026</strong></p>
+
+        </div>
+      </div>
+      <div class="venue-right reveal reveal-delay">
+        <div id="venueMap" class="venue-map-wrap">
+          <iframe class="venue-map-iframe"
+            src="https://maps.google.com/maps?q=Government+Engineering+College+Hassan+Karnataka&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=&amp;output=embed"
+            title="Map showing location of Government Engineering College, Hassan" loading="lazy" allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div id="venueDirections">
+          <a href="https://www.google.com/maps/search/?api=1&query=Government+Engineering+College+Hassan"
+            target="_blank" rel="noopener noreferrer" class="button button-outline venue-directions-btn">Get directions
+            to GEC Hassan <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"
+              style="font-size: 11px; margin-left: 4px;"></i></a>
+        </div>
+      </div>
+    </section>
+    <section class="faq section-pad" id="faq" aria-labelledby="faq-heading">
+      <div class="section-intro reveal">
+        <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>09 / QUESTIONS, ANSWERED</p>
+        <h2 id="faq-heading">FREQUENTLY<br /><em>ASKED.</em></h2>
+      </div>
+      <div class="faq-list reveal reveal-delay" id="faqList"></div>
+    </section>
+  </main>
+  <footer class="site-footer reveal" role="contentinfo">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="brand" href="/" aria-label="HackSprint 3.0 — home">
+            <img class="brand-logo" src="images/hacksprint-logo.png" alt="HackSprint 3.0" />
+            <span class="brand-text">HACKSPRINT <span class="brand-accent">3.0</span></span>
+          </a>
+          <p class="footer-tagline">COMPASS &times; GLUE &bull; Government Engineering College, Hassan</p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <a href="#about">About</a>
+          <a href="#rulebook">Rulebook</a>
+          <a href="#problem-statements">Challenge</a>
+          <a href="#timeline">Timeline</a>
+          <a href="#prizes">Prizes</a>
+          <a href="#organizers">Contact</a>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-credit">@ designed and developed by <strong>Prajwal K L</strong></p>
+        <p class="footer-copy">&copy; 2026 HackSprint 3.0. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Fixed Back to Top Button (Right Bottom) -->
+  <button class="back-to-top-btn" id="backToTop" aria-label="Back to top of page" title="Back to top">
+    <span aria-hidden="true">&uarr;</span>
+  </button>
+  <script type="module" src="app.js"></script>
+</body>
+
+</html>

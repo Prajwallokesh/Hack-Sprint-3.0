@@ -1,0 +1,21 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/register",
+      "destination": "/register.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://REPLACE_WITH_YOUR_RENDER_URL/api/:path*"
+    },
+    {
+      "source": "/uploads/:path*",
+      "destination": "https://REPLACE_WITH_YOUR_RENDER_URL/uploads/:path*"
+    }
+  ]
+}

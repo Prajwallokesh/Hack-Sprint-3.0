@@ -1,0 +1,2384 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#34A853" />
+  <title>Register | HackSprint 3.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
+  <link rel="apple-touch-icon" href="images/hacksprint-icon-192.png" />
+
+  <style>
+    /* Neo-Brutalist Registration Page Specific Styles */
+    .reg-page-container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: clamp(24px, 4.5vh, 40px) 1.5rem 5rem;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .reg-marquee-banner {
+      margin-top: clamp(66px, 9.5vh, 84px);
+      border-top: var(--border-ink);
+      border-bottom: var(--border-ink);
+      background: var(--yellow);
+    }
+
+    .reg-mobile-back {
+      display: none;
+      font: 700 11px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink);
+      text-decoration: none;
+      background: var(--surface-alt);
+      border: 1.5px solid var(--ink);
+      box-shadow: 2px 2px 0 var(--ink);
+      padding: 5px 12px;
+      border-radius: 999px;
+      transition: all var(--dur-fast);
+      align-items: center;
+      gap: 4px;
+      margin-left: auto;
+    }
+    .reg-mobile-back:hover {
+      background: var(--yellow);
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    .reg-title {
+      font-size: clamp(1.85rem, 6.8vw, 4.2rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .reg-intro-desc {
+      font-size: clamp(0.92rem, 3.4vw, 1.1rem);
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.45;
+    }
+
+    .reg-stepper {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .step-pill {
+      background: var(--surface);
+      border: var(--border-ink);
+      box-shadow: var(--shadow-hard);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard), background var(--dur-fast);
+      border-radius: 3px;
+      box-sizing: border-box;
+    }
+
+    .step-pill.active {
+      background: var(--ink);
+      color: #fff;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--green);
+    }
+
+    .step-pill.completed {
+      background: #E6F4EA;
+      border-color: var(--green-dark);
+    }
+
+    .step-pill-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--gray-200);
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font: 700 13px var(--mono);
+      flex-shrink: 0;
+    }
+
+    .step-pill.active .step-pill-num {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .step-pill.completed .step-pill-num {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .step-pill-title {
+      font: 700 12px var(--mono);
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .step-pill-sub {
+      font-size: 11px;
+      color: #a1a1aa;
+      line-height: 1.3;
+    }
+    .step-pill.active .step-pill-sub {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Main Form Card */
+    .reg-main-card {
+      background: var(--surface);
+      border: var(--border-ink);
+      box-shadow: 8px 8px 0 var(--ink);
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-sm);
+    }
+
+    .reg-card-inner {
+      padding: clamp(24px, 4vw, 42px);
+      box-sizing: border-box;
+    }
+
+    .step-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 10px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .step-section-title {
+      font: 800 clamp(16px, 3.8vw, 20px) var(--display);
+      text-transform: uppercase;
+      margin: 0;
+      color: var(--ink);
+    }
+
+    .step-section-tag {
+      font: 700 12px var(--mono);
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* Form Fields */
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .field-full {
+      grid-column: 1 / -1;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font: 700 12px var(--mono);
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      color: var(--ink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .field-label .req {
+      color: var(--red);
+    }
+
+    .neo-input,
+    .neo-select {
+      background: #FFFFFF;
+      border: var(--border-ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      padding: 13px 16px;
+      font-family: var(--display);
+      font-size: 16px; /* Prevents auto-zoom on iOS Safari */
+      font-weight: 500;
+      color: var(--ink);
+      outline: none;
+      transition: all var(--dur-fast);
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 2px;
+    }
+
+    .neo-input:focus,
+    .neo-select:focus {
+      border-color: var(--green);
+      box-shadow: 4px 4px 0 var(--green);
+    }
+
+    /* Dynamic Fee Display Box */
+    .fee-preview-banner {
+      margin-top: 10px;
+      padding: 16px 20px;
+      border: var(--border-ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      background: var(--surface-alt);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+      gap: 12px;
+      box-sizing: border-box;
+    }
+
+    .fee-preview-banner.hassan {
+      background: #E6F4EA;
+      border-color: var(--ink);
+      box-shadow: 5px 5px 0 var(--green);
+    }
+
+    .fee-preview-banner.other {
+      background: #E8F0FE;
+      border-color: var(--ink);
+      box-shadow: 5px 5px 0 var(--blue);
+    }
+
+    .fee-preview-val {
+      font: 900 32px var(--display);
+      line-height: 1;
+      color: var(--ink);
+      flex-shrink: 0;
+    }
+
+    /* Member Card */
+    .member-neo-box {
+      background: #FAFAF9;
+      border: var(--border-ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
+
+    .member-neo-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px dashed var(--line);
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .member-neo-badge {
+      font: 700 12px var(--mono);
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      background: var(--ink);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+
+    .btn-add-neo {
+      width: 100%;
+      background: var(--surface-alt);
+      border: 2px dashed var(--ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      padding: 16px;
+      font: 700 13px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+      cursor: pointer;
+      transition: all var(--dur-fast);
+      margin-bottom: 24px;
+      box-sizing: border-box;
+    }
+
+    .btn-add-neo:hover {
+      background: #FEF7E0;
+      border-style: solid;
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 var(--yellow-dark);
+    }
+
+    /* Payment Layout */
+    .neo-payment-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .neo-qr-frame {
+      background: #FFFFFF;
+      border: var(--border-ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      padding: 16px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .neo-dropzone {
+      border: 2.5px dashed var(--ink);
+      background: #FAFAF9;
+      box-shadow: 3px 3px 0 var(--ink);
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: all var(--dur-fast);
+      box-sizing: border-box;
+    }
+
+    .neo-dropzone:hover {
+      background: #E8F0FE;
+      border-color: var(--blue);
+    }
+
+    .neo-dropzone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Action Bar */
+    .reg-actions-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 2px solid var(--line);
+      gap: 12px;
+    }
+
+    .error-neo-box {
+      background: #FCE8E6;
+      border: 2px solid var(--red);
+      box-shadow: 4px 4px 0 var(--red-dark);
+      color: var(--red-dark);
+      font: 700 13px var(--mono);
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      display: none;
+      word-break: break-word;
+    }
+
+    .conf-action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .conf-reg-pill {
+      display: inline-block;
+      font: 900 24px var(--mono);
+      background: #FAFAF9;
+      border: var(--border-ink);
+      box-shadow: 4px 4px 0 var(--green);
+      padding: 12px 28px;
+      margin-bottom: 24px;
+      max-width: 100%;
+      box-sizing: border-box;
+      word-break: break-all;
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 1040px) {
+      .reg-mobile-back {
+        display: inline-flex;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .reg-page-container {
+        padding: clamp(18px, 3vh, 28px) clamp(12px, 3.5vw, 20px) 4rem;
+      }
+
+      .reg-marquee-banner {
+        margin-top: 64px;
+      }
+
+      /* 3-Step Pill Bar on Mobile: clean single-row segmented flow */
+      .reg-stepper {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(5px, 1.5vw, 8px);
+        margin-bottom: 1.25rem;
+      }
+
+      .step-pill {
+        padding: 10px 6px;
+        gap: 6px;
+        box-shadow: 3px 3px 0 var(--ink);
+        border-width: 2px;
+        justify-content: center;
+      }
+
+      .step-pill.active {
+        box-shadow: 3px 3px 0 var(--green);
+        transform: translate(-1px, -1px);
+      }
+
+      .step-pill-num {
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+      }
+
+      .step-pill-title {
+        font-size: clamp(8.5px, 2.1vw, 10.5px);
+        letter-spacing: 0.02em;
+        line-height: 1.15;
+      }
+
+      .step-pill-sub {
+        display: none; /* Hide subtitle on mobile for compact 1-row layout */
+      }
+
+      .reg-main-card {
+        box-shadow: 4px 4px 0 var(--ink);
+        border-width: 2px;
+      }
+
+      .reg-card-inner {
+        padding: clamp(16px, 3.8vw, 24px) clamp(12px, 3vw, 18px);
+      }
+
+      .field-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .field-label {
+        font-size: 11px;
+      }
+
+      .neo-input,
+      .neo-select {
+        padding: 11px 12px;
+        font-size: 16px;
+        box-shadow: 2.5px 2.5px 0 var(--ink);
+      }
+
+      .member-neo-box {
+        padding: clamp(14px, 3vw, 18px) clamp(10px, 2.5vw, 14px);
+        box-shadow: 3px 3px 0 var(--ink);
+        margin-bottom: 14px;
+      }
+
+      .member-neo-badge {
+        font-size: 10.5px;
+        padding: 3px 8px;
+      }
+
+      .btn-add-neo {
+        padding: 13px;
+        font-size: 11.5px;
+        box-shadow: 2.5px 2.5px 0 var(--ink);
+        margin-bottom: 18px;
+      }
+
+      .neo-payment-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .neo-qr-frame {
+        max-width: 260px;
+        margin: 0 auto;
+        padding: 14px;
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+
+      .neo-qr-frame img {
+        max-width: 200px;
+        margin: 0 auto 10px;
+      }
+
+      .fee-preview-banner {
+        padding: 12px 14px;
+        box-shadow: 3px 3px 0 var(--ink);
+      }
+
+      .fee-preview-val {
+        font-size: clamp(1.5rem, 5.5vw, 1.9rem);
+      }
+    }
+
+    @media (max-width: 580px) {
+      .reg-actions-row {
+        flex-direction: column-reverse;
+        gap: 10px;
+        margin-top: 22px;
+        padding-top: 16px;
+      }
+
+      .reg-actions-row .button,
+      .reg-actions-row button,
+      .reg-actions-row a {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        padding: 12.5px 16px;
+        font-size: 13px;
+        box-sizing: border-box;
+      }
+
+      .conf-action-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+      }
+
+      .conf-action-buttons .button,
+      .conf-action-buttons a {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+
+      #stepSection4 {
+        padding: 1.25rem 0.25rem !important;
+      }
+
+      #stepSection4 h2 {
+        font-size: clamp(1.35rem, 6vw, 1.85rem) !important;
+      }
+
+      .conf-reg-pill {
+        font-size: clamp(1.05rem, 4.6vw, 1.4rem);
+        padding: 10px 16px;
+      }
+    }
+
+    @media (max-width: 440px) {
+      .step-pill {
+        flex-direction: column;
+        text-align: center;
+        padding: 8px 4px;
+        gap: 4px;
+      }
+
+      .step-pill-title {
+        font-size: 8px;
+        letter-spacing: 0;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .reg-page-container {
+        padding: 14px 8px 3rem;
+      }
+
+      .reg-card-inner {
+        padding: 14px 8px;
+      }
+
+      .fee-preview-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .fee-preview-val {
+        align-self: flex-end;
+      }
+    }
+
+    /* ==========================================================
+       STEP 4: UNIFIED NEO-BRUTALIST ENTRY TICKET PASS
+       ========================================================== */
+    .conf-step-wrap {
+      text-align: center;
+      padding: clamp(10px, 2vh, 24px) clamp(4px, 1.5vw, 16px);
+    }
+
+    .conf-hero-header {
+      margin-bottom: 2rem;
+    }
+
+    .conf-check-badge {
+      width: 68px;
+      height: 68px;
+      background: #E6F4EA;
+      border: var(--border-ink);
+      box-shadow: 4px 4px 0 var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: var(--green);
+      margin: 0 auto 1.25rem;
+      border-radius: 14px;
+    }
+
+    .conf-hero-title {
+      font: 900 clamp(1.8rem, 4.5vw, 2.5rem) / 1.1 var(--display);
+      text-transform: uppercase;
+      letter-spacing: -0.025em;
+      margin: 0.5rem 0;
+      color: var(--ink);
+    }
+
+    .conf-hero-desc {
+      color: var(--muted);
+      max-width: 540px;
+      margin: 0 auto;
+      font-size: clamp(13px, 1.4vw, 15px);
+      line-height: 1.5;
+    }
+
+    /* Pass Card Container */
+    .conf-ticket-card {
+      background: #FFFFFF;
+      border: 3px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--ink);
+      border-radius: 20px;
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      overflow: hidden;
+      text-align: left;
+      position: relative;
+    }
+
+    .conf-ticket-top-bar {
+      height: 7px;
+      background: linear-gradient(90deg, #22C55E 0%, #10B981 25%, #06B6D4 50%, #3B82F6 75%, #F59E0B 100%);
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .conf-ticket-inner {
+      padding: clamp(20px, 4vw, 32px);
+    }
+
+    .conf-ticket-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px dashed #D6D3D1;
+    }
+
+    .conf-ticket-branding {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .conf-ticket-tag {
+      font: 800 10.5px var(--mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .conf-ticket-team {
+      font: 900 clamp(1.35rem, 3.2vw, 1.85rem) / 1.15 var(--display);
+      color: var(--ink);
+      margin: 0;
+      word-break: break-word;
+      text-transform: uppercase;
+    }
+
+    .conf-ticket-reg-badge {
+      background: #FAFAF9;
+      border: 2px solid var(--ink);
+      box-shadow: 2.5px 2.5px 0 var(--ink);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font: 800 clamp(12.5px, 1.5vw, 14.5px) var(--mono);
+      letter-spacing: 0.03em;
+      color: var(--ink);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* QR Frame */
+    .conf-qr-section {
+      background: #FAFAF9;
+      border: 2px solid var(--ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      border-radius: 14px;
+      padding: 20px 16px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .conf-qr-viewport {
+      background: #FFFFFF;
+      padding: 12px;
+      border: 2px solid var(--ink);
+      box-shadow: 2px 2px 0 var(--ink);
+      border-radius: 10px;
+      display: inline-block;
+      line-height: 0;
+    }
+
+    .conf-qr-mount {
+      position: relative;
+      display: inline-block;
+      line-height: 0;
+    }
+
+    .conf-qr-mount img,
+    .conf-qr-mount canvas {
+      display: block;
+      width: 170px !important;
+      height: 170px !important;
+      margin: 0 auto;
+    }
+
+    .conf-qr-center-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      background: #FFFFFF;
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      box-shadow: 1.5px 1.5px 0 var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3px;
+      box-sizing: border-box;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .conf-qr-center-logo img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain !important;
+    }
+
+    .conf-qr-caption strong {
+      display: block;
+      font: 800 12px var(--mono);
+      letter-spacing: 0.06em;
+      color: var(--ink);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .conf-qr-caption span {
+      display: block;
+      font-size: 11.5px;
+      color: var(--muted);
+      font-weight: 500;
+      max-width: 280px;
+      margin: 0 auto;
+      line-height: 1.35;
+    }
+
+    /* Details Grid */
+    .conf-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 16px;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 2px dashed #D6D3D1;
+    }
+
+    .conf-detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .conf-detail-label {
+      font: 800 9.5px var(--mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #78716C;
+    }
+
+    .conf-detail-val {
+      font: 700 clamp(12.5px, 1.4vw, 14px) var(--display);
+      color: var(--ink);
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .conf-val-highlight {
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .conf-special-notice {
+      background: #E8F5E9;
+      border: 1.5px solid var(--green);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      line-height: 1.4;
+      color: #14532D;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-align: left;
+    }
+
+    /* Pass Actions */
+    .conf-pass-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .conf-btn-download {
+      width: 100%;
+      padding: 14px 20px;
+      font: 800 14px var(--mono);
+      letter-spacing: 0.02em;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .conf-auto-download-hint {
+      font: 700 11px var(--mono);
+      color: #15803D;
+      display: none;
+      align-items: center;
+    }
+
+    /* WhatsApp Card */
+    .conf-whatsapp-card {
+      background: #E8F5E9;
+      border: 2.5px solid var(--ink);
+      box-shadow: 5px 5px 0 var(--green);
+      max-width: 520px;
+      margin: 0 auto 2rem;
+      padding: clamp(18px, 3.8vw, 24px);
+      text-align: center;
+      border-radius: 16px;
+    }
+
+    .conf-wa-icon {
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+      color: #25D366;
+    }
+
+    .conf-wa-title {
+      font: 900 1.25rem var(--display);
+      text-transform: uppercase;
+      margin: 0 0 6px;
+      color: var(--ink);
+    }
+
+    .conf-wa-desc {
+      font-size: 0.88rem;
+      color: #1B5E20;
+      font-weight: 600;
+      margin: 0 0 16px;
+      line-height: 1.45;
+    }
+
+    .conf-wa-btn {
+      background: #25D366;
+      color: #fff;
+      border: 2px solid var(--ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      width: 100%;
+      border-radius: 10px;
+      box-sizing: border-box;
+      transition: transform var(--dur-fast), box-shadow var(--dur-fast);
+    }
+
+    .conf-wa-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+
+    .conf-footer-actions {
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 520px) {
+      .conf-details-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .conf-ticket-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .conf-ticket-reg-badge {
+        align-self: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Background Grid Texture -->
+  <div class="page-grid" aria-hidden="true"></div>
+
+  <!-- Floating Neo-Brutalist Pill Navbar -->
+  <header class="site-header" id="navbar">
+    <a class="brand" href="/" aria-label="HackSprint 3.0 — home">
+      <img class="brand-logo" src="images/hacksprint-logo.png" alt="HackSprint 3.0" />
+      <span class="brand-text">HACKSPRINT <span class="brand-accent">3.0</span></span>
+    </a>
+    <a href="/" class="reg-mobile-back" aria-label="Back to Overview">
+      <span>&larr; Overview</span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="/#about">About</a>
+      <a href="/#rulebook">Rulebook</a>
+      <a href="/#problem-statements">Challenge</a>
+      <a href="/#prizes">Prizes</a>
+      <a href="/" class="nav-cta-btn">&larr; Back to Overview</a>
+    </nav>
+  </header>
+
+  <!-- Marquee Ticker -->
+  <div class="marquee-banner reg-marquee-banner">
+    <div class="marquee-track">
+      <span>OFFICIAL REGISTRATION • HACKSPRINT 3.0 • NOV 14–15, 2026 • 24-HOUR OFFLINE HACKATHON • GEC HASSAN • GEC ARSIKERE • GEC MOSALEHOSAHALLI • OPEN INNOVATION • </span>
+      <span>OFFICIAL REGISTRATION • HACKSPRINT 3.0 • NOV 14–15, 2026 • 24-HOUR OFFLINE HACKATHON • GEC HASSAN • GEC ARSIKERE • GEC MOSALEHOSAHALLI • OPEN INNOVATION • </span>
+    </div>
+  </div>
+
+  <main class="reg-page-container">
+    <div style="margin-bottom: 2rem;">
+      <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>01 / JOIN THE BUILD</p>
+      <h1 class="reg-title">
+        TEAM<br /><em style="color: var(--green); font-style: italic;">REGISTRATION.</em>
+      </h1>
+      <p class="reg-intro-desc">
+        Register your team for HackSprint 3.0. Teams can have 2 to 5 members from participating engineering colleges.
+      </p>
+    </div>
+
+    <!-- Stepper Navigation -->
+    <div class="reg-stepper">
+      <div class="step-pill active" id="stepPill1">
+        <div class="step-pill-num">1</div>
+        <div class="step-pill-content">
+          <div class="step-pill-title">COLLEGE &amp; LEADER</div>
+          <div class="step-pill-sub">Team Profile</div>
+        </div>
+      </div>
+      <div class="step-pill" id="stepPill2">
+        <div class="step-pill-num">2</div>
+        <div class="step-pill-content">
+          <div class="step-pill-title">TEAM MEMBERS</div>
+          <div class="step-pill-sub">Members 2 to 5</div>
+        </div>
+      </div>
+      <div class="step-pill" id="stepPill3">
+        <div class="step-pill-num">3</div>
+        <div class="step-pill-content">
+          <div class="step-pill-title">PAYMENT PROOF</div>
+          <div class="step-pill-sub">Scan &amp; Submit</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Alert Box -->
+    <div class="error-neo-box" id="errorToast"></div>
+
+    <!-- Main Registration Card -->
+    <div class="reg-main-card">
+      <div class="reg-card-inner">
+        <form id="regForm" autocomplete="off">
+
+          <!-- ========================================================
+               STEP 1: COLLEGE & TEAM LEADER
+               ======================================================== -->
+          <div id="stepSection1">
+            <div class="step-section-header">
+              <h2 class="step-section-title">01. College &amp; Team Details</h2>
+              <span class="step-section-tag">STEP 1 OF 3</span>
+            </div>
+
+            <div class="field-grid">
+              <!-- College Selection -->
+              <div class="field-group field-full">
+                <label class="field-label" for="collegeSelect">
+                  <span>SELECT YOUR COLLEGE <span class="req">*</span></span>
+                  <span style="font-size: 10px; color: var(--muted);">MUST BE SELECTED FIRST</span>
+                </label>
+                <select id="collegeSelect" class="neo-select" required>
+                  <option value="" disabled selected>-- Choose your institution --</option>
+                  <option value="GEC Hassan">Government Engineering College, Hassan (GEC Hassan)</option>
+                  <option value="GEC Arsikere">Government Engineering College, Arsikere (GEC Arsikere)</option>
+                  <option value="GEC Mosalehosahalli">Government Engineering College, Mosalehosahalli (GEC Mosalehosahalli)</option>
+                </select>
+
+                <!-- Dynamic Fee Preview Banner -->
+                <div class="fee-preview-banner" id="feeBadgeBox">
+                  <div>
+                    <div style="font: 700 11px var(--mono); text-transform: uppercase; color: var(--muted);">REGISTRATION FEE</div>
+                    <div style="font: 800 16px var(--display); text-transform: uppercase;" id="feeBadgeText">Select your college above</div>
+                    <div style="font-size: 12px; color: var(--muted);">Flat fee per team (up to 5 members)</div>
+                  </div>
+                  <div class="fee-preview-val" id="feeBadgeVal">—</div>
+                </div>
+
+                <!-- Real-Time Seat Quota & Urgency Banner -->
+                <div id="seatUrgencyBox" style="display: none; margin-top: 12px; padding: 12px 16px; border: 2px solid var(--ink); border-radius: 4px; box-shadow: 3px 3px 0 var(--ink); transition: all 0.3s ease;"></div>
+              </div>
+
+              <!-- Team Name -->
+              <div class="field-group field-full">
+                <label class="field-label" for="teamName">TEAM NAME <span class="req">*</span></label>
+                <input type="text" id="teamName" class="neo-input" placeholder="e.g. Matrix Hackers" required />
+              </div>
+
+              <!-- Leader Name -->
+              <div class="field-group">
+                <label class="field-label" for="leaderName">TEAM LEADER NAME <span class="req">*</span></label>
+                <input type="text" id="leaderName" class="neo-input" placeholder="Full Name" required />
+              </div>
+
+              <!-- Leader USN -->
+              <div class="field-group">
+                <label class="field-label" for="leaderUsn">LEADER USN <span class="req">*</span></label>
+                <input type="text" id="leaderUsn" class="neo-input" placeholder="e.g. 4GH22CS001" autocapitalize="characters" autocomplete="off" spellcheck="false" style="text-transform: uppercase; font-family: var(--mono);" required />
+              </div>
+
+              <!-- Leader Mobile -->
+              <div class="field-group">
+                <label class="field-label" for="leaderMobile">LEADER 10-DIGIT MOBILE <span class="req">*</span></label>
+                <input type="tel" id="leaderMobile" class="neo-input" placeholder="9876543210" maxlength="10" required />
+              </div>
+
+              <!-- Leader Year -->
+              <div class="field-group">
+                <label class="field-label" for="leaderYear">LEADER YEAR OF STUDY <span class="req">*</span></label>
+                <select id="leaderYear" class="neo-select" required>
+                  <option value="1st Year">1st Year</option>
+                  <option value="2nd Year" selected>2nd Year</option>
+                  <option value="3rd Year">3rd Year</option>
+                  <option value="4th Year">4th Year</option>
+                </select>
+              </div>
+
+              <!-- Leader Email -->
+              <div class="field-group field-full">
+                <label class="field-label" for="leaderEmail">LEADER EMAIL ADDRESS</label>
+                <input type="email" id="leaderEmail" class="neo-input" placeholder="leader@example.com" />
+              </div>
+            </div>
+
+            <div class="reg-actions-row">
+              <a href="/" class="button button-ghost">← Cancel</a>
+              <button type="button" class="button button-primary" id="btnNext1">
+                Add Team Members ➔
+              </button>
+            </div>
+          </div>
+
+          <!-- ========================================================
+               STEP 2: TEAM MEMBERS
+               ======================================================== -->
+          <div id="stepSection2" style="display: none;">
+            <div class="step-section-header">
+              <h2 class="step-section-title">02. Team Members Details</h2>
+              <span class="step-section-tag">STEP 2 OF 3</span>
+            </div>
+
+            <!-- GEC Hassan Policy Notice Banner -->
+            <div id="gecHassanNotice" style="display: none; background: #E8F5E9; border: 2.5px solid var(--ink); box-shadow: 4px 4px 0 var(--green); padding: 18px 20px; margin-bottom: 1.5rem;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                <i class="fa-solid fa-leaf" style="font-size: 1.2rem; color: #1B5E20;" aria-hidden="true"></i>
+                <span style="font: 800 13px var(--mono); color: #1B5E20; text-transform: uppercase; letter-spacing: 0.05em;">GEC HASSAN TEAM POLICY</span>
+              </div>
+              <p style="font-size: 14px; font-weight: 700; color: var(--ink); margin: 0; line-height: 1.45;">
+                GEC Hassan teams are restricted to a total of <strong>3 members</strong> (Leader + 2 members).
+              </p>
+              <p style="font-size: 13.5px; font-weight: 600; color: #2E7D32; margin: 4px 0 0; line-height: 1.4;">
+                ★ <strong>2 first-year students will be added to your team</strong> by the faculty and organizing committee to foster junior mentorship!
+              </p>
+              <p style="font-size: 13px; font-weight: 600; color: #1B5E20; margin: 6px 0 0; line-height: 1.4;">
+                ★ <strong>COMPASS association fee paid students will receive first preference</strong> during team selection and slot allotment.
+              </p>
+            </div>
+
+            <p id="step2Intro" style="color: var(--muted); font-size: 14px; margin-bottom: 1.5rem;">
+              Member 2 is required. You can add up to 5 members in total (Leader + up to 4 members).
+            </p>
+
+            <!-- Member 2 (Required) -->
+            <div class="member-neo-box">
+              <div class="member-neo-head">
+                <span class="member-neo-badge">MEMBER 2 (REQUIRED)</span>
+              </div>
+              <div class="field-grid">
+                <div class="field-group">
+                  <label class="field-label" for="m2Name">FULL NAME <span class="req">*</span></label>
+                  <input type="text" id="m2Name" class="neo-input" placeholder="Full Name" required />
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="m2Usn">USN <span class="req">*</span></label>
+                  <input type="text" id="m2Usn" class="neo-input" placeholder="e.g. 4GH22CS045" autocapitalize="characters" autocomplete="off" spellcheck="false" style="text-transform: uppercase; font-family: var(--mono);" required />
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="m2Mobile">MOBILE NUMBER <span class="req">*</span></label>
+                  <input type="tel" id="m2Mobile" class="neo-input" placeholder="10-digit mobile" maxlength="10" required />
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="m2Year">YEAR OF STUDY <span class="req">*</span></label>
+                  <select id="m2Year" class="neo-select" required>
+                    <option value="1st Year">1st Year</option>
+                    <option value="2nd Year" selected>2nd Year</option>
+                    <option value="3rd Year">3rd Year</option>
+                    <option value="4th Year">4th Year</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Members Container -->
+            <div id="additionalMembersContainer"></div>
+
+            <!-- Add Member Button -->
+            <button type="button" class="btn-add-neo" id="btnAddMember">
+              + Add Another Member (Up to 5 total)
+            </button>
+
+            <div class="reg-actions-row">
+              <button type="button" class="button button-ghost" id="btnPrev2">
+                ← Back
+              </button>
+              <button type="button" class="button button-primary" id="btnNext2">
+                Proceed to Payment ➔
+              </button>
+            </div>
+          </div>
+
+          <!-- ========================================================
+               STEP 3: PAYMENT & PROOF
+               ======================================================== -->
+          <div id="stepSection3" style="display: none;">
+            <div class="step-section-header">
+              <h2 class="step-section-title" id="step3Title">03. Fee Payment &amp; Proof</h2>
+              <span class="step-section-tag" id="step3Tag">STEP 3 OF 3</span>
+            </div>
+
+            <!-- Priority Waiting List Full Banner (shown when college seats full) -->
+            <div id="waitlistBannerBox" style="display: none; background: #EFF6FF; border: 2.5px solid var(--ink); border-radius: 6px; padding: 20px 24px; box-shadow: 4px 4px 0 var(--ink); margin-bottom: 24px;">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <span style="background: #2563EB; color: #FFFFFF; font: 800 11px var(--mono); padding: 4px 8px; border-radius: 4px; border: 1.5px solid var(--ink); text-transform: uppercase;">PRIORITY WAITING LIST</span>
+                <span style="font: 800 16px var(--display); color: var(--ink); text-transform: uppercase;">NO PAYMENT REQUIRED TODAY</span>
+              </div>
+              <p style="font-size: 14px; color: var(--ink); line-height: 1.5; margin: 0 0 10px 0;">
+                The guaranteed regular quota for <strong id="waitlistCollegeSpan">your college</strong> has reached capacity.
+                You are submitting your team for the <strong>Official Priority Waiting List</strong>.
+              </p>
+              <div style="background: #FFFFFF; border: 1.5px solid var(--ink); border-radius: 4px; padding: 10px 14px; font-size: 13px; color: var(--ink);">
+                <i class="fa-solid fa-circle-info" style="color: #2563EB; margin-right: 6px;"></i>
+                <strong>Zero Fee Policy:</strong> You do <strong>not</strong> need to make any UPI payment or upload screenshot proof now. If a confirmed team cancels or slots are expanded, we will contact your team leader immediately!
+              </div>
+            </div>
+
+            <div class="neo-payment-grid">
+              <!-- Left: QR Frame -->
+              <div class="neo-qr-frame" id="qrFrameBox">
+                <div class="qr-img-wrapper" style="position: relative; background: #FFFFFF; padding: 4px; border: var(--border-ink); border-radius: 8px; margin-bottom: 12px; box-shadow: 2px 2px 0 var(--ink);">
+                  <img id="qrImage" src="images/qr-100.jpg" alt="Payment QR Code - Akash (₹100)" style="width: 100%; height: auto; display: block; border-radius: 6px;" />
+                </div>
+                <div class="qr-upi-info" style="background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 10px 8px; margin-bottom: 10px; text-align: center;">
+                  <div style="font: 800 11px var(--mono); color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase;">Pay to: Akash (Treasurer)</div>
+                  <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 5px;">
+                    <code style="font: 700 12px var(--mono); color: var(--ink); background: #FFFFFF; padding: 3px 8px; border: 1px solid var(--ink); border-radius: 4px;" id="upiIdText">akashmithn@oksbi</code>
+                    <button type="button" id="btnCopyUpi" title="Copy UPI ID" style="background: var(--surface); border: 1.5px solid var(--ink); box-shadow: 1.5px 1.5px 0 var(--ink); border-radius: 4px; padding: 4px 8px; cursor: pointer; font: 700 11px var(--mono);">
+                      <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy
+                    </button>
+                  </div>
+                </div>
+                <p style="font: 700 11px var(--mono); color: var(--muted); margin: 0; text-transform: uppercase;">
+                  Scan via GPay / PhonePe / Paytm / Any UPI app
+                </p>
+              </div>
+
+              <!-- Right: Payment Proof Inputs -->
+              <div>
+                <div class="fee-preview-banner" style="margin-top: 0; margin-bottom: 20px;" id="paySummaryBox">
+                  <div>
+                    <div style="font: 700 11px var(--mono); text-transform: uppercase; color: var(--muted);">AMOUNT DUE</div>
+                    <div style="font: 800 16px var(--display);" id="paySummaryCollege">GEC Hassan</div>
+                  </div>
+                  <div class="fee-preview-val" style="color: var(--green);" id="paySummaryFee">₹100</div>
+                </div>
+
+                <div id="paymentProofFields">
+                  <!-- Transaction ID / UTR -->
+                  <div class="field-group" style="margin-bottom: 20px;">
+                    <label class="field-label" for="transactionId">UPI TRANSACTION ID / UTR NUMBER <span class="req">*</span></label>
+                    <input type="text" id="transactionId" class="neo-input" placeholder="12-digit UPI reference ID" style="font-family: var(--mono); font-weight: 700;" required />
+                    <span style="font-size: 11px; color: var(--muted); font-family: var(--mono);">12-digit number found in transaction receipt.</span>
+                  </div>
+
+                  <!-- Screenshot Upload -->
+                  <div class="field-group">
+                    <label class="field-label">PAYMENT SCREENSHOT <span class="req">*</span></label>
+                    <div class="neo-dropzone" id="uploadZone">
+                      <input type="file" id="paymentScreenshot" accept="image/*" required />
+                      <div style="font-size: 32px; margin-bottom: 6px; color: var(--green);"><i class="fa-solid fa-camera" aria-hidden="true"></i></div>
+                      <div style="font: 800 14px var(--display); text-transform: uppercase;">Click or drag payment screenshot here</div>
+                      <div style="font-700 11px var(--mono); color: var(--muted); margin-top: 4px;">PNG, JPG, WEBP (Max 8MB)</div>
+                    </div>
+
+                    <div id="previewBox" style="display: none; align-items: center; gap: 12px; margin-top: 12px; background: #FAFAF9; border: var(--border-ink); padding: 10px 14px;">
+                      <img id="previewImg" src="" alt="Screenshot" style="width: 44px; height: 44px; object-fit: cover; border: 1px solid var(--ink);" />
+                      <div style="flex: 1; font: 700 12px var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" id="previewName"></div>
+                      <button type="button" id="btnRemoveFile" style="background: none; border: none; color: var(--red); font: 700 12px var(--mono); cursor: pointer;">✕ REMOVE</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="reg-actions-row">
+              <button type="button" class="button button-ghost" id="btnPrev3">
+                ← Back
+              </button>
+              <button type="submit" class="button button-primary" id="btnSubmit">
+                Submit Registration <i class="fa-solid fa-paper-plane" aria-hidden="true" style="margin-left: 6px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- ========================================================
+               STEP 4: CONFIRMATION & DIGITAL ENTRY PASS
+               ======================================================== -->
+          <div id="stepSection4" class="conf-step-wrap" style="display: none;">
+
+            <!-- Confirmation Badge & Heading -->
+            <div class="conf-hero-header">
+              <div class="conf-check-badge">
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+              </div>
+              <p class="eyebrow" style="justify-content: center;"><span class="eyebrow-rule"></span>OFFICIAL ENTRY PASS GENERATED</p>
+              <h2 class="conf-hero-title">REGISTRATION CONFIRMED!</h2>
+              <p class="conf-hero-desc">
+                Your team registration has been recorded. Save your unique digital entry pass below to check in at GEC Hassan on <strong>November 14, 2026</strong>.
+              </p>
+            </div>
+
+            <!-- UNIFIED DIGITAL ENTRY PASS TICKET -->
+            <div class="conf-ticket-card" id="confTicketCard">
+              <div class="conf-ticket-top-bar" aria-hidden="true"></div>
+
+              <div class="conf-ticket-inner">
+                <!-- Ticket Header -->
+                <div class="conf-ticket-header">
+                  <div class="conf-ticket-branding">
+                    <span class="conf-ticket-tag">OFFICIAL ENTRY PASS</span>
+                    <h3 class="conf-ticket-team" id="confTeamName">—</h3>
+                  </div>
+                  <div class="conf-ticket-reg-badge" id="confRegId">
+                    HS3-HSSN-0000
+                  </div>
+                </div>
+
+                <!-- Unique QR Viewport -->
+                <div class="conf-qr-section">
+                  <div class="conf-qr-viewport">
+                    <div id="confQrMount" class="conf-qr-mount"></div>
+                  </div>
+                  <div class="conf-qr-caption">
+                    <strong>UNIQUE TEAM QR CODE</strong>
+                    <span>Present this QR at the venue check-in desk on Nov 14</span>
+                  </div>
+                </div>
+
+                <!-- Details Grid -->
+                <div class="conf-details-grid">
+                  <div class="conf-detail-item">
+                    <span class="conf-detail-label">INSTITUTION</span>
+                    <strong class="conf-detail-val" id="confCollege">—</strong>
+                  </div>
+                  <div class="conf-detail-item">
+                    <span class="conf-detail-label">TEAM LEADER</span>
+                    <strong class="conf-detail-val" id="confLeaderName">—</strong>
+                  </div>
+                  <div class="conf-detail-item">
+                    <span class="conf-detail-label">BUILDERS</span>
+                    <strong class="conf-detail-val" id="confMembersCount">—</strong>
+                  </div>
+                  <div class="conf-detail-item">
+                    <span class="conf-detail-label">AMOUNT PAID</span>
+                    <strong class="conf-detail-val conf-val-highlight" id="confAmount">₹0</strong>
+                  </div>
+                </div>
+
+                <!-- GEC Hassan 1st-Year Allocation Notice -->
+                <div id="confSpecialNotice" class="conf-special-notice" style="display: none;">
+                  <i class="fa-solid fa-leaf" style="color: #1B5E20; font-size: 14px;"></i>
+                  <span><strong>GEC Hassan Policy:</strong> 2 first-year students will be allocated to your team by the organizing committee.</span>
+                </div>
+
+                <!-- Pass Download Actions -->
+                <div class="conf-pass-actions">
+                  <button type="button" class="button button-primary conf-btn-download" id="btnDownloadPass">
+                    <i class="fa-solid fa-cloud-arrow-down" style="margin-right: 8px;"></i>
+                    Download Team QR Pass (.png)
+                  </button>
+                  <span class="conf-auto-download-hint" id="autoDownloadHint">
+                    <i class="fa-solid fa-circle-check" style="color: var(--green); margin-right: 5px;"></i>
+                    Auto-downloading unique pass to your device...
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Official WhatsApp Community Gateway -->
+            <div id="whatsappCard" class="conf-whatsapp-card">
+              <div class="conf-wa-icon"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+              <h3 class="conf-wa-title">JOIN OFFICIAL PARTICIPANT WHATSAPP GROUP</h3>
+              <p class="conf-wa-desc">
+                Mandatory: Join the official group to receive live updates, hackathon schedules, and mentor assignments!
+              </p>
+              <a id="confWhatsAppBtn" href="#" target="_blank" rel="noopener noreferrer" class="conf-wa-btn">
+                <i class="fa-brands fa-whatsapp" style="font-size: 1.25rem;"></i>
+                <span>Join Official WhatsApp Group</span>
+                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.85rem;"></i>
+              </a>
+            </div>
+
+            <!-- Back to Home -->
+            <div class="conf-footer-actions">
+              <a href="/" class="button button-ghost">
+                &larr; Back to Hackathon Home
+              </a>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Site Footer Matching Index.html -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="brand" href="/" aria-label="HackSprint 3.0 — home">
+            <img class="brand-logo" src="images/hacksprint-logo.png" alt="HackSprint 3.0" />
+            <span class="brand-text">HACKSPRINT <span class="brand-accent">3.0</span></span>
+          </a>
+          <p class="footer-tagline">COMPASS &times; GLUE &bull; Government Engineering College, Hassan</p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <a href="/#about">About</a>
+          <a href="/#rulebook">Rulebook</a>
+          <a href="/#problem-statements">Challenge</a>
+          <a href="/#prizes">Prizes</a>
+          <a href="mailto:hacksprint3@gechassan.ac.in">Contact</a>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-credit">@ designed and developed by <strong>Prajwal K L</strong></p>
+        <p class="footer-copy">&copy; 2026 HackSprint 3.0. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Fixed Back to Top Button (Right Bottom) -->
+  <button class="back-to-top-btn" id="backToTop" aria-label="Back to top of page" title="Back to top">
+    <span aria-hidden="true">&uarr;</span>
+  </button>
+
+  <!-- QR Code Generator Library -->
+  <script src="/js/qrcode.min.js"></script>
+  <script>
+    const btt = document.getElementById('backToTop');
+    if (btt) {
+      window.addEventListener('scroll', () => {
+        btt.classList.toggle('visible', window.scrollY > 300);
+      }, { passive: true });
+      btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
+
+    let currentStep = 1;
+    let selectedCollege = '';
+    let feeAmount = 0;
+    let dynamicMembers = [];
+    let seatsQuotas = null;
+
+    const collegeSelect = document.getElementById('collegeSelect');
+    const feeBadgeBox = document.getElementById('feeBadgeBox');
+    const feeBadgeText = document.getElementById('feeBadgeText');
+    const feeBadgeVal = document.getElementById('feeBadgeVal');
+    const errorToast = document.getElementById('errorToast');
+
+    async function fetchSeatsStatus() {
+      try {
+        const res = await fetch('/api/seats-status');
+        const data = await res.json();
+        if (data.success && data.quotas) {
+          seatsQuotas = data.quotas;
+          updateSeatDisplay();
+        }
+      } catch (err) {
+        console.warn('Seat quota fetch error:', err);
+      }
+    }
+
+    // Initial fetch of seat quotas
+    fetchSeatsStatus();
+
+    function updateSeatDisplay() {
+      const urgencyBox = document.getElementById('seatUrgencyBox');
+      const waitlistCollegeSpan = document.getElementById('waitlistCollegeSpan');
+      if (waitlistCollegeSpan) waitlistCollegeSpan.textContent = selectedCollege || 'your college';
+
+      if (!urgencyBox) return;
+      if (!selectedCollege || !seatsQuotas || !seatsQuotas[selectedCollege]) {
+        urgencyBox.style.display = 'none';
+        updateStep3WaitlistView(false);
+        return;
+      }
+
+      const info = seatsQuotas[selectedCollege];
+      const remaining = info.remaining;
+      const isWaitlist = info.isWaitlist;
+
+      if (isWaitlist) {
+        // College quota full -> Waitlist Mode
+        urgencyBox.style.display = 'block';
+        urgencyBox.style.background = '#EFF6FF';
+        urgencyBox.style.borderColor = '#2563EB';
+        urgencyBox.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #2563EB;"></span>
+              <strong style="font: 800 12px var(--mono); color: #1D4ED8; letter-spacing: 0.04em;">REGULAR SEATS FULL (${info.limit} TEAMS)</strong>
+            </div>
+            <span style="font: 700 11px var(--mono); background: #DBEAFE; color: #1E40AF; padding: 2px 8px; border-radius: 4px; border: 1px solid #93C5FD;">PRIORITY WAITLIST ACTIVE</span>
+          </div>
+          <div style="font-size: 13px; color: #1E3A8A; margin-top: 6px; font-weight: 500;">
+            Regular slots for <strong>${selectedCollege}</strong> are filled. Register now for the official <strong>Priority Waiting List (Free / No Payment Today)</strong>.
+          </div>
+        `;
+      } else if (selectedCollege === 'GEC Hassan') {
+        // Hassan college: show urgency ONLY when remaining <= 10
+        if (remaining <= 10) {
+          urgencyBox.style.display = 'block';
+          urgencyBox.style.background = '#FEF2F2';
+          urgencyBox.style.borderColor = '#DC2626';
+          urgencyBox.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #DC2626; box-shadow: 0 0 8px #DC2626;"></span>
+                <strong style="font: 800 12px var(--mono); color: #B91C1C; letter-spacing: 0.04em;">🔥 FAST FILLING: ONLY ${remaining} SEATS LEFT!</strong>
+              </div>
+              <span style="font: 700 11px var(--mono); background: #FEE2E2; color: #991B1B; padding: 2px 8px; border-radius: 4px; border: 1px solid #FCA5A5;">${remaining} / 30 SLOTS REMAINING</span>
+            </div>
+            <div style="font-size: 12px; color: #7F1D1D; margin-top: 5px;">
+              Hurry! Complete registration before the 30-team GEC Hassan regular quota closes.
+            </div>
+          `;
+        } else {
+          // Hassan remaining > 10: keep it hidden as requested by user
+          urgencyBox.style.display = 'none';
+        }
+      } else {
+        // Other colleges (Arsikere & Mosalehosahalli): live remaining seats visible at all times from 5 downwards
+        urgencyBox.style.display = 'block';
+        const isLow = remaining <= 2;
+        urgencyBox.style.background = isLow ? '#FEF2F2' : '#F0FDF4';
+        urgencyBox.style.borderColor = isLow ? '#DC2626' : '#16A34A';
+        const badgeBg = isLow ? '#FEE2E2' : '#DCFCE7';
+        const badgeBorder = isLow ? '#FCA5A5' : '#86EFAC';
+        const badgeColor = isLow ? '#991B1B' : '#166534';
+        const titleColor = isLow ? '#B91C1C' : '#15803D';
+        const dotColor = isLow ? '#DC2626' : '#16A34A';
+
+        urgencyBox.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: ${dotColor};"></span>
+              <strong style="font: 800 12px var(--mono); color: ${titleColor}; letter-spacing: 0.04em;">⚡ LIVE SEATS: ${remaining} OF ${info.limit} SEATS AVAILABLE</strong>
+            </div>
+            <span style="font: 700 11px var(--mono); background: ${badgeBg}; color: ${badgeColor}; padding: 2px 8px; border-radius: 4px; border: 1px solid ${badgeBorder};">${remaining} SEATS LEFT</span>
+          </div>
+          <div style="font-size: 12px; color: var(--muted); margin-top: 5px;">
+            Quota strictly capped at 5 confirmed teams for ${selectedCollege}.
+          </div>
+        `;
+      }
+
+      updateStep3WaitlistView(isWaitlist);
+    }
+
+    function updateStep3WaitlistView(isWaitlist) {
+      const qrFrame = document.getElementById('qrFrameBox');
+      const waitlistBanner = document.getElementById('waitlistBannerBox');
+      const paymentFields = document.getElementById('paymentProofFields');
+      const paySummaryFee = document.getElementById('paySummaryFee');
+      const paySummaryCollege = document.getElementById('paySummaryCollege');
+      const btnSubmit = document.getElementById('btnSubmit');
+      const txInput = document.getElementById('transactionId');
+      const fileInput = document.getElementById('paymentScreenshot');
+      const step3Title = document.getElementById('step3Title');
+      const step3Tag = document.getElementById('step3Tag');
+      const feeBadgeVal = document.getElementById('feeBadgeVal');
+      const feeBadgeText = document.getElementById('feeBadgeText');
+
+      if (isWaitlist) {
+        if (step3Title) step3Title.innerHTML = '03. Priority Waiting List Entry';
+        if (step3Tag) step3Tag.textContent = 'FREE WAITLIST';
+        if (qrFrame) qrFrame.style.display = 'none';
+        if (waitlistBanner) waitlistBanner.style.display = 'block';
+        if (paymentFields) paymentFields.style.display = 'none';
+        if (feeBadgeVal) feeBadgeVal.textContent = '₹0 (WAITLIST)';
+        if (feeBadgeText) feeBadgeText.textContent = (selectedCollege ? selectedCollege.toUpperCase() : '') + ' (WAITLIST)';
+        if (paySummaryFee) {
+          paySummaryFee.textContent = '₹0 (Deferred)';
+          paySummaryFee.style.color = '#2563EB';
+        }
+        if (paySummaryCollege) paySummaryCollege.textContent = selectedCollege + ' (Waiting List)';
+        if (txInput) txInput.required = false;
+        if (fileInput) fileInput.required = false;
+        if (btnSubmit) {
+          btnSubmit.innerHTML = 'Join Priority Waiting List (Free) <i class="fa-solid fa-clock" style="margin-left: 6px;"></i>';
+          btnSubmit.style.background = '#2563EB';
+        }
+      } else {
+        if (step3Title) step3Title.innerHTML = '03. Fee Payment &amp; Proof';
+        if (step3Tag) step3Tag.textContent = 'STEP 3 OF 3';
+        if (qrFrame) qrFrame.style.display = 'block';
+        if (waitlistBanner) waitlistBanner.style.display = 'none';
+        if (paymentFields) paymentFields.style.display = 'block';
+        if (feeBadgeVal && feeAmount) feeBadgeVal.textContent = '₹' + feeAmount;
+        if (paySummaryFee) {
+          paySummaryFee.textContent = '₹' + feeAmount;
+          paySummaryFee.style.color = 'var(--green)';
+        }
+        if (paySummaryCollege) paySummaryCollege.textContent = selectedCollege;
+        if (txInput) txInput.required = true;
+        if (fileInput) fileInput.required = true;
+        if (btnSubmit) {
+          btnSubmit.innerHTML = 'Submit Registration <i class="fa-solid fa-paper-plane" style="margin-left: 6px;"></i>';
+          btnSubmit.style.background = '';
+        }
+      }
+    }
+
+    function showError(msg) {
+      errorToast.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="margin-right: 6px;"></i>' + msg;
+      errorToast.style.display = 'block';
+      errorToast.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function hideError() {
+      errorToast.style.display = 'none';
+      errorToast.textContent = '';
+    }
+
+    function updateCollegeTeamRules() {
+      const isHassan = selectedCollege === 'GEC Hassan';
+      const notice = document.getElementById('gecHassanNotice');
+      const intro = document.getElementById('step2Intro');
+      if (notice) notice.style.display = isHassan ? 'block' : 'none';
+      if (intro) {
+        if (isHassan) {
+          intro.style.display = 'none';
+          intro.textContent = '';
+        } else {
+          intro.style.display = 'block';
+          intro.textContent = 'Member 2 is required. You can add up to 5 members in total (Leader + up to 4 members).';
+        }
+      }
+
+      // If switching to Hassan and already had >1 dynamic member, trim to 1 (Member 3)
+      if (isHassan && dynamicMembers.length > 1) {
+        dynamicMembers = dynamicMembers.slice(0, 1);
+      }
+    }
+
+    collegeSelect.addEventListener('change', () => {
+      selectedCollege = collegeSelect.value;
+      hideError();
+
+      if (selectedCollege === 'GEC Hassan') {
+        feeAmount = 100;
+        feeBadgeBox.className = 'fee-preview-banner hassan';
+        feeBadgeText.textContent = 'GEC HASSAN SPECIAL FEE';
+        feeBadgeVal.textContent = '₹100';
+        document.getElementById('qrImage').src = 'images/qr-100.jpg';
+        document.getElementById('qrImage').alt = 'Payment QR Code - Akash (₹100)';
+        document.getElementById('paySummaryCollege').textContent = 'GEC Hassan (Special Rate)';
+        document.getElementById('paySummaryFee').textContent = '₹100';
+      } else if (selectedCollege === 'GEC Arsikere' || selectedCollege === 'GEC Mosalehosahalli') {
+        feeAmount = 400;
+        feeBadgeBox.className = 'fee-preview-banner other';
+        feeBadgeText.textContent = selectedCollege.toUpperCase() + ' FEE';
+        feeBadgeVal.textContent = '₹400';
+        document.getElementById('qrImage').src = 'images/qr-400.jpg';
+        document.getElementById('qrImage').alt = 'Payment QR Code - Akash (₹400)';
+        document.getElementById('paySummaryCollege').textContent = selectedCollege;
+        document.getElementById('paySummaryFee').textContent = '₹400';
+      }
+
+      updateCollegeTeamRules();
+      renderDynamicMembers();
+      updateSeatDisplay();
+    });
+
+    // Copy UPI ID helper
+    const btnCopyUpi = document.getElementById('btnCopyUpi');
+    if (btnCopyUpi) {
+      btnCopyUpi.addEventListener('click', () => {
+        const upiId = 'akashmithn@oksbi';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(upiId).then(() => {
+            btnCopyUpi.innerHTML = '<i class="fa-solid fa-check" style="color: var(--green);"></i> Copied';
+            setTimeout(() => { btnCopyUpi.innerHTML = '<i class="fa-regular fa-copy"></i> Copy'; }, 2000);
+          }).catch(() => fallbackCopy(upiId));
+        } else {
+          fallbackCopy(upiId);
+        }
+      });
+      function fallbackCopy(text) {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+        btnCopyUpi.innerHTML = '<i class="fa-solid fa-check" style="color: var(--green);"></i> Copied';
+        setTimeout(() => { btnCopyUpi.innerHTML = '<i class="fa-regular fa-copy"></i> Copy'; }, 2000);
+      }
+    }
+
+    function goToStep(step) {
+      hideError();
+      currentStep = step;
+
+      for (let i = 1; i <= 3; i++) {
+        const pill = document.getElementById('stepPill' + i);
+        if (pill) {
+          pill.classList.remove('active', 'completed');
+          if (i < currentStep) pill.classList.add('completed');
+          if (i === currentStep) pill.classList.add('active');
+        }
+      }
+
+      document.getElementById('stepSection1').style.display = currentStep === 1 ? 'block' : 'none';
+      document.getElementById('stepSection2').style.display = currentStep === 2 ? 'block' : 'none';
+      document.getElementById('stepSection3').style.display = currentStep === 3 ? 'block' : 'none';
+      document.getElementById('stepSection4').style.display = currentStep === 4 ? 'block' : 'none';
+
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    }
+
+    document.getElementById('btnNext1').addEventListener('click', () => {
+      if (!selectedCollege) { showError('Please select your college first.'); return; }
+      const teamName = document.getElementById('teamName').value.trim();
+      const leaderName = document.getElementById('leaderName').value.trim();
+      const leaderUsn = document.getElementById('leaderUsn').value.trim();
+      const leaderMobile = document.getElementById('leaderMobile').value.trim();
+
+      if (!teamName) { showError('Please enter your team name.'); return; }
+      if (!leaderName) { showError('Please enter team leader name.'); return; }
+      if (!leaderUsn) { showError('Please enter leader USN.'); return; }
+      if (!leaderMobile || leaderMobile.length !== 10 || isNaN(leaderMobile)) {
+        showError('Please enter a valid 10-digit mobile number.');
+        return;
+      }
+      updateCollegeTeamRules();
+      renderDynamicMembers();
+      goToStep(2);
+    });
+
+    document.getElementById('btnPrev2').addEventListener('click', () => goToStep(1));
+
+    const addContainer = document.getElementById('additionalMembersContainer');
+    const btnAdd = document.getElementById('btnAddMember');
+
+    function renderDynamicMembers() {
+      addContainer.innerHTML = '';
+      dynamicMembers.forEach((m, idx) => {
+        const memberNum = idx + 3;
+        const div = document.createElement('div');
+        div.className = 'member-neo-box';
+        div.innerHTML = `
+          <div class="member-neo-head">
+            <span class="member-neo-badge" style="background: var(--blue);">MEMBER ${memberNum}</span>
+            <button type="button" class="button button-ghost" style="padding: 4px 10px; font-size: 11px; color: var(--red); border-color: var(--red);" onclick="removeMember(${idx})">✕ Remove</button>
+          </div>
+          <div class="field-grid">
+            <div class="field-group">
+              <label class="field-label">FULL NAME <span class="req">*</span></label>
+              <input type="text" class="neo-input dyn-name" value="${m.name || ''}" placeholder="Full Name" required />
+            </div>
+            <div class="field-group">
+              <label class="field-label">USN <span class="req">*</span></label>
+              <input type="text" class="neo-input dyn-usn" value="${m.usn || ''}" placeholder="e.g. 4GH22CS099" autocapitalize="characters" autocomplete="off" spellcheck="false" style="text-transform: uppercase; font-family: var(--mono);" required />
+            </div>
+            <div class="field-group">
+              <label class="field-label">MOBILE NUMBER <span class="req">*</span></label>
+              <input type="tel" class="neo-input dyn-mobile" value="${m.mobile || ''}" placeholder="10-digit mobile" maxlength="10" required />
+            </div>
+            <div class="field-group">
+              <label class="field-label">YEAR OF STUDY <span class="req">*</span></label>
+              <select class="neo-select dyn-year">
+                <option value="1st Year" ${m.year === '1st Year' ? 'selected' : ''}>1st Year</option>
+                <option value="2nd Year" ${m.year === '2nd Year' || !m.year ? 'selected' : ''}>2nd Year</option>
+                <option value="3rd Year" ${m.year === '3rd Year' ? 'selected' : ''}>3rd Year</option>
+                <option value="4th Year" ${m.year === '4th Year' ? 'selected' : ''}>4th Year</option>
+              </select>
+            </div>
+          </div>
+        `;
+        addContainer.appendChild(div);
+      });
+
+      const isHassan = selectedCollege === 'GEC Hassan';
+      const total = 2 + dynamicMembers.length;
+
+      if (isHassan) {
+        if (dynamicMembers.length === 0) {
+          btnAdd.style.display = 'block';
+          btnAdd.textContent = '+ Add 3rd Member (Max 3 for GEC Hassan)';
+        } else {
+          btnAdd.style.display = 'none';
+        }
+      } else {
+        btnAdd.textContent = '+ Add Another Member (Up to 5 total)';
+        btnAdd.style.display = total >= 5 ? 'none' : 'block';
+      }
+    }
+
+    btnAdd.addEventListener('click', () => {
+      saveDynamicInputs();
+      const isHassan = selectedCollege === 'GEC Hassan';
+      const maxDynamic = isHassan ? 1 : 3;
+      if (dynamicMembers.length < maxDynamic) {
+        dynamicMembers.push({ name: '', usn: '', mobile: '', year: '2nd Year' });
+        renderDynamicMembers();
+      }
+    });
+
+    window.removeMember = function(idx) {
+      saveDynamicInputs();
+      dynamicMembers.splice(idx, 1);
+      renderDynamicMembers();
+    };
+
+    function saveDynamicInputs() {
+      const names = document.querySelectorAll('.dyn-name');
+      const usns = document.querySelectorAll('.dyn-usn');
+      const mobiles = document.querySelectorAll('.dyn-mobile');
+      const years = document.querySelectorAll('.dyn-year');
+
+      names.forEach((el, i) => {
+        if (dynamicMembers[i]) {
+          dynamicMembers[i].name = el.value.trim();
+          dynamicMembers[i].usn = (usns[i].value || '').trim().toUpperCase();
+          dynamicMembers[i].mobile = mobiles[i].value.trim();
+          dynamicMembers[i].year = years[i].value;
+        }
+      });
+    }
+
+    document.getElementById('btnNext2').addEventListener('click', () => {
+      if (selectedCollege === 'GEC Hassan' && dynamicMembers.length > 1) {
+        showError('GEC Hassan teams are restricted to a maximum of 3 members. 2 first-year students will be added by the organizers.');
+        return;
+      }
+      const m2Name = document.getElementById('m2Name').value.trim();
+      const m2Usn = document.getElementById('m2Usn').value.trim().toUpperCase();
+      const m2Mobile = document.getElementById('m2Mobile').value.trim();
+
+      if (!m2Name) { showError('Please enter Member 2 name.'); return; }
+      if (!m2Usn) { showError('Please enter Member 2 USN.'); return; }
+      if (!m2Mobile || m2Mobile.length !== 10 || isNaN(m2Mobile)) {
+        showError('Please enter a valid 10-digit mobile number for Member 2.');
+        return;
+      }
+
+      saveDynamicInputs();
+      for (let i = 0; i < dynamicMembers.length; i++) {
+        const m = dynamicMembers[i];
+        if (!m.name || !m.usn || !m.mobile) {
+          showError(`Please complete all details for Member ${i + 3}.`);
+          return;
+        }
+        if (m.mobile.length !== 10 || isNaN(m.mobile)) {
+          showError(`Member ${i + 3}: Mobile number must be a valid 10-digit number.`);
+          return;
+        }
+      }
+
+      // Check within-team duplicate USNs
+      const leaderUsn = (document.getElementById('leaderUsn').value || '').trim().toUpperCase();
+      const allTeamUsns = [leaderUsn, m2Usn, ...dynamicMembers.map(m => (m.usn || '').trim().toUpperCase())].filter(Boolean);
+      const seenUsn = new Set();
+      let dupUsn = null;
+      for (const u of allTeamUsns) {
+        if (seenUsn.has(u)) { dupUsn = u; break; }
+        seenUsn.add(u);
+      }
+      if (dupUsn) {
+        showError(`Duplicate USN detected within team: "${dupUsn}" is entered multiple times. Each team member must have a distinct USN.`);
+        return;
+      }
+
+      // Check within-team duplicate mobile numbers
+      const leaderMobile = (document.getElementById('leaderMobile').value || '').trim();
+      const allTeamMobiles = [leaderMobile, m2Mobile, ...dynamicMembers.map(m => (m.mobile || '').trim())].filter(Boolean);
+      const seenMobile = new Set();
+      let dupMobile = null;
+      for (const mob of allTeamMobiles) {
+        if (seenMobile.has(mob)) { dupMobile = mob; break; }
+        seenMobile.add(mob);
+      }
+      if (dupMobile) {
+        showError(`Duplicate mobile number detected within team: "${dupMobile}" is entered multiple times. Each member must provide their own contact number.`);
+        return;
+      }
+
+      goToStep(3);
+    });
+
+    document.getElementById('btnPrev3').addEventListener('click', () => goToStep(2));
+
+    const fileInput = document.getElementById('paymentScreenshot');
+    const previewBox = document.getElementById('previewBox');
+    const previewImg = document.getElementById('previewImg');
+    const previewName = document.getElementById('previewName');
+    const btnRemoveFile = document.getElementById('btnRemoveFile');
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        previewName.textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          previewImg.src = e.target.result;
+          previewBox.style.display = 'flex';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    btnRemoveFile.addEventListener('click', () => {
+      fileInput.value = '';
+      previewBox.style.display = 'none';
+    });
+
+    const regForm = document.getElementById('regForm');
+    const btnSubmit = document.getElementById('btnSubmit');
+
+    regForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+
+      const isWaitlistMode = seatsQuotas && seatsQuotas[selectedCollege] && seatsQuotas[selectedCollege].isWaitlist;
+      let transactionId = document.getElementById('transactionId').value.trim();
+
+      if (!isWaitlistMode) {
+        if (!transactionId) {
+          showError('Please enter your UPI transaction ID / UTR.');
+          return;
+        }
+
+        if (!fileInput.files || !fileInput.files[0]) {
+          showError('Please attach a screenshot of your payment.');
+          return;
+        }
+      } else {
+        transactionId = transactionId || 'WAITLIST';
+      }
+
+      saveDynamicInputs();
+      const allMembers = [
+        {
+          memberNumber: 2,
+          name: document.getElementById('m2Name').value.trim(),
+          usn: document.getElementById('m2Usn').value.trim().toUpperCase(),
+          mobile: document.getElementById('m2Mobile').value.trim(),
+          year: document.getElementById('m2Year').value
+        },
+        ...dynamicMembers.map((m, idx) => ({
+          memberNumber: idx + 3,
+          name: m.name,
+          usn: (m.usn || '').trim().toUpperCase(),
+          mobile: m.mobile,
+          year: m.year
+        }))
+      ];
+
+      const formData = new FormData();
+      formData.append('college', selectedCollege);
+      formData.append('teamName', document.getElementById('teamName').value.trim());
+      formData.append('leaderName', document.getElementById('leaderName').value.trim());
+      formData.append('leaderUsn', document.getElementById('leaderUsn').value.trim().toUpperCase());
+      formData.append('leaderMobile', document.getElementById('leaderMobile').value.trim());
+      formData.append('leaderYear', document.getElementById('leaderYear').value);
+      formData.append('leaderEmail', document.getElementById('leaderEmail').value.trim());
+      formData.append('membersJson', JSON.stringify(allMembers));
+      formData.append('transactionId', transactionId);
+      if (!isWaitlistMode && fileInput.files && fileInput.files[0]) {
+        formData.append('paymentScreenshot', fileInput.files[0]);
+      }
+
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = 'SUBMITTING...';
+
+      try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Registration failed.');
+        }
+
+        const leaderName = document.getElementById('leaderName').value.trim();
+
+        // Populate Unified Digital Entry Pass Ticket
+        document.getElementById('confRegId').textContent = data.registrationId;
+        document.getElementById('confTeamName').textContent = data.teamName;
+        document.getElementById('confCollege').textContent = data.college;
+        document.getElementById('confLeaderName').textContent = leaderName;
+        document.getElementById('confMembersCount').textContent = data.totalMembers + ' Registered' + (data.college.includes('Hassan') ? ' (+2 Assigned)' : '');
+
+        if (data.isWaitlist) {
+          const eyebrowEl = document.querySelector('#stepSection4 .eyebrow');
+          if (eyebrowEl) eyebrowEl.innerHTML = '<span class="eyebrow-rule"></span>PRIORITY WAITING LIST PASS GENERATED';
+          
+          const heroTitle = document.querySelector('#stepSection4 .conf-hero-title');
+          if (heroTitle) heroTitle.textContent = 'WAITLIST ENTRY RECORDED!';
+
+          const heroDesc = document.querySelector('#stepSection4 .conf-hero-desc');
+          if (data.isLastSeatRaceContention) {
+            if (heroTitle) heroTitle.textContent = 'WAITLIST ENTRY (FINAL SEAT CONTENTION)';
+            if (heroDesc) heroDesc.innerHTML = '<strong>Important Notice:</strong> Another team confirmed the final guaranteed seat just moments before your submission. Your team has been awarded <strong>Position #1 on the Priority Waiting List</strong>, and your payment details have been recorded for first-priority allocation or full refund.';
+            document.getElementById('confAmount').textContent = '₹' + (data.fee || 100) + ' (Held for Priority #1)';
+          } else {
+            if (heroDesc) heroDesc.innerHTML = 'Your team has been placed on the <strong>Official Priority Waiting List</strong> (Queue Position #' + (data.waitlistPosition || 1) + '). <strong>No payment is required today.</strong> You will be notified immediately if a regular spot opens!';
+            document.getElementById('confAmount').textContent = '₹0 (Deferred - Waitlist)';
+          }
+
+          const waTitle = document.querySelector('#whatsappCard .conf-wa-title');
+          if (waTitle) waTitle.textContent = 'JOIN OFFICIAL WAITING LIST WHATSAPP GROUP';
+
+          const waDesc = document.querySelector('#whatsappCard .conf-wa-desc');
+          if (waDesc) waDesc.textContent = 'Join the dedicated Waiting List community to receive real-time notifications about cancellations, spot openings, and promotions!';
+
+          const waBtn = document.getElementById('confWhatsAppBtn');
+          if (waBtn) {
+            waBtn.querySelector('span').textContent = 'Join Waiting List WhatsApp Group';
+            waBtn.href = data.whatsappGroupUrl;
+          }
+        } else {
+          const eyebrowEl = document.querySelector('#stepSection4 .eyebrow');
+          if (eyebrowEl) eyebrowEl.innerHTML = '<span class="eyebrow-rule"></span>OFFICIAL ENTRY PASS GENERATED';
+
+          const heroTitle = document.querySelector('#stepSection4 .conf-hero-title');
+          if (heroTitle) heroTitle.textContent = 'REGISTRATION CONFIRMED!';
+
+          const heroDesc = document.querySelector('#stepSection4 .conf-hero-desc');
+          if (heroDesc) heroDesc.innerHTML = 'Your team registration has been recorded. Save your unique digital entry pass below to check in at GEC Hassan on <strong>November 14, 2026</strong>.';
+
+          const ticketTag = document.querySelector('#stepSection4 .conf-ticket-tag');
+          if (ticketTag) {
+            ticketTag.textContent = 'OFFICIAL ENTRY PASS';
+            ticketTag.style.background = '';
+            ticketTag.style.color = '';
+          }
+
+          document.getElementById('confAmount').textContent = '₹' + data.fee + ' (Submitted)';
+
+          const waTitle = document.querySelector('#whatsappCard .conf-wa-title');
+          if (waTitle) waTitle.textContent = 'JOIN OFFICIAL PARTICIPANT WHATSAPP GROUP';
+
+          const waDesc = document.querySelector('#whatsappCard .conf-wa-desc');
+          if (waDesc) waDesc.textContent = 'Mandatory: Join the official group to receive live updates, hackathon schedules, and mentor assignments!';
+
+          const waBtn = document.getElementById('confWhatsAppBtn');
+          if (waBtn) {
+            waBtn.querySelector('span').textContent = 'Join Official WhatsApp Group';
+            waBtn.href = data.whatsappGroupUrl;
+          }
+        }
+
+        const specialNotice = document.getElementById('confSpecialNotice');
+        if (specialNotice) {
+          specialNotice.style.display = data.college.includes('Hassan') ? 'flex' : 'none';
+        }
+
+        // Generate Team QR Code (links to verification payload)
+        const qrMount = document.getElementById('confQrMount');
+        if (qrMount) {
+          qrMount.innerHTML = '';
+          const qrPayload = `https://hacksprint.gechassan.ac.in/verify?id=${encodeURIComponent(data.registrationId)}`;
+          try {
+            if (typeof QRCode !== 'undefined') {
+              new QRCode(qrMount, {
+                text: qrPayload,
+                width: 170,
+                height: 170,
+                colorDark: "#0A0A0A",
+                colorLight: "#FFFFFF",
+                correctLevel: QRCode.CorrectLevel.H
+              });
+
+              // Add center logo overlay
+              const centerLogo = document.createElement('div');
+              centerLogo.className = 'conf-qr-center-logo';
+              centerLogo.innerHTML = '<img src="images/hacksprint-icon-192.png" alt="HackSprint" />';
+              qrMount.appendChild(centerLogo);
+            }
+          } catch (qrErr) {
+            console.error('QR code render error:', qrErr);
+          }
+        }
+
+        goToStep(4);
+
+        // Setup Digital Pass (.png) Generator & Auto-download
+        setupPassDownloader(data, leaderName);
+
+        // Re-fetch quotas to ensure fresh state
+        fetchSeatsStatus();
+
+      } catch (err) {
+        showError(err.message || 'Error occurred while saving registration.');
+        btnSubmit.disabled = false;
+        if (seatsQuotas && seatsQuotas[selectedCollege] && seatsQuotas[selectedCollege].isWaitlist) {
+          btnSubmit.innerHTML = 'Join Priority Waiting List (Free) <i class="fa-solid fa-clock" style="margin-left: 6px;"></i>';
+        } else {
+          btnSubmit.innerHTML = 'Submit Registration <i class="fa-solid fa-paper-plane" aria-hidden="true" style="margin-left: 6px;"></i>';
+        }
+      }
+    });
+
+    // High-Resolution Team Entry Pass (.png) Generator & Auto-Downloader
+    let currentPassDataUrl = null;
+
+    function setupPassDownloader(data, leaderName) {
+      const centerLogoImg = new Image();
+      centerLogoImg.src = 'images/hacksprint-icon-192.png';
+
+      function renderCanvasPass() {
+        const qrMount = document.getElementById('confQrMount');
+        const qrSource = qrMount ? (qrMount.querySelector('canvas') || qrMount.querySelector('img')) : null;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 800;
+        canvas.height = 1060;
+        const ctx = canvas.getContext('2d');
+
+        // Background
+        ctx.fillStyle = '#F5F3EE';
+        ctx.fillRect(0, 0, 800, 1060);
+
+        // Outer Shadow
+        ctx.fillStyle = '#0A0A0A';
+        ctx.fillRect(40 + 10, 40 + 10, 720, 970);
+
+        // Card Frame
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(40, 40, 720, 970);
+        ctx.strokeStyle = '#0A0A0A';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(40, 40, 720, 970);
+
+        // Top Accent Color Bar
+        const grad = ctx.createLinearGradient(40, 0, 760, 0);
+        grad.addColorStop(0, '#22C55E');
+        grad.addColorStop(0.25, '#10B981');
+        grad.addColorStop(0.5, '#06B6D4');
+        grad.addColorStop(0.75, '#3B82F6');
+        grad.addColorStop(1, '#F59E0B');
+        ctx.fillStyle = grad;
+        ctx.fillRect(40, 40, 720, 12);
+
+        // Top Header Block
+        ctx.fillStyle = '#0A0A0A';
+        ctx.fillRect(40, 52, 720, 95);
+
+        ctx.fillStyle = data.isWaitlist ? '#3B82F6' : '#22C55E';
+        ctx.font = '800 12px "Space Mono", monospace';
+        ctx.fillText(data.isWaitlist ? 'HACKSPRINT 3.0 • PRIORITY WAITING LIST PASS' : 'HACKSPRINT 3.0 • OFFICIAL ENTRY PASS', 65, 88);
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '900 26px "Outfit", sans-serif';
+        ctx.fillText('24-HOUR OFFLINE HACKATHON', 65, 122);
+
+        // Team Name & Registration ID
+        ctx.fillStyle = '#78716C';
+        ctx.font = '700 11px "Space Mono", monospace';
+        ctx.fillText('TEAM NAME', 65, 185);
+
+        ctx.fillStyle = '#0A0A0A';
+        ctx.font = '900 32px "Outfit", sans-serif';
+        const teamStr = data.teamName || 'Team';
+        const displayTeamName = teamStr.length > 22 ? teamStr.substring(0, 20) + '...' : teamStr;
+        ctx.fillText(displayTeamName.toUpperCase(), 65, 225);
+
+        // Registration ID Pill
+        ctx.fillStyle = '#F5F3EE';
+        ctx.fillRect(520, 180, 205, 48);
+        ctx.strokeStyle = '#0A0A0A';
+        ctx.lineWidth = 2.5;
+        ctx.strokeRect(520, 180, 205, 48);
+
+        ctx.fillStyle = '#0A0A0A';
+        ctx.font = '800 15px "Space Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(data.registrationId || 'HS3-0000', 622, 210);
+        ctx.textAlign = 'left';
+
+        // Dashed Divider
+        ctx.strokeStyle = '#D6D3D1';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 8]);
+        ctx.beginPath();
+        ctx.moveTo(65, 255);
+        ctx.lineTo(735, 255);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // QR Code Box
+        ctx.fillStyle = '#FAFAF9';
+        ctx.fillRect(235, 280, 330, 330);
+        ctx.strokeStyle = '#0A0A0A';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(235, 280, 330, 330);
+
+        if (qrSource) {
+          try {
+            ctx.drawImage(qrSource, 255, 300, 290, 290);
+
+            // Center Logo Badge overlay on Downloadable Canvas Pass
+            const logoSize = 64;
+            const logoX = 255 + (290 - logoSize) / 2;
+            const logoY = 300 + (290 - logoSize) / 2;
+
+            // White rounded box background with border
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(logoX - 5, logoY - 5, logoSize + 10, logoSize + 10);
+            ctx.strokeStyle = '#0A0A0A';
+            ctx.lineWidth = 2.5;
+            ctx.strokeRect(logoX - 5, logoY - 5, logoSize + 10, logoSize + 10);
+
+            if (centerLogoImg && centerLogoImg.complete && centerLogoImg.naturalWidth > 0) {
+              ctx.drawImage(centerLogoImg, logoX, logoY, logoSize, logoSize);
+            }
+          } catch (e) {
+            console.error('Failed to draw QR onto canvas pass:', e);
+          }
+        }
+
+        ctx.fillStyle = '#0A0A0A';
+        ctx.font = '800 12px "Space Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('UNIQUE VENUE CHECK-IN QR CODE', 400, 642);
+        ctx.fillStyle = '#78716C';
+        ctx.font = '600 12px "Outfit", sans-serif';
+        ctx.fillText('Present this pass at the GEC Hassan entry desk on Nov 14, 2026', 400, 662);
+        ctx.textAlign = 'left';
+
+        // Dashed Divider
+        ctx.strokeStyle = '#D6D3D1';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 8]);
+        ctx.beginPath();
+        ctx.moveTo(65, 690);
+        ctx.lineTo(735, 690);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Details Grid (2 Columns)
+        // Col 1: Institution & Team Size
+        ctx.fillStyle = '#78716C';
+        ctx.font = '800 10.5px "Space Mono", monospace';
+        ctx.fillText('INSTITUTION', 65, 725);
+        ctx.fillStyle = '#0A0A0A';
+        ctx.font = '700 15px "Outfit", sans-serif';
+        ctx.fillText(data.college || 'GEC Hassan', 65, 748);
+
+        ctx.fillStyle = '#78716C';
+        ctx.font = '800 10.5px "Space Mono", monospace';
+        ctx.fillText('TEAM SIZE', 65, 792);
+        ctx.fillStyle = '#0A0A0A';
+        ctx.font = '700 15px "Outfit", sans-serif';
+        const membersDesc = (data.totalMembers || 2) + ' Registered Builders' + (data.college && data.college.includes('Hassan') ? ' (+2 Assigned)' : '');
+        ctx.fillText(membersDesc, 65, 815);
+
+        // Col 2: Leader & Amount Paid
+        ctx.fillStyle = '#78716C';
+        ctx.font = '800 10.5px "Space Mono", monospace';
+        ctx.fillText('TEAM LEADER', 430, 725);
+        ctx.fillStyle = '#0A0A0A';
+        ctx.font = '700 15px "Outfit", sans-serif';
+        ctx.fillText(leaderName || 'Team Leader', 430, 748);
+
+        ctx.fillStyle = '#78716C';
+        ctx.font = '800 10.5px "Space Mono", monospace';
+        ctx.fillText('AMOUNT PAID', 430, 792);
+        ctx.fillStyle = data.isWaitlist ? '#2563EB' : '#22C55E';
+        ctx.font = '900 17px "Space Mono", monospace';
+        const feeDesc = data.isWaitlist ? '₹0 (Deferred - Waitlist)' : '₹' + (data.fee || 0) + ' (Submitted)';
+        ctx.fillText(feeDesc, 430, 815);
+
+        // Bottom Footer Block
+        ctx.fillStyle = '#F5F3EE';
+        ctx.fillRect(40, 930, 720, 80);
+        ctx.strokeStyle = '#0A0A0A';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(40, 930);
+        ctx.lineTo(760, 930);
+        ctx.stroke();
+
+        ctx.fillStyle = '#0A0A0A';
+        ctx.font = '800 11px "Space Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('ORGANIZED BY COMPASS × GLUE • GOVERNMENT ENGINEERING COLLEGE, HASSAN', 400, 965);
+        ctx.fillStyle = '#78716C';
+        ctx.font = '600 11px "Outfit", sans-serif';
+        ctx.fillText('Bring this official pass on arrival • Gate check-in opens at 8:00 AM IST', 400, 985);
+        ctx.textAlign = 'left';
+
+        return canvas.toDataURL('image/png');
+      }
+
+      function downloadPassFile(isAuto = false) {
+        if (!currentPassDataUrl) {
+          currentPassDataUrl = renderCanvasPass();
+        }
+        if (!currentPassDataUrl) return;
+
+        const safeName = (data.teamName || 'Team').replace(/[^a-zA-Z0-9_-]/g, '_');
+        const filename = `HackSprint3_${safeName}_QR_Pass.png`;
+
+        const a = document.createElement('a');
+        a.href = currentPassDataUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        if (isAuto) {
+          const hint = document.getElementById('autoDownloadHint');
+          if (hint) {
+            hint.style.display = 'inline-flex';
+          }
+        }
+      }
+
+      // Automatically render and trigger download after 1.2s
+      setTimeout(() => {
+        downloadPassFile(true);
+      }, 1200);
+
+      // Manual re-download button
+      const btnDownload = document.getElementById('btnDownloadPass');
+      if (btnDownload) {
+        btnDownload.onclick = () => {
+          downloadPassFile(false);
+        };
+      }
+    }
+
+    // Real-time automatic UPPERCASE transformation for all USN inputs across desktop and mobile keyboards
+    document.addEventListener('input', (e) => {
+      if (e.target && (e.target.id === 'leaderUsn' || e.target.id === 'm2Usn' || e.target.classList.contains('dyn-usn'))) {
+        const start = e.target.selectionStart;
+        const end = e.target.selectionEnd;
+        e.target.value = e.target.value.toUpperCase();
+        if (start !== null && end !== null) {
+          e.target.setSelectionRange(start, end);
+        }
+      }
+    });
+
+    // Resilient Marquee Scroller for all motion environments
+    (function initMarqueeScroller() {
+      const banner = document.querySelector('.marquee-banner');
+      if (!banner) return;
+      const track = banner.querySelector('.marquee-track');
+      if (!track) return;
+      const isReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (isReducedMotion) {
+        track.style.animation = 'none';
+        let offset = 0;
+        let lastTime = performance.now();
+        const speed = 75;
+        function step(now) {
+          const dt = (now - lastTime) / 1000;
+          lastTime = now;
+          offset += speed * dt;
+          const halfWidth = track.scrollWidth / 2;
+          if (halfWidth > 0 && offset >= halfWidth) offset = offset % halfWidth;
+          track.style.transform = `translate3d(-${offset}px, 0, 0)`;
+          requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+    })();
+  </script>
+</body>
+
+</html>

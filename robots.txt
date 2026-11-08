@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hack-with-gdg-s4.vercel.app/sitemap.xml

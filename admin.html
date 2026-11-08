@@ -1,0 +1,1931 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#34A853" />
+  <title>Admin Dashboard | HackSprint 3.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- QR Code Live Camera Scanner Library -->
+  <script src="/js/html5-qrcode.min.js"></script>
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
+  <link rel="apple-touch-icon" href="images/hacksprint-icon-192.png" />
+
+  <style>
+    body {
+      overflow-x: hidden;
+    }
+
+    /* Neo-Brutalist Admin Dashboard Styles */
+    .admin-page-container {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 24px 1.5rem 5rem;
+    }
+
+    .admin-marquee {
+      margin-top: clamp(74px, 9.5vh, 88px);
+      border-top: var(--border-ink);
+      border-bottom: var(--border-ink);
+      background: var(--green);
+      color: #fff;
+    }
+
+    /* KPI Grid */
+    .neo-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 2rem;
+    }
+
+    .neo-kpi-card {
+      background: var(--surface);
+      border: var(--border-ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .neo-kpi-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    .neo-kpi-title {
+      font: 700 11px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .neo-kpi-value {
+      font: 900 28px var(--mono);
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    /* Controls Bar */
+    .neo-controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface);
+      border: var(--border-ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      padding: 16px 20px;
+      margin-bottom: 2rem;
+    }
+
+    .neo-controls-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      flex: 1;
+      max-width: 850px;
+    }
+
+    .neo-search-input,
+    .neo-filter-select {
+      background: #FFFFFF;
+      border: var(--border-ink);
+      box-shadow: 2px 2px 0 var(--ink);
+      padding: 10px 14px;
+      font-family: var(--display);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .neo-search-input {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .neo-search-input:focus,
+    .neo-filter-select:focus {
+      border-color: var(--green);
+      box-shadow: 3px 3px 0 var(--green);
+    }
+
+    /* Table Container */
+    .neo-table-frame {
+      background: var(--surface);
+      border: var(--border-ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      overflow-x: auto;
+    }
+
+    table.neo-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    table.neo-data-table th {
+      background: var(--ink);
+      color: #fff;
+      font: 700 11px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    table.neo-data-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: middle;
+      font-family: var(--display);
+    }
+
+    table.neo-data-table tr {
+      transition: background var(--dur-fast);
+      cursor: pointer;
+    }
+
+    table.neo-data-table tr:hover {
+      background: #FEF7E0;
+    }
+
+    /* Status Pills */
+    .neo-pill {
+      display: inline-block;
+      font: 700 11px var(--mono);
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border: 1.5px solid var(--ink);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .neo-pill-verified {
+      background: #E6F4EA;
+      color: var(--green-dark);
+    }
+
+    .neo-pill-pending {
+      background: #FEF7E0;
+      color: var(--yellow-dark);
+    }
+
+    .neo-pill-rejected {
+      background: #FCE8E6;
+      color: var(--red);
+    }
+
+    .neo-pill-hassan {
+      background: #E6F4EA;
+      color: var(--green-dark);
+    }
+
+    .neo-pill-other {
+      background: #E8F0FE;
+      color: var(--blue-dark);
+    }
+
+    .neo-pill-waitlist {
+      background: #E0E7FF;
+      color: #3730A3;
+      border: 1px solid #C7D2FE;
+    }
+
+    /* Inspector Modal */
+    .neo-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 10, 10, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .neo-modal-box {
+      background: var(--surface);
+      border: var(--border-ink);
+      box-shadow: 12px 12px 0 var(--ink);
+      max-width: 980px;
+      width: 100%;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-radius: 0;
+    }
+
+    .neo-modal-header {
+      padding: 18px 24px;
+      background: var(--surface-alt);
+      border-bottom: var(--border-ink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .neo-modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+    }
+
+    .neo-modal-card {
+      background: #FAFAF9;
+      border: var(--border-ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .neo-modal-footer {
+      padding: 16px 24px;
+      border-top: var(--border-ink);
+      background: var(--surface-alt);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* ==========================================================
+       RESPONSIVE ADMIN OVERHAUL & SCANNER STYLES
+       ========================================================== */
+    .admin-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+    }
+
+    .admin-user-tag {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    .btn-admin-logout {
+      padding: 5px 12px;
+      font-size: 11px;
+    }
+
+    .admin-public-link {
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 12.5px;
+    }
+
+    .neo-controls-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mobile-table-hint {
+      display: none;
+      background: #FEF7E0;
+      border: 1.5px solid var(--ink);
+      padding: 8px 12px;
+      font: 700 11px var(--mono);
+      color: #78350F;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    /* Scanner Modal Window */
+    .scanner-modal-box {
+      max-width: 480px;
+      width: 100%;
+      border-radius: 0;
+      overflow: hidden;
+    }
+
+    .scanner-modal-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      background: #FFFFFF;
+    }
+
+    .scanner-viewport-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      height: 320px;
+      background: #0A0A0A;
+      border: 3px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      border-radius: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #qrReader {
+      width: 100% !important;
+      height: 100% !important;
+      border: none !important;
+      border-radius: 0 !important;
+    }
+
+    #qrReader video {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      border-radius: 0 !important;
+    }
+
+    /* Reticle Guide */
+    .scanner-reticle {
+      position: absolute;
+      inset: 24px;
+      pointer-events: none;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 0;
+    }
+
+    .reticle-corner {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: #22C55E;
+      border-style: solid;
+      border-width: 0;
+      border-radius: 0;
+    }
+
+    .reticle-tl {
+      top: -2px;
+      left: -2px;
+      border-top-width: 4px;
+      border-left-width: 4px;
+      border-radius: 0;
+    }
+
+    .reticle-tr {
+      top: -2px;
+      right: -2px;
+      border-top-width: 4px;
+      border-right-width: 4px;
+      border-radius: 0;
+    }
+
+    .reticle-bl {
+      bottom: -2px;
+      left: -2px;
+      border-bottom-width: 4px;
+      border-left-width: 4px;
+      border-radius: 0;
+    }
+
+    .reticle-br {
+      bottom: -2px;
+      right: -2px;
+      border-bottom-width: 4px;
+      border-right-width: 4px;
+      border-radius: 0;
+    }
+
+    .reticle-laser {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, rgba(34, 197, 94, 0) 0%, rgba(34, 197, 94, 0.9) 50%, rgba(34, 197, 94, 0) 100%);
+      box-shadow: 0 0 8px #22C55E;
+      animation: scanLaser 2s infinite ease-in-out;
+    }
+
+    @keyframes scanLaser {
+      0% {
+        top: 0%;
+        opacity: 0.8;
+      }
+
+      50% {
+        top: 96%;
+        opacity: 1;
+      }
+
+      100% {
+        top: 0%;
+        opacity: 0.8;
+      }
+    }
+
+    .scanner-controls-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .scanner-status-text {
+      font: 700 11px var(--mono);
+      color: #15803D;
+      text-align: center;
+      background: #E8F5E9;
+      padding: 6px 10px;
+      border-radius: 0;
+      border: 1.5px solid #22C55E;
+    }
+
+    .scanner-manual-box {
+      width: 100%;
+      max-width: 380px;
+      background: #FAFAF9;
+      border: 1.5px solid var(--ink);
+      box-shadow: 2.5px 2.5px 0 var(--ink);
+      padding: 12px 14px;
+      border-radius: 0;
+      box-sizing: border-box;
+    }
+
+    /* Enforce box shapes on all scanner children */
+    .scanner-modal-box select,
+    .scanner-modal-box input,
+    .scanner-modal-box button,
+    .scanner-modal-box .modal-close-btn,
+    .scanner-modal-box .neo-modal-header,
+    .scanner-modal-box .neo-modal-footer {
+      border-radius: 0 !important;
+    }
+
+    .scanner-manual-label {
+      display: block;
+      font: 800 10px var(--mono);
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .scanner-manual-input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .scanner-manual-input-row input {
+      flex: 1;
+      font: 800 13px var(--mono);
+      text-transform: uppercase;
+      padding: 8px 10px;
+    }
+
+    .scanner-manual-input-row button {
+      padding: 8px 12px;
+      font-size: 11.5px;
+      white-space: nowrap;
+    }
+
+    .scanner-error-text {
+      color: var(--red);
+      font: 700 11px var(--mono);
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    /* ==========================================================
+       ADMIN LOGIN CARD (NEO-BRUTALIST STYLING)
+       ========================================================== */
+    .login-screen-wrap {
+      width: 100%;
+      max-width: 440px;
+      margin: clamp(16px, 3vh, 32px) auto;
+      box-sizing: border-box;
+    }
+
+    .admin-login-card {
+      background: var(--surface);
+      border: var(--border-card);
+      border-top: 6px solid var(--green);
+      box-shadow: 6px 6px 0 var(--ink);
+      border-radius: 0;
+      padding: clamp(26px, 5.2vw, 36px) clamp(18px, 4.5vw, 30px);
+      position: relative;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 480px) {
+      .admin-login-card {
+        border-width: 2px;
+        box-shadow: 4px 4px 0 var(--ink);
+        padding: 22px 16px;
+      }
+    }
+
+    .login-icon-box {
+      width: 56px;
+      height: 56px;
+      background: var(--gray-100);
+      border: 2px solid var(--ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      border-radius: 0;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-icon-box img {
+      height: 34px;
+      width: auto;
+      display: block;
+    }
+
+    .login-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-light);
+      border: 1.5px solid var(--green);
+      padding: 3px 8px;
+      font: 700 11px var(--mono);
+      color: var(--green-dark);
+      letter-spacing: 0.04em;
+      margin: 0 auto 10px;
+      border-radius: 0;
+    }
+
+    .login-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 2px rgba(52, 168, 83, 0.3);
+    }
+
+    .login-title {
+      font: 900 clamp(22px, 5.5vw, 26px)/1.1 var(--display);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-align: center;
+      margin: 0 0 6px 0;
+    }
+
+    .login-subtitle {
+      font: 500 13px/1.45 var(--body);
+      color: var(--muted);
+      text-align: center;
+      margin: 0 0 20px 0;
+    }
+
+    .admin-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .admin-label {
+      font: 800 11px var(--mono);
+      letter-spacing: 0.05em;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+    }
+
+    .admin-login-input {
+      width: 100%;
+      box-sizing: border-box;
+      background: #FAFAF9;
+      border: 2px solid var(--ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      border-radius: 0;
+      padding: 12px 14px;
+      font: 700 13.5px var(--mono);
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .admin-login-input:focus {
+      border-color: var(--green);
+      box-shadow: 3.5px 3.5px 0 var(--green);
+      background: #FFFFFF;
+    }
+
+    .pass-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .pass-input-wrap .admin-login-input {
+      padding-right: 44px;
+    }
+
+    .btn-pass-toggle {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 6px 8px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s;
+    }
+
+    .btn-pass-toggle:hover {
+      color: var(--ink);
+    }
+
+    .admin-submit-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--green);
+      color: #FFFFFF !important;
+      border: 2.5px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      border-radius: 0;
+      padding: 13px 18px;
+      font: 800 13px var(--mono);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .admin-submit-btn:hover {
+      background: var(--green-dark);
+      transform: translate(-1px, -1px);
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+
+    .admin-submit-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .login-hint-box {
+      background: #FEF7E0;
+      border: 1.5px solid var(--ink);
+      box-shadow: 2.5px 2.5px 0 var(--ink);
+      border-radius: 0;
+      padding: 12px 14px;
+      margin-top: 20px;
+      font: 700 11px var(--mono);
+      color: var(--ink);
+      box-sizing: border-box;
+    }
+
+    .hint-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      color: #92400E;
+    }
+
+    .btn-autofill {
+      background: #FFFFFF;
+      border: 1px solid var(--ink);
+      box-shadow: 1px 1px 0 var(--ink);
+      font: 700 9.5px var(--mono);
+      color: var(--ink);
+      padding: 2px 6px;
+      cursor: pointer;
+      text-transform: uppercase;
+      border-radius: 0;
+      transition: transform 0.1s;
+    }
+
+    .btn-autofill:active {
+      transform: translate(1px, 1px);
+      box-shadow: none;
+    }
+
+    .hint-creds {
+      font-size: 11px;
+      line-height: 1.4;
+      color: #78350F;
+    }
+
+    /* ==========================================================
+       RESPONSIVE BREAKPOINTS FOR ADMIN
+       ========================================================== */
+    @media (max-width: 960px) {
+      .admin-page-container {
+        padding: 20px 1.25rem 4rem;
+      }
+
+      .neo-controls-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+
+      .neo-controls-filters {
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .neo-controls-actions {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .admin-page-container {
+        padding: 16px 12px 3rem;
+      }
+
+      .admin-marquee {
+        margin-top: 68px;
+      }
+
+      .site-header {
+        padding: 8px 14px;
+      }
+
+      .admin-user-tag {
+        display: none;
+      }
+
+      .neo-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .neo-kpi-card {
+        padding: 12px 14px;
+      }
+
+      .neo-kpi-value {
+        font-size: 22px;
+      }
+
+      .mobile-table-hint {
+        display: block;
+      }
+
+      .neo-modal-box {
+        width: 96vw;
+        max-height: 94vh;
+        border-radius: 0;
+      }
+
+      .neo-modal-header {
+        padding: 14px 16px;
+      }
+
+      .neo-modal-body {
+        grid-template-columns: 1fr;
+        padding: 14px;
+        gap: 16px;
+      }
+
+      .neo-modal-footer {
+        flex-direction: column-reverse;
+        gap: 10px;
+        padding: 14px 16px;
+      }
+
+      .neo-modal-footer button {
+        width: 100%;
+      }
+
+      .scanner-viewport-wrap {
+        max-width: 280px;
+        height: 280px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .neo-controls-filters {
+        flex-direction: column;
+      }
+
+      .neo-search-input,
+      .neo-filter-select {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .neo-controls-actions {
+        flex-direction: column;
+      }
+
+      .neo-controls-actions button,
+      .neo-controls-actions a {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+      }
+
+      .scanner-manual-input-row {
+        flex-direction: column;
+      }
+
+      .scanner-manual-input-row button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Background Grid Texture -->
+  <div class="page-grid" aria-hidden="true"></div>
+
+  <!-- Floating Pill Navbar -->
+  <header class="site-header" id="navbar">
+    <a class="brand" href="/" aria-label="HackSprint 3.0 — home" style="display: flex; align-items: center; gap: 8px;">
+      <img class="brand-logo" src="images/hacksprint-logo.png" alt="HackSprint 3.0"
+        style="height: 30px; width: auto;" />
+      <span
+        style="font-family: var(--display); font-weight: 900; font-size: clamp(0.95rem, 3.2vw, 1.1rem); letter-spacing: -0.02em; color: var(--ink); white-space: nowrap;">HACKSPRINT
+        <span style="color: var(--green);">3.0</span> <span
+          style="font-size: 10px; background: var(--ink); color: #fff; padding: 2px 6px; border-radius: 0; font-family: var(--mono); margin-left: 4px; vertical-align: middle;">ADMIN</span></span>
+    </a>
+    <nav class="admin-nav" aria-label="Admin Navigation">
+      <div id="adminNavLinks" style="display: none; align-items: center; gap: 12px;">
+        <span class="admin-user-tag">Admin: <strong style="color: var(--ink);">admin</strong></span>
+        <button type="button" class="button button-ghost btn-admin-logout" id="btnLogout">Sign Out</button>
+      </div>
+      <a href="/" class="admin-public-link">Site ➔</a>
+    </nav>
+  </header>
+
+  <!-- Marquee Ticker -->
+  <div class="marquee-banner admin-marquee">
+    <div class="marquee-track">
+      <span>HACKSPRINT 3.0 • NOV 14–15, 2026 • 24-HOUR HACKATHON CONTROL ROOM • LIVE REGISTRATION DATABASE • TEAM
+        INSPECTION • EXCEL EXPORT ENGINE • </span>
+      <span>HACKSPRINT 3.0 • NOV 14–15, 2026 • 24-HOUR HACKATHON CONTROL ROOM • LIVE REGISTRATION DATABASE • TEAM
+        INSPECTION • EXCEL EXPORT ENGINE • </span>
+    </div>
+  </div>
+
+  <main class="admin-page-container">
+
+    <!-- ==========================================================
+         LOGIN SCREEN
+         ========================================================== -->
+    <div id="loginScreen" class="login-screen-wrap">
+      <div class="admin-login-card">
+
+        <!-- Logo Emblem -->
+        <div class="login-icon-box">
+          <img src="images/hacksprint-logo.png" alt="HackSprint 3.0" />
+        </div>
+
+        <div style="text-align: center;">
+          <div class="login-badge">
+            <span class="login-badge-dot"></span>
+            <span>SECURITY GATEWAY</span>
+          </div>
+          <h2 class="login-title">ADMIN LOGIN</h2>
+          <p class="login-subtitle">
+            Sign in to access HackSprint 3.0 registrations, scan entry QR passes, and export data.
+          </p>
+        </div>
+
+        <div id="loginError"
+          style="background: #FCE8E6; border: 2px solid var(--red); color: var(--red); padding: 10px 14px; font: 700 12px var(--mono); margin-bottom: 16px; border-radius: 0; box-shadow: 2.5px 2.5px 0 var(--red); display: none;">
+        </div>
+
+        <form id="loginForm">
+          <div class="admin-field-group">
+            <label class="admin-label" for="adminUser">
+              <i class="fa-solid fa-user-shield" style="color: var(--green);"></i> USERNAME
+            </label>
+            <input type="text" id="adminUser" class="admin-login-input" value="admin" required
+              autocomplete="username" />
+          </div>
+
+          <div class="admin-field-group">
+            <label class="admin-label" for="adminPass">
+              <i class="fa-solid fa-key" style="color: var(--green);"></i> PASSWORD
+            </label>
+            <div class="pass-input-wrap">
+              <input type="password" id="adminPass" class="admin-login-input" value="HackSprint2026!" required
+                autocomplete="current-password" />
+              <button type="button" class="btn-pass-toggle" id="btnTogglePass" aria-label="Toggle password visibility">
+                <i class="fa-regular fa-eye" id="passToggleIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="admin-submit-btn">
+            <span>Access Dashboard</span>
+            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+          </button>
+        </form>
+
+
+
+      </div>
+    </div>
+
+    <!-- ==========================================================
+         DASHBOARD SCREEN
+         ========================================================== -->
+    <div id="dashboardScreen" style="display: none;">
+      <div style="margin-bottom: 2rem;">
+        <p class="eyebrow"><span class="eyebrow-rule"></span>02 / MANAGEMENT CONSOLE</p>
+        <h1
+          style="font-size: clamp(2.4rem, 4.5vw, 3.8rem); font-weight: 900; line-height: 0.95; letter-spacing: -0.04em; text-transform: uppercase; margin: 0.5rem 0;">
+          ADMIN<br /><em style="color: var(--green); font-style: italic;">DASHBOARD.</em>
+        </h1>
+      </div>
+
+      <!-- KPI Metrics -->
+      <div class="neo-kpi-grid">
+        <div class="neo-kpi-card">
+          <div class="neo-kpi-bar" style="background: var(--blue);"></div>
+          <div class="neo-kpi-title">TOTAL TEAMS</div>
+          <div class="neo-kpi-value" id="metricTeams">0</div>
+        </div>
+        <div class="neo-kpi-card">
+          <div class="neo-kpi-bar" style="background: var(--red);"></div>
+          <div class="neo-kpi-title">TOTAL BUILDERS</div>
+          <div class="neo-kpi-value" id="metricBuilders">0</div>
+        </div>
+        <div class="neo-kpi-card">
+          <div class="neo-kpi-bar" style="background: var(--green);"></div>
+          <div class="neo-kpi-title">GEC HASSAN (₹100)</div>
+          <div class="neo-kpi-value" id="metricHassan">0</div>
+        </div>
+        <div class="neo-kpi-card">
+          <div class="neo-kpi-bar" style="background: var(--yellow);"></div>
+          <div class="neo-kpi-title">OTHER GECS (₹400)</div>
+          <div class="neo-kpi-value" id="metricOthers">0</div>
+        </div>
+        <div class="neo-kpi-card">
+          <div class="neo-kpi-bar" style="background: var(--green);"></div>
+          <div class="neo-kpi-title">REVENUE COLLECTED</div>
+          <div class="neo-kpi-value" id="metricRevenue">₹0</div>
+        </div>
+        <div class="neo-kpi-card">
+          <div class="neo-kpi-bar" style="background: var(--red);"></div>
+          <div class="neo-kpi-title">PENDING PROOFS</div>
+          <div class="neo-kpi-value" id="metricPending">0</div>
+        </div>
+      </div>
+
+      <!-- Controls & Filter Bar -->
+      <div class="neo-controls-bar">
+        <div class="neo-controls-filters">
+          <input type="text" id="searchInput" class="neo-search-input" placeholder="Search team, leader, USN, UTR..." />
+          <select id="collegeFilter" class="neo-filter-select">
+            <option value="">All Colleges</option>
+            <option value="GEC Hassan">GEC Hassan</option>
+            <option value="GEC Arsikere">GEC Arsikere</option>
+            <option value="GEC Mosalehosahalli">GEC Mosalehosahalli</option>
+          </select>
+          <select id="statusFilter" class="neo-filter-select">
+            <option value="">All Statuses</option>
+            <option value="confirmed">Confirmed Only</option>
+            <option value="waitlist">Waitlist Only</option>
+            <option value="pending">Pending</option>
+            <option value="verified">Verified</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        <div class="neo-controls-actions">
+          <button type="button" class="button button-dark" id="btnOpenScanner"
+            style="padding: 10px 16px; font-size: 13px;">
+            <i class="fa-solid fa-qrcode" style="margin-right: 6px; color: var(--green);"></i> Scan Team QR
+          </button>
+          <button type="button" class="button button-ghost" id="btnRefresh"
+            style="padding: 10px 14px; font-size: 13px;">
+            <i class="fa-solid fa-rotate" style="margin-right: 4px;"></i> Reload
+          </button>
+          <a href="#" id="btnExport" class="button button-primary" style="padding: 10px 18px; font-size: 13px;">
+            Export (.xlsx) <i class="fa-solid fa-file-excel" style="margin-left: 6px;"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Mobile swipe hint -->
+
+
+      <!-- Registrations Data Table -->
+      <div class="neo-table-frame">
+        <table class="neo-data-table">
+          <thead>
+            <tr>
+              <th>REG ID</th>
+              <th>REGISTERED</th>
+              <th>TEAM NAME</th>
+              <th>COLLEGE</th>
+              <th>LEADER &amp; USN</th>
+              <th>BUILDERS</th>
+              <th>FEE</th>
+              <th>STATUS</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody id="registrationsTbody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+        <div id="tableEmpty"
+          style="padding: 40px; text-align: center; color: var(--muted); font: 700 13px var(--mono); display: none;">
+          NO REGISTRATIONS FOUND MATCHING FILTER CRITERIA.
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Team Inspector Modal -->
+  <div class="neo-modal-backdrop" id="inspectorBackdrop">
+    <div class="neo-modal-box">
+      <!-- Modal Accent Bar -->
+      <div class="modal-color-bar" aria-hidden="true"></div>
+
+      <div class="neo-modal-header">
+        <div>
+          <div style="font: 700 11px var(--mono); color: var(--green);" id="modalRegId">HS3-HSSN-0000</div>
+          <h2 style="font: 900 24px var(--display); text-transform: uppercase; margin: 0;" id="modalTeamName">TEAM NAME
+          </h2>
+        </div>
+        <button type="button" id="modalCloseBtn"
+          style="background: none; border: var(--border-ink); box-shadow: 2px 2px 0 var(--ink); width: 34px; height: 34px; font: 700 16px var(--mono); cursor: pointer;">✕</button>
+      </div>
+
+      <div class="neo-modal-body">
+        <!-- Left: Profile & Members -->
+        <div>
+          <div style="font: 700 11px var(--mono); color: var(--muted); text-transform: uppercase; margin-bottom: 12px;">
+            01 / TEAM &amp; BUILDER PROFILES
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+            <span class="neo-pill" id="modalCollegePill">GEC Hassan</span>
+            <span style="font: 700 11px var(--mono); color: var(--muted); align-self: center;"
+              id="modalRegDate">—</span>
+          </div>
+
+          <!-- Leader -->
+          <div class="neo-modal-card">
+            <div
+              style="display: flex; justify-content: space-between; font: 700 11px var(--mono); color: var(--green-dark); margin-bottom: 8px;">
+              <span>TEAM LEADER</span>
+              <span id="modalLeaderYear">2nd Year</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13px;">
+              <div><span style="color: var(--muted); font: 700 10px var(--mono);">NAME:</span>
+                <div id="modalLeaderName" style="font-weight: 700;">—</div>
+              </div>
+              <div><span style="color: var(--muted); font: 700 10px var(--mono);">USN:</span>
+                <div id="modalLeaderUsn" style="font-family: var(--mono); font-weight: 700;">—</div>
+              </div>
+              <div><span style="color: var(--muted); font: 700 10px var(--mono);">MOBILE:</span>
+                <div id="modalLeaderMobile" style="font-weight: 700;">—</div>
+              </div>
+              <div><span style="color: var(--muted); font: 700 10px var(--mono);">EMAIL:</span>
+                <div id="modalLeaderEmail" style="font-weight: 700;">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Members Container -->
+          <div id="modalMembersContainer"></div>
+        </div>
+
+        <!-- Right: Payment & Verification -->
+        <div>
+          <div style="font: 700 11px var(--mono); color: var(--muted); text-transform: uppercase; margin-bottom: 12px;">
+            02 / PAYMENT PROOF &amp; APPROVAL
+          </div>
+
+          <div class="neo-modal-card" style="background: #FAFAF9;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font: 700 11px var(--mono); color: var(--muted);">AMOUNT PAID:</span>
+              <strong style="font: 900 24px var(--display); color: var(--green);" id="modalPayAmount">₹100</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font: 700 11px var(--mono); color: var(--muted);">TRANSACTION ID / UTR:</span>
+              <code
+                style="font: 700 12px var(--mono); background: #FFFFFF; border: 1px solid var(--ink); padding: 4px 8px;"
+                id="modalPayUtr">—</code>
+            </div>
+          </div>
+
+          <!-- Screenshot Viewer -->
+          <div
+            style="border: var(--border-ink); box-shadow: 3px 3px 0 var(--ink); background: #FFFFFF; padding: 10px; margin-bottom: 16px;">
+            <div
+              style="font: 700 10px var(--mono); color: var(--muted); text-transform: uppercase; margin-bottom: 6px;">
+              PAYMENT RECEIPT (CLICK TO ZOOM)</div>
+            <a id="modalScreenshotLink" href="#" target="_blank">
+              <img id="modalScreenshotImg" src="" alt="Receipt"
+                style="width: 100%; max-height: 240px; object-fit: contain; border: 1px solid var(--line); display: block;" />
+            </a>
+          </div>
+
+          <!-- Status Controls -->
+          <div style="background: var(--surface-alt); border: var(--border-ink); padding: 14px;">
+            <label style="font: 700 11px var(--mono); text-transform: uppercase; display: block; margin-bottom: 8px;">
+              SET VERIFICATION STATUS:
+            </label>
+            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+              <button type="button" class="button button-primary" id="btnSetVerified"
+                style="flex: 1; padding: 8px; font-size: 11px;">
+                <i class="fa-solid fa-check" style="margin-right: 4px;"></i>Verified
+              </button>
+              <button type="button" class="button button-ghost" id="btnSetRejected"
+                style="flex: 1; padding: 8px; font-size: 11px; color: var(--red); border-color: var(--red);">
+                <i class="fa-solid fa-xmark" style="margin-right: 4px;"></i>Reject
+              </button>
+              <button type="button" class="button button-ghost" id="btnSetPending"
+                style="flex: 1; padding: 8px; font-size: 11px; color: var(--yellow-dark); border-color: var(--yellow-dark);">
+                <i class="fa-solid fa-hourglass-half" style="margin-right: 4px;"></i>Pending
+              </button>
+            </div>
+            <textarea id="modalAdminNotes" rows="2" class="neo-input" placeholder="Admin verification notes..."
+              style="font-size: 12px; margin-bottom: 8px;"></textarea>
+            <button type="button" class="button button-dark" id="btnSaveStatusNotes"
+              style="width: 100%; padding: 8px; font-size: 11px;">
+              Save Status &amp; Notes
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="neo-modal-footer">
+        <button type="button" class="button button-ghost" id="btnDeleteRegistration"
+          style="color: var(--red); border-color: var(--red);">
+          <i class="fa-solid fa-trash-can" style="margin-right: 6px;"></i>Delete Team
+        </button>
+        <button type="button" class="button button-dark" id="btnInspectorClose">
+          Close Window
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================
+       QR CODE LIVE CAMERA SCANNER MODAL
+       ========================================================== -->
+  <div class="neo-modal-backdrop" id="scannerBackdrop" role="dialog" aria-modal="true"
+    aria-labelledby="scannerModalTitle">
+    <div class="neo-modal-box scanner-modal-box">
+      <div class="neo-modal-header" style="background: var(--ink); color: #fff;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-qrcode" style="color: var(--green); font-size: 1.25rem;"></i>
+          <h2 id="scannerModalTitle"
+            style="font: 900 15px var(--mono); text-transform: uppercase; margin: 0; color: #fff;">
+            SCAN TEAM ENTRY QR
+          </h2>
+        </div>
+        <button type="button" class="modal-close-btn" id="btnScannerClose" aria-label="Close Scanner"
+          style="color: #fff; background: var(--gray-800); border-color: #555;">&times;</button>
+      </div>
+
+      <div class="scanner-modal-body">
+        <!-- Live Camera Viewport Container -->
+        <div class="scanner-viewport-wrap">
+          <div id="qrReader" class="scanner-reader"></div>
+          <!-- Aiming Reticle Overlay -->
+          <div class="scanner-reticle" aria-hidden="true">
+            <span class="reticle-corner reticle-tl"></span>
+            <span class="reticle-corner reticle-tr"></span>
+            <span class="reticle-corner reticle-bl"></span>
+            <span class="reticle-corner reticle-br"></span>
+            <div class="reticle-laser"></div>
+          </div>
+        </div>
+
+        <!-- Camera Switcher & Status Pill -->
+        <div class="scanner-controls-row">
+          <select id="scannerCameraSelect" class="neo-filter-select"
+            style="font-size: 12px; padding: 6px 10px; width: 100%;">
+            <option value="">Detecting cameras...</option>
+          </select>
+          <span id="scannerStatusText" class="scanner-status-text">
+            Aim camera at Team QR Code
+          </span>
+        </div>
+
+        <!-- Manual Input / Barcode Scanner Fallback -->
+        <div class="scanner-manual-box">
+          <span class="scanner-manual-label">MANUAL LOOKUP / BARCODE SCANNER:</span>
+          <div class="scanner-manual-input-row">
+            <input type="text" id="manualScanInput" class="neo-input" placeholder="Enter Reg ID (e.g. HS3-HSSN-LFX7)..."
+              autocomplete="off" />
+            <button type="button" class="button button-primary" id="btnManualScanLookup">
+              Inspect ➔
+            </button>
+          </div>
+          <div id="scannerLookupError" class="scanner-error-text" style="display: none;"></div>
+        </div>
+      </div>
+
+      <div class="neo-modal-footer">
+        <span style="font: 700 11px var(--mono); color: var(--muted);"><i class="fa-solid fa-volume-high"
+            style="margin-right: 4px; color: var(--green);"></i>AUDIO CONFIRMATION ENABLED</span>
+        <button type="button" class="button button-ghost" id="btnScannerCloseFooter">
+          Close Window
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Footer -->
+  <footer role="contentinfo"
+    style="border-top: var(--border-ink); background: var(--surface); padding: 40px var(--section-x);">
+    <div
+      style="max-width: var(--content-max); margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
+      <div class="brand" style="display: flex; align-items: center; gap: 10px;">
+        <img class="brand-logo" src="images/hacksprint-logo.png" alt="HackSprint 3.0"
+          style="height: 34px; width: auto;" />
+        <span style="font-weight: 900; font-size: 1.15rem; color: var(--ink);">HACKSPRINT <b>3.0</b> ADMIN</span>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--gray-600); margin: 0;">COMPASS × GLUE • Government Engineering College,
+        Hassan</p>
+    </div>
+  </footer>
+
+  <script>
+    let authToken = localStorage.getItem('hacksprint_admin_token') || '';
+    let registrationsData = [];
+    let currentActiveDoc = null;
+
+    const loginScreen = document.getElementById('loginScreen');
+    const dashboardScreen = document.getElementById('dashboardScreen');
+    const adminNavLinks = document.getElementById('adminNavLinks');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+
+    if (authToken) {
+      showDashboard();
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loginError.style.display = 'none';
+
+      const username = document.getElementById('adminUser').value.trim();
+      const password = document.getElementById('adminPass').value.trim();
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Invalid credentials.');
+        }
+
+        authToken = data.token;
+        localStorage.setItem('hacksprint_admin_token', authToken);
+        showDashboard();
+
+      } catch (err) {
+        loginError.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="margin-right: 6px;"></i>' + err.message;
+        loginError.style.display = 'block';
+      }
+    });
+
+    // Password visibility toggle
+    const btnTogglePass = document.getElementById('btnTogglePass');
+    const passInput = document.getElementById('adminPass');
+    const passIcon = document.getElementById('passToggleIcon');
+    if (btnTogglePass && passInput && passIcon) {
+      btnTogglePass.addEventListener('click', () => {
+        const isPass = passInput.type === 'password';
+        passInput.type = isPass ? 'text' : 'password';
+        passIcon.className = isPass ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+      });
+    }
+
+    // Auto-fill default credentials
+    const btnAutoFill = document.getElementById('btnAutoFill');
+    if (btnAutoFill) {
+      btnAutoFill.addEventListener('click', () => {
+        const u = document.getElementById('adminUser');
+        const p = document.getElementById('adminPass');
+        if (u) u.value = 'admin';
+        if (p) p.value = 'HackSprint2026!';
+      });
+    }
+
+    document.getElementById('btnLogout').addEventListener('click', () => {
+      localStorage.removeItem('hacksprint_admin_token');
+      authToken = '';
+      dashboardScreen.style.display = 'none';
+      adminNavLinks.style.display = 'none';
+      loginScreen.style.display = 'block';
+    });
+
+    function showDashboard() {
+      loginScreen.style.display = 'none';
+      adminNavLinks.style.display = 'flex';
+      dashboardScreen.style.display = 'block';
+      loadRegistrations();
+      loadStats();
+
+      document.getElementById('btnExport').onclick = (e) => {
+        e.preventDefault();
+        fetch('/api/admin/export', {
+          headers: { 'Authorization': 'Bearer ' + authToken }
+        })
+          .then(res => res.blob())
+          .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `HackSprint3_Registrations_${Date.now()}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          })
+          .catch(err => alert('Export failed: ' + err.message));
+      };
+    }
+
+    async function loadRegistrations() {
+      try {
+        const res = await fetch('/api/admin/registrations', {
+          headers: { 'Authorization': 'Bearer ' + authToken }
+        });
+        if (res.status === 401 || res.status === 403) {
+          localStorage.removeItem('hacksprint_admin_token');
+          location.reload();
+          return;
+        }
+        const data = await res.json();
+        registrationsData = data.registrations || [];
+        renderTable();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/admin/stats', {
+          headers: { 'Authorization': 'Bearer ' + authToken }
+        });
+        const data = await res.json();
+        if (data.success && data.stats) {
+          const s = data.stats;
+          document.getElementById('metricTeams').textContent = s.totalTeams;
+          document.getElementById('metricBuilders').textContent = s.totalParticipants;
+          document.getElementById('metricHassan').textContent = s.hassanTeams;
+          document.getElementById('metricOthers').textContent = s.otherTeams;
+          document.getElementById('metricRevenue').textContent = '₹' + s.totalCollected.toLocaleString('en-IN');
+          document.getElementById('metricPending').textContent = s.pendingCount;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    const searchInput = document.getElementById('searchInput');
+    const collegeFilter = document.getElementById('collegeFilter');
+    const statusFilter = document.getElementById('statusFilter');
+
+    searchInput.addEventListener('input', renderTable);
+    collegeFilter.addEventListener('change', renderTable);
+    statusFilter.addEventListener('change', renderTable);
+    document.getElementById('btnRefresh').addEventListener('click', () => {
+      loadRegistrations();
+      loadStats();
+    });
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatDate(date) {
+      if (!date) return '—';
+      try {
+        return new Date(date).toLocaleString('en-IN', {
+          timeZone: 'Asia/Kolkata',
+          month: 'short',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+      } catch (e) {
+        return String(date);
+      }
+    }
+
+    function renderTable() {
+      const q = searchInput.value.toLowerCase().trim();
+      const col = collegeFilter.value;
+      const stat = statusFilter.value;
+
+      const filtered = registrationsData.filter(r => {
+        if (col && r.college !== col) return false;
+        const curStatus = r.payment ? r.payment.status : 'pending';
+        if (stat === 'confirmed' && r.isWaitlist) return false;
+        if (stat === 'waitlist' && !r.isWaitlist) return false;
+        if (stat && stat !== 'confirmed' && stat !== 'waitlist' && curStatus !== stat) return false;
+
+        if (q) {
+          const matchTeam = (r.teamName || '').toLowerCase().includes(q);
+          const matchLeader = (r.leader && r.leader.name || '').toLowerCase().includes(q);
+          const matchUsn = (r.leader && r.leader.usn || '').toLowerCase().includes(q);
+          const matchUtr = (r.payment && r.payment.transactionId || '').toLowerCase().includes(q);
+          const matchReg = (r.registrationId || '').toLowerCase().includes(q);
+          const matchDate = formatDate(r.registeredAt).toLowerCase().includes(q);
+          if (!matchTeam && !matchLeader && !matchUsn && !matchUtr && !matchReg && !matchDate) return false;
+        }
+        return true;
+      });
+
+      const tbody = document.getElementById('registrationsTbody');
+      const emptyBox = document.getElementById('tableEmpty');
+      tbody.innerHTML = '';
+
+      if (!filtered.length) {
+        emptyBox.style.display = 'block';
+        return;
+      }
+      emptyBox.style.display = 'none';
+
+      filtered.forEach(r => {
+        const tr = document.createElement('tr');
+        const pStatus = r.payment ? r.payment.status : 'pending';
+        const pillClass = r.isWaitlist
+          ? 'neo-pill-waitlist'
+          : (pStatus === 'verified' ? 'neo-pill-verified' : (pStatus === 'rejected' ? 'neo-pill-rejected' : 'neo-pill-pending'));
+        const displayStatus = r.isWaitlist ? `WAITLIST (#${r.waitlistPosition || 1})` : pStatus;
+        const colPill = r.college === 'GEC Hassan' ? 'neo-pill-hassan' : 'neo-pill-other';
+        const leaderName = r.leader ? escapeHtml(r.leader.name) : '—';
+        const leaderUsn = r.leader ? escapeHtml(r.leader.usn) : '';
+        const teamName = escapeHtml(r.teamName);
+        const regId = escapeHtml(r.registrationId);
+        const college = escapeHtml(r.college);
+        const regDateFormatted = formatDate(r.registeredAt);
+
+        tr.innerHTML = `
+          <td><code style="font-family: var(--mono); font-weight: 700; color: ${r.isWaitlist ? '#2563EB' : 'var(--green)'};">${regId}</code></td>
+          <td><div style="font-family: var(--mono); font-size: 11.5px; font-weight: 600; color: var(--muted); white-space: nowrap;">${regDateFormatted}</div></td>
+          <td><strong style="font-size: 15px;">${teamName}</strong></td>
+          <td><span class="neo-pill ${colPill}">${college}</span></td>
+          <td>
+            <div style="font-weight: 600;">${leaderName}</div>
+            <div style="font-family: var(--mono); font-size: 11px; color: var(--muted);">${leaderUsn}</div>
+          </td>
+          <td><span style="font-family: var(--mono); font-weight: 700;">${r.totalMembers}</span> builders</td>
+          <td><strong style="font-family: var(--display); font-size: 16px;">₹${r.payment ? r.payment.amount : 0}</strong></td>
+          <td><span class="neo-pill ${pillClass}">${displayStatus}</span></td>
+          <td>
+            <button class="button button-ghost" style="padding: 5px 12px; font-size: 11px;">
+              Inspect ➔
+            </button>
+          </td>
+        `;
+
+        tr.addEventListener('click', () => openInspector(r));
+        tbody.appendChild(tr);
+      });
+    }
+
+    const inspectorBackdrop = document.getElementById('inspectorBackdrop');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const btnInspectorClose = document.getElementById('btnInspectorClose');
+
+    function openInspector(doc) {
+      currentActiveDoc = doc;
+
+      document.getElementById('modalRegId').textContent = doc.registrationId;
+      document.getElementById('modalTeamName').textContent = doc.teamName;
+      document.getElementById('modalCollegePill').textContent = doc.college;
+      document.getElementById('modalRegDate').textContent = doc.registeredAt ? (new Date(doc.registeredAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' }) + ' IST') : '—';
+
+      document.getElementById('modalLeaderName').textContent = (doc.leader && doc.leader.name) || '—';
+      document.getElementById('modalLeaderUsn').textContent = (doc.leader && doc.leader.usn) || '—';
+      document.getElementById('modalLeaderMobile').textContent = (doc.leader && doc.leader.mobile) || '—';
+      document.getElementById('modalLeaderEmail').textContent = (doc.leader && doc.leader.email) || '—';
+      document.getElementById('modalLeaderYear').textContent = (doc.leader && doc.leader.year) || '—';
+
+      const membersContainer = document.getElementById('modalMembersContainer');
+      membersContainer.innerHTML = '';
+
+      if (doc.college && doc.college.includes('Hassan')) {
+        const hassanSlotNotice = document.createElement('div');
+        hassanSlotNotice.style.cssText = 'background: #E8F5E9; border: 1.5px solid var(--green); padding: 10px 14px; margin-bottom: 12px; font-size: 12px; font-weight: 700; color: #1B5E20; border-radius: 4px;';
+        hassanSlotNotice.innerHTML = '<i class="fa-solid fa-leaf" style="margin-right: 6px; color: #1B5E20;"></i><strong>GEC Hassan Policy:</strong> 3 registered members + 2 First-Year students to be assigned by organizers.';
+        membersContainer.appendChild(hassanSlotNotice);
+      }
+
+      if (doc.members && doc.members.length) {
+        doc.members.forEach(m => {
+          const div = document.createElement('div');
+          div.className = 'neo-modal-card';
+          div.innerHTML = `
+            <div style="display: flex; justify-content: space-between; font: 700 11px var(--mono); color: var(--blue-dark); margin-bottom: 8px;">
+              <span>MEMBER ${m.memberNumber}</span>
+              <span>${escapeHtml(m.year)}</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13px;">
+              <div><span style="color: var(--muted); font: 700 10px var(--mono);">NAME:</span><div style="font-weight: 700;">${escapeHtml(m.name)}</div></div>
+              <div><span style="color: var(--muted); font: 700 10px var(--mono);">USN:</span><div style="font-family: var(--mono); font-weight: 700;">${escapeHtml(m.usn)}</div></div>
+              <div><span style="color: var(--muted); font: 700 10px var(--mono);">MOBILE:</span><div style="font-weight: 700;">${escapeHtml(m.mobile)}</div></div>
+            </div>
+          `;
+          membersContainer.appendChild(div);
+        });
+      }
+
+      document.getElementById('modalPayAmount').textContent = '₹' + (doc.payment ? doc.payment.amount : 0);
+      document.getElementById('modalPayUtr').textContent = doc.payment ? doc.payment.transactionId : '—';
+      document.getElementById('modalAdminNotes').value = (doc.payment && doc.payment.adminNotes) || '';
+
+      const shotImg = document.getElementById('modalScreenshotImg');
+      const shotLink = document.getElementById('modalScreenshotLink');
+      if (doc.payment && doc.payment.screenshotPath) {
+        shotImg.src = doc.payment.screenshotPath;
+        shotLink.href = doc.payment.screenshotPath;
+      } else {
+        shotImg.src = '';
+      }
+
+      inspectorBackdrop.style.display = 'flex';
+    }
+
+    function closeInspector() {
+      inspectorBackdrop.style.display = 'none';
+      currentActiveDoc = null;
+    }
+
+    modalCloseBtn.addEventListener('click', closeInspector);
+    btnInspectorClose.addEventListener('click', closeInspector);
+    inspectorBackdrop.addEventListener('click', (e) => {
+      if (e.target === inspectorBackdrop) closeInspector();
+    });
+
+    async function updateStatus(newStatus) {
+      if (!currentActiveDoc) return;
+      const notes = document.getElementById('modalAdminNotes').value.trim();
+
+      try {
+        const res = await fetch(`/api/admin/registrations/${currentActiveDoc._id}/status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + authToken
+          },
+          body: JSON.stringify({ status: newStatus, adminNotes: notes })
+        });
+        const data = await res.json();
+        if (data.success) {
+          currentActiveDoc.payment.status = newStatus;
+          currentActiveDoc.payment.adminNotes = notes;
+          loadRegistrations();
+          loadStats();
+          alert('Status updated to: ' + newStatus.toUpperCase());
+        }
+      } catch (err) {
+        alert('Failed to update: ' + err.message);
+      }
+    }
+
+    document.getElementById('btnSetVerified').addEventListener('click', () => updateStatus('verified'));
+    document.getElementById('btnSetRejected').addEventListener('click', () => updateStatus('rejected'));
+    document.getElementById('btnSetPending').addEventListener('click', () => updateStatus('pending'));
+
+    document.getElementById('btnSaveStatusNotes').addEventListener('click', () => {
+      const cur = currentActiveDoc && currentActiveDoc.payment ? currentActiveDoc.payment.status : 'pending';
+      updateStatus(cur);
+    });
+
+    document.getElementById('btnDeleteRegistration').addEventListener('click', async () => {
+      if (!currentActiveDoc) return;
+      if (!confirm(`Are you sure you want to delete team "${currentActiveDoc.teamName}"? This action cannot be undone.`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/admin/registrations/${currentActiveDoc._id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': 'Bearer ' + authToken }
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('Team registration deleted.');
+          closeInspector();
+          loadRegistrations();
+          loadStats();
+        }
+      } catch (err) {
+        alert('Failed to delete: ' + err.message);
+      }
+    });
+
+    /* ==========================================================
+       LIVE CAMERA QR SCANNER & CHECK-IN CONTROLLER
+       ========================================================== */
+    const scannerBackdrop = document.getElementById('scannerBackdrop');
+    const btnOpenScanner = document.getElementById('btnOpenScanner');
+    const btnScannerClose = document.getElementById('btnScannerClose');
+    const btnScannerCloseFooter = document.getElementById('btnScannerCloseFooter');
+    const scannerCameraSelect = document.getElementById('scannerCameraSelect');
+    const scannerStatusText = document.getElementById('scannerStatusText');
+    const manualScanInput = document.getElementById('manualScanInput');
+    const btnManualScanLookup = document.getElementById('btnManualScanLookup');
+    const scannerLookupError = document.getElementById('scannerLookupError');
+
+    let html5QrScannerInstance = null;
+    let isScanningActive = false;
+    let cameraList = [];
+
+    // Web Audio API Synth Chime for successful scan
+    function playSuccessChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+        osc.frequency.setValueAtTime(880.00, ctx.currentTime + 0.1); // A5
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      } catch (e) {
+        console.warn('Audio chime failed:', e);
+      }
+    }
+
+    // Parse registration ID from QR payload or text
+    function parseRegId(text) {
+      if (!text) return '';
+      const clean = text.trim();
+      // Check if URL with id param
+      if (clean.includes('id=')) {
+        try {
+          const url = new URL(clean);
+          const param = url.searchParams.get('id');
+          if (param) return param.trim().toUpperCase();
+        } catch (e) {
+          const match = clean.match(/[?&]id=([^&#]+)/i);
+          if (match && match[1]) return decodeURIComponent(match[1]).trim().toUpperCase();
+        }
+      }
+      // Check standard HackSprint ID pattern HS3-XXXX-XXXX
+      const hsMatch = clean.match(/HS3-[A-Z0-9]+-[A-Z0-9]+/i);
+      if (hsMatch) return hsMatch[0].toUpperCase();
+
+      return clean.toUpperCase();
+    }
+
+    // Lookup registration and open inspector
+    async function handleScannedId(rawText) {
+      const targetId = parseRegId(rawText);
+      if (!targetId) {
+        showScannerError('Invalid QR Code format.');
+        return;
+      }
+
+      // Check current in-memory registrations list
+      let found = registrationsData.find(r => r.registrationId && r.registrationId.toUpperCase() === targetId);
+
+      if (!found) {
+        // Try refreshing registrations from API
+        if (scannerStatusText) scannerStatusText.textContent = `Looking up ${targetId}...`;
+        try {
+          await loadRegistrations();
+          found = registrationsData.find(r => r.registrationId && r.registrationId.toUpperCase() === targetId);
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      if (found) {
+        playSuccessChime();
+        closeScannerModal();
+        openInspector(found);
+      } else {
+        showScannerError(`No registration found matching "${targetId}".`);
+      }
+    }
+
+    function showScannerError(msg) {
+      if (scannerLookupError) {
+        scannerLookupError.textContent = msg;
+        scannerLookupError.style.display = 'block';
+        setTimeout(() => {
+          if (scannerLookupError) scannerLookupError.style.display = 'none';
+        }, 4000);
+      }
+    }
+
+    async function initCameraScanner() {
+      if (typeof Html5Qrcode === 'undefined') {
+        if (scannerStatusText) scannerStatusText.textContent = 'Scanner library loading or unavailable.';
+        return;
+      }
+
+      if (!html5QrScannerInstance) {
+        html5QrScannerInstance = new Html5Qrcode("qrReader");
+      }
+
+      try {
+        cameraList = await Html5Qrcode.getCameras();
+        if (scannerCameraSelect) scannerCameraSelect.innerHTML = '';
+
+        if (!cameraList || !cameraList.length) {
+          if (scannerStatusText) scannerStatusText.textContent = 'No camera found. Use manual input below.';
+          return;
+        }
+
+        cameraList.forEach((cam, i) => {
+          const opt = document.createElement('option');
+          opt.value = cam.id;
+          opt.textContent = cam.label || `Camera ${i + 1}`;
+          if (scannerCameraSelect) scannerCameraSelect.appendChild(opt);
+        });
+
+        // Prefer rear/environment camera on mobile
+        let selectedCamId = cameraList[0].id;
+        const rearCam = cameraList.find(c => /back|rear|environment/i.test(c.label));
+        if (rearCam) selectedCamId = rearCam.id;
+        if (scannerCameraSelect) scannerCameraSelect.value = selectedCamId;
+
+        startCameraWithId(selectedCamId);
+
+      } catch (err) {
+        console.error('Camera access error:', err);
+        if (scannerStatusText) scannerStatusText.textContent = 'Camera permission denied or camera in use.';
+      }
+    }
+
+    async function startCameraWithId(cameraId) {
+      if (!html5QrScannerInstance) return;
+      if (isScanningActive) {
+        await stopCameraStream();
+      }
+
+      if (scannerStatusText) scannerStatusText.textContent = 'Aim camera at Team QR Code';
+      try {
+        await html5QrScannerInstance.start(
+          cameraId,
+          {
+            fps: 10,
+            qrbox: { width: 220, height: 220 },
+            aspectRatio: 1.0
+          },
+          (decodedText) => {
+            // Success QR callback
+            handleScannedId(decodedText);
+          },
+          (errorMessage) => {
+            // Scanning in progress
+          }
+        );
+        isScanningActive = true;
+      } catch (e) {
+        console.error('Failed to start camera:', e);
+        if (scannerStatusText) scannerStatusText.textContent = 'Camera stream failed to initialize.';
+      }
+    }
+
+    async function stopCameraStream() {
+      if (html5QrScannerInstance && isScanningActive) {
+        try {
+          await html5QrScannerInstance.stop();
+        } catch (e) {
+          console.warn('Stop camera error:', e);
+        }
+        isScanningActive = false;
+      }
+    }
+
+    function openScannerModal() {
+      if (scannerBackdrop) scannerBackdrop.style.display = 'flex';
+      if (manualScanInput) {
+        manualScanInput.value = '';
+        manualScanInput.focus();
+      }
+      if (scannerLookupError) scannerLookupError.style.display = 'none';
+      initCameraScanner();
+    }
+
+    function closeScannerModal() {
+      stopCameraStream();
+      if (scannerBackdrop) scannerBackdrop.style.display = 'none';
+    }
+
+    if (btnOpenScanner) {
+      btnOpenScanner.addEventListener('click', openScannerModal);
+    }
+    if (btnScannerClose) {
+      btnScannerClose.addEventListener('click', closeScannerModal);
+    }
+    if (btnScannerCloseFooter) {
+      btnScannerCloseFooter.addEventListener('click', closeScannerModal);
+    }
+
+    if (scannerBackdrop) {
+      scannerBackdrop.addEventListener('click', (e) => {
+        if (e.target === scannerBackdrop) closeScannerModal();
+      });
+    }
+
+    if (scannerCameraSelect) {
+      scannerCameraSelect.addEventListener('change', () => {
+        if (scannerCameraSelect.value) {
+          startCameraWithId(scannerCameraSelect.value);
+        }
+      });
+    }
+
+    // Manual Input Lookup
+    if (btnManualScanLookup) {
+      btnManualScanLookup.addEventListener('click', () => {
+        const val = manualScanInput.value.trim();
+        if (val) handleScannedId(val);
+      });
+    }
+
+    if (manualScanInput) {
+      manualScanInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const val = manualScanInput.value.trim();
+          if (val) handleScannedId(val);
+        }
+      });
+    }
+
+    // Resilient Marquee Scroller for all motion environments
+    (function initMarqueeScroller() {
+      const banner = document.querySelector('.marquee-banner');
+      if (!banner) return;
+      const track = banner.querySelector('.marquee-track');
+      if (!track) return;
+      const isReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (isReducedMotion) {
+        track.style.animation = 'none';
+        let offset = 0;
+        let lastTime = performance.now();
+        const speed = 75;
+        function step(now) {
+          const dt = (now - lastTime) / 1000;
+          lastTime = now;
+          offset += speed * dt;
+          const halfWidth = track.scrollWidth / 2;
+          if (halfWidth > 0 && offset >= halfWidth) offset = offset % halfWidth;
+          track.style.transform = `translate3d(-${offset}px, 0, 0)`;
+          requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+    })();
+  </script>
+</body>
+
+</html>
