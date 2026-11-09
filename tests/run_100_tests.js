@@ -13,7 +13,7 @@ const path = require('path');
 const crypto = require('crypto');
 const dns = require('dns');
 dns.setDefaultResultOrder('ipv4first');
-dns.setServers(['8.8.8.8', '8.8.4.4']);
+dns.setServers(['8.8.8.8', '1.1.1.1']);
 
 require('dotenv').config();
 const mongoose = require('mongoose');
@@ -1047,7 +1047,7 @@ function assert(condition, message) {
   });
 
   await runTest('T80', 'Project Gateway', 'Gateway countdown timer calculation logic verification', async () => {
-    const KICKOFF_TIME = new Date('2026-11-14T15:00:00+05:30').getTime();
+    const KICKOFF_TIME = new Date('2026-11-21T15:00:00+05:30').getTime();
     const now = Date.now();
     assert(now < KICKOFF_TIME, 'Kickoff time must be in future');
     const diff = KICKOFF_TIME - now;

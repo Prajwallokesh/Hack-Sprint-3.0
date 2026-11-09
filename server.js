@@ -1385,16 +1385,16 @@ app.post('/api/team/add-third-member', requireTeamAuth, async (req, res) => {
   }
 });
 
-// Hackathon Kickoff & Project Submission Opening Time: Nov 14, 2026, 03:00 PM IST (UTC+05:30)
-const SUBMISSION_KICKOFF_TIME = new Date('2026-11-14T15:00:00+05:30').getTime();
+// Hackathon Kickoff & Project Submission Opening Time: Nov 21, 2026, 03:00 PM IST (UTC+05:30)
+const SUBMISSION_KICKOFF_TIME = new Date('2026-11-21T15:00:00+05:30').getTime();
 
 // 8.5 Team Final Project Submission (Title, GitHub URL, and ZIP archive)
 app.post('/api/team/project-submission', requireTeamAuth, (req, res) => {
-  // Gateway lock enforcement: Locked before Nov 14, 2026 03:00 PM IST
+  // Gateway lock enforcement: Locked before Nov 21, 2026 03:00 PM IST
   // (Bypassable for automated test suite via X-Bypass-Freeze header)
   if (Date.now() < SUBMISSION_KICKOFF_TIME && req.headers['x-bypass-freeze'] !== 'test-mode') {
     return res.status(403).json({
-      error: 'Project submission gateway is currently locked. Submissions will open automatically on November 14, 2026 at 03:00 PM IST.'
+      error: 'Project submission gateway is currently locked. Submissions will open automatically on November 21, 2026 at 03:00 PM IST.'
     });
   }
 
@@ -1695,7 +1695,7 @@ app.delete('/api/admin/first-years/:id', requireAdmin, async (req, res) => {
   }
 });
 
-// 9.6 Gate Check-in QR Scanner API (Spot Verification & Seat Allocation on Nov 14)
+// 9.6 Gate Check-in QR Scanner API (Spot Verification & Seat Allocation on Nov 21)
 app.post('/api/admin/checkin/:id', requireAdmin, async (req, res) => {
   try {
     const id = req.params.id;

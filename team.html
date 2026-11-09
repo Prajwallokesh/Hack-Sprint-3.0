@@ -862,9 +862,9 @@
   <!-- Marquee Banner -->
   <div class="marquee-banner team-marquee">
     <div class="marquee-track">
-      <span>HACKSPRINT 3.0 • OFFICIAL BUILDER DASHBOARD • VERIFICATION GATEWAY • ENTRY PASS GENERATOR • NOV 14–15, 2026
+      <span>HACKSPRINT 3.0 • OFFICIAL BUILDER DASHBOARD • VERIFICATION GATEWAY • ENTRY PASS GENERATOR • NOV 21–22, 2026
         • </span>
-      <span>HACKSPRINT 3.0 • OFFICIAL BUILDER DASHBOARD • VERIFICATION GATEWAY • ENTRY PASS GENERATOR • NOV 14–15, 2026
+      <span>HACKSPRINT 3.0 • OFFICIAL BUILDER DASHBOARD • VERIFICATION GATEWAY • ENTRY PASS GENERATOR • NOV 21–22, 2026
         • </span>
     </div>
   </div>
@@ -962,7 +962,7 @@
             --D --H --M --S
           </div>
           <div style="font: 600 11.5px var(--mono); color: var(--muted);" id="dashTimerSub">
-            Starts: Nov 14, 03:00 PM IST
+            Starts: Nov 21, 03:00 PM IST
           </div>
         </div>
       </div>
@@ -1004,7 +1004,7 @@
         </h2>
         <p class="gating-desc">
           Payment verified and complete squad locked in! Present your digital entry pass or printout at the registration
-          desk on <strong>Nov 14, 03:00 PM</strong> at Government Engineering College, Hassan for your seat allocation.
+          desk on <strong>Nov 21, 03:00 PM</strong> at Government Engineering College, Hassan for your seat allocation.
         </p>
 
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -1108,7 +1108,7 @@
                   <div>
                     <span style="font: 700 10.5px var(--mono); color: var(--muted); display: block;">REPORTING
                       TIME:</span>
-                    <strong>Nov 14, 2026 &bull; 03:00 PM</strong>
+                    <strong>Nov 21, 2026 &bull; 03:00 PM</strong>
                   </div>
                   <div>
                     <span style="font: 700 10.5px var(--mono); color: var(--muted); display: block;">EVENT VENUE:</span>
@@ -1180,7 +1180,7 @@
           </p>
         </div>
 
-        <!-- Locked Submission Placeholder (Shown when before Nov 14, 3:00 PM IST) -->
+        <!-- Locked Submission Placeholder (Shown when before Nov 21, 3:00 PM IST) -->
         <div id="submissionLockedCard" class="pass-locked-overlay"
           style="display: none; border-color: #B45309; background: #FFFDF7; margin-bottom: 20px;">
           <div class="pass-locked-icon" style="color: #B45309;">
@@ -1194,7 +1194,7 @@
             SUBMISSION GATEWAY OPENS AT KICKOFF
           </h3>
           <p style="font: 500 13.5px var(--mono); color: var(--muted); max-width: 580px; margin: 0 auto 16px;">
-            The project submission gateway unlocks automatically on <strong>November 14, 2026 at 03:00 PM IST</strong>
+            The project submission gateway unlocks automatically on <strong>November 21, 2026 at 03:00 PM IST</strong>
             when the 24-hour hackathon officially commences. You will be able to submit your Project Title, GitHub Repo
             URL, and Source Code ZIP Archive.
           </p>
@@ -1478,8 +1478,8 @@
         .replace(/'/g, '&#039;');
     }
 
-    // 24-Hour Hackathon Timer Controller (Starts Nov 14, 2026, 03:00 PM IST)
-    const KICKOFF_TIME = new Date('2026-11-14T15:00:00+05:30').getTime();
+    // 24-Hour Hackathon Timer Controller (Starts Nov 21, 2026, 03:00 PM IST)
+    const KICKOFF_TIME = new Date('2026-11-21T15:00:00+05:30').getTime();
     const END_TIME = KICKOFF_TIME + (24 * 60 * 60 * 1000);
 
     function updateHackathonTimer() {
@@ -1504,7 +1504,7 @@
           timerValEl.textContent = countdownStr;
           timerValEl.style.color = '#B45309';
         }
-        if (timerSubEl) timerSubEl.textContent = 'Kickoff: Nov 14, 03:00 PM IST';
+        if (timerSubEl) timerSubEl.textContent = 'Kickoff: Nov 21, 03:00 PM IST';
 
         // Gateway is LOCKED before kickoff
         if (subLockedCard) subLockedCard.style.display = 'block';
@@ -1525,7 +1525,7 @@
             timerValEl.textContent = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} REMAINING`;
             timerValEl.style.color = '#15803D';
           }
-          if (timerSubEl) timerSubEl.textContent = 'Timer ends: Nov 15, 03:00 PM IST';
+          if (timerSubEl) timerSubEl.textContent = 'Timer ends: Nov 22, 03:00 PM IST';
         } else {
           if (timerLabelEl) timerLabelEl.innerHTML = '<i class="fa-solid fa-flag-checkered" style="color: var(--green);"></i> HACKATHON STATUS:';
           if (timerValEl) {

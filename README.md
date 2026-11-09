@@ -1,6 +1,6 @@
 # HackSprint 3.0 — 24-Hour Offline Hackathon
 
-Official web platform for **HackSprint 3.0**, presented by **COMPASS** (Computer Science Students Association) in collaboration with **GLUE** at **Government Engineering College, Hassan (GECH)** on November 14–15, 2026.
+Official web platform for **HackSprint 3.0**, presented by **COMPASS** (Computer Science Students Association) in collaboration with **GLUE** at **Government Engineering College, Hassan (GECH)** on November 21–22, 2026.
 
 Built with pure, high-performance **HTML5**, **CSS3**, and **ES6+ JavaScript**, featuring a Neo-Brutalist living digital world theme with real-time seat quota management, payment proof verification, and administrative control.
 
