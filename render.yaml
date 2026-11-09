@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: hacksprint-3
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 20.18.0
+      - key: MONGODB_URI
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: TEAM_SECRET
+        generateValue: true
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: WHATSAPP_CONFIRMED_URL
+        value: https://chat.whatsapp.com/HJXSxdQWU7i6bLoza40MJQ?s=cl&p=a&mlu=4&ilr=4&iam=2
+      - key: WHATSAPP_WAITLIST_URL
+        value: https://chat.whatsapp.com/HD6uTGs1YYGHRaKbnUGbeN?s=sh&p=a&mlu=4&ilr=4&iam=2

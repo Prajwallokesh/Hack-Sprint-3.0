@@ -2584,7 +2584,8 @@
         ctx.fillText('ORGANIZED BY COMPASS × GLUE • GOVERNMENT ENGINEERING COLLEGE, HASSAN', 400, 965);
         ctx.fillStyle = '#78716C';
         ctx.font = '600 11px "Outfit", sans-serif';
-        ctx.fillText('Team Dashboard: http://localhost:3000/team • Login with Registration ID & Mobile', 400, 985);
+        const teamPortalUrl = (window.location.origin && window.location.origin !== 'null' && window.location.protocol.startsWith('http')) ? (window.location.origin + '/team') : '/team';
+        ctx.fillText('Team Dashboard: ' + teamPortalUrl + ' • Login with Registration ID & Mobile', 400, 985);
         ctx.textAlign = 'left';
 
         return canvas.toDataURL('image/png');
