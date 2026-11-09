@@ -1,0 +1,2161 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#34A853" />
+  <title>Team Portal &amp; Entry Pass | HackSprint 3.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
+  <link rel="apple-touch-icon" href="images/hacksprint-icon-192.png" />
+
+  <!-- Local QR Code Engine -->
+  <script src="/js/qrcode.min.js"></script>
+
+  <style>
+    body {
+      overflow-x: hidden;
+      background: var(--surface-alt, #FAF8F5);
+    }
+
+    .team-page-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 1.5rem 5rem;
+    }
+
+    .team-marquee {
+      margin-top: clamp(74px, 9.5vh, 88px);
+      border-top: var(--border-ink);
+      border-bottom: var(--border-ink);
+      background: var(--ink);
+      color: #FFFFFF;
+    }
+
+    /* Neo-Brutalist Authentication Card */
+    .team-login-wrap {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 1rem;
+    }
+
+    .team-auth-card {
+      background: #FFFFFF;
+      border: var(--border-ink);
+      box-shadow: 8px 8px 0 var(--ink);
+      max-width: 480px;
+      width: 100%;
+      padding: 36px 30px;
+      position: relative;
+    }
+
+    .team-auth-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .team-auth-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font: 700 11px var(--mono);
+      text-transform: uppercase;
+      background: #FEF7E0;
+      border: 1.5px solid var(--ink);
+      box-shadow: 2px 2px 0 var(--ink);
+      padding: 3px 10px;
+      margin-bottom: 12px;
+      color: #92400E;
+    }
+
+    .team-auth-badge-dot {
+      width: 8px;
+      height: 8px;
+      background: #F59E0B;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .team-auth-title {
+      font: 900 clamp(1.8rem, 3.5vw, 2.3rem) var(--display);
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin: 0 0 8px;
+    }
+
+    .team-auth-sub {
+      font: 500 13px var(--display);
+      color: var(--muted);
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .team-field {
+      margin-bottom: 18px;
+    }
+
+    .team-label {
+      display: block;
+      font: 700 11px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+      color: var(--ink);
+    }
+
+    .team-input {
+      width: 100%;
+      box-sizing: border-box;
+      background: #FAF8F5;
+      border: var(--border-ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      padding: 12px 14px;
+      font: 700 14px var(--mono);
+      color: var(--ink);
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .team-input:focus {
+      background: #FFFFFF;
+      border-color: var(--green);
+      box-shadow: 4px 4px 0 var(--green);
+    }
+
+    /* Dashboard UI Elements */
+    .team-header-panel {
+      background: #FFFFFF;
+      border: var(--border-ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      padding: 24px;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .team-hero-title {
+      font: 900 clamp(2rem, 4vw, 3rem) var(--display);
+      text-transform: uppercase;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      margin: 4px 0 8px;
+    }
+
+    /* Gating Callout Boxes */
+    .gating-card {
+      border: 3px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      padding: 28px;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .gating-card-under-process {
+      background: #FFFBEB;
+      border-color: #B45309;
+    }
+
+    .gating-card-confirmed {
+      background: #F0FDF4;
+      border-color: #15803D;
+    }
+
+    .gating-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .gating-status-title {
+      font: 900 clamp(1.4rem, 2.5vw, 1.8rem) var(--display);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin: 0 0 8px;
+    }
+
+    .gating-desc {
+      font-size: 14.5px;
+      line-height: 1.5;
+      color: var(--ink);
+      margin-bottom: 18px;
+    }
+
+    /* Checklist */
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .check-step {
+      background: #FFFFFF;
+      border: 1.5px solid var(--ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .check-step-icon {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--ink);
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .check-step.done .check-step-icon {
+      background: #DCFCE7;
+      color: #15803D;
+      border-color: #15803D;
+    }
+
+    .check-step.pending .check-step-icon {
+      background: #FEF3C7;
+      color: #B45309;
+      border-color: #B45309;
+    }
+
+    .check-step-label {
+      font: 700 11px var(--mono);
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .check-step-val {
+      font: 700 13px var(--display);
+      color: var(--ink);
+    }
+
+    /* Neo-Brutalist Blocked Member Cards (Squad Super Design) */
+    .squad-block-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 20px;
+      margin-bottom: 2.5rem;
+    }
+
+    .member-block-card {
+      background: #FFFFFF;
+      border: 3px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .member-block-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+
+    .member-block-stripe {
+      height: 7px;
+      width: 100%;
+    }
+
+    .member-block-stripe-leader {
+      background: #F59E0B;
+    }
+
+    .member-block-stripe-core {
+      background: #2563EB;
+    }
+
+    .member-block-stripe-freshman {
+      background: #16A34A;
+    }
+
+    .member-block-stripe-pending {
+      background: #D97706;
+      background-image: repeating-linear-gradient(45deg, #D97706, #D97706 10px, #F59E0B 10px, #F59E0B 20px);
+    }
+
+    .member-block-body {
+      padding: 22px 20px 18px;
+      flex: 1;
+    }
+
+    .member-block-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font: 700 10.5px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border: 1.5px solid var(--ink);
+      box-shadow: 2px 2px 0 var(--ink);
+      margin-bottom: 12px;
+    }
+
+    .member-block-badge-leader {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    .member-block-badge-core {
+      background: #DBEAFE;
+      color: #1E40AF;
+    }
+
+    .member-block-badge-freshman {
+      background: #DCFCE7;
+      color: #15803D;
+    }
+
+    .member-block-badge-pending {
+      background: #FEF3C7;
+      color: #B45309;
+    }
+
+    .member-block-name {
+      font: 900 21px var(--display);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin: 0 0 6px;
+    }
+
+    .member-block-usn {
+      font: 700 13px var(--mono);
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+
+    .member-block-meta {
+      font: 600 12px var(--mono);
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .member-block-details {
+      font-size: 13px;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    .member-block-footer {
+      padding: 12px 20px;
+      background: #FAF8F5;
+      border-top: 1.5px solid var(--ink);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: #FFFFFF;
+      border: 1.5px solid var(--ink);
+      box-shadow: 2px 2px 0 var(--ink);
+      font: 700 12px var(--mono);
+      padding: 8px 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-whatsapp:hover {
+      background: #1EBE5D;
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    /* Project Submission Neo-Brutalist Box */
+    .project-submission-box {
+      background: #FFFFFF;
+      border: 3px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      padding: 28px;
+      margin-bottom: 2.5rem;
+    }
+
+    .file-dropzone {
+      border: 2px dashed var(--ink);
+      background: #FAF8F5;
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .file-dropzone:hover,
+    .file-dropzone.dragover {
+      background: #EFF6FF;
+      border-color: #2563EB;
+    }
+
+    .file-dropzone-icon {
+      font-size: 32px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    /* OFFICIAL DIGITAL ENTRY PASS (TICKET STYLE) */
+    .entry-pass-card {
+      background: #FFFFFF;
+      border: 4px solid var(--ink);
+      box-shadow: 10px 10px 0 var(--ink);
+      position: relative;
+      margin-bottom: 2.5rem;
+      overflow: hidden;
+    }
+
+    .entry-pass-top-bar {
+      background: var(--ink);
+      color: #FFFFFF;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pass-layout-grid {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      border-top: 2px solid var(--ink);
+    }
+
+    .pass-main-stub {
+      padding: 28px;
+      border-right: 2px dashed var(--ink);
+      position: relative;
+    }
+
+    .pass-qr-stub {
+      padding: 24px;
+      background: #FAF8F5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .pass-qr-box {
+      background: #FFFFFF;
+      border: 2px solid var(--ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      padding: 12px;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .pass-roster-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+
+    .pass-roster-table th {
+      background: #FAF8F5;
+      border: 1px solid var(--ink);
+      padding: 6px 10px;
+      font: 700 10.5px var(--mono);
+      text-transform: uppercase;
+      text-align: left;
+    }
+
+    .pass-roster-table td {
+      border: 1px solid var(--line);
+      padding: 6px 10px;
+      font-family: var(--display);
+    }
+
+    /* Pass Locked State */
+    .pass-locked-overlay {
+      background: repeating-linear-gradient(-45deg,
+          #FAFAF9,
+          #FAFAF9 12px,
+          #F5F5F4 12px,
+          #F5F5F4 24px);
+      border: 2px dashed var(--ink);
+      padding: 48px 24px;
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .pass-locked-icon {
+      font-size: 46px;
+      color: #92400E;
+      margin-bottom: 14px;
+    }
+
+    /* Print Stylesheet */
+    @media print {
+      body {
+        background: #FFFFFF !important;
+      }
+
+      .site-header,
+      .team-marquee,
+      .team-header-panel,
+      .gating-card,
+      .freshmen-grid,
+      .team-profile-section,
+      .pass-actions-bar,
+      footer,
+      #teamLoginWrap {
+        display: none !important;
+      }
+
+      .team-page-container {
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+
+      .entry-pass-card {
+        box-shadow: none !important;
+        border: 2px solid #000000 !important;
+        page-break-inside: avoid;
+        margin: 0 auto;
+        max-width: 800px;
+      }
+
+      .pass-main-stub {
+        border-right: 2px dashed #000000 !important;
+      }
+    }
+
+    .dash-timer-card {
+      background: #FAF8F5;
+      border: 2px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      padding: 16px 20px;
+      text-align: right;
+      min-width: 260px;
+      box-sizing: border-box;
+    }
+
+    .pass-venue-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      font-size: 12.5px;
+    }
+
+    .pass-roster-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--ink);
+      margin-top: 10px;
+      background: #FFFFFF;
+    }
+
+    .proj-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    /* Comprehensive Responsive Overhaul */
+    @media (max-width: 900px) {
+      .team-header-panel {
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .team-page-container {
+        padding: 18px 1rem 4rem;
+      }
+
+      .team-marquee {
+        margin-top: 68px;
+      }
+
+      .team-header-panel {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px 16px;
+        box-shadow: 5px 5px 0 var(--ink);
+        gap: 16px;
+      }
+
+      .dash-timer-card {
+        text-align: left;
+        min-width: 100%;
+        width: 100%;
+        padding: 14px 16px;
+        box-shadow: 3px 3px 0 var(--ink);
+      }
+
+      .team-hero-title {
+        font-size: clamp(1.8rem, 6.5vw, 2.4rem);
+        word-break: break-word;
+      }
+
+      .gating-card {
+        padding: 20px 16px;
+        box-shadow: 5px 5px 0 var(--ink);
+        margin-bottom: 2rem;
+      }
+
+      .gating-status-title {
+        font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+        word-break: break-word;
+      }
+
+      .squad-block-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+        gap: 16px;
+        margin-bottom: 2rem;
+      }
+
+      .member-block-card {
+        box-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .member-block-body {
+        padding: 18px 16px 14px;
+      }
+
+      .entry-pass-card {
+        box-shadow: 6px 6px 0 var(--ink);
+        margin-bottom: 2rem;
+      }
+
+      .entry-pass-top-bar {
+        padding: 12px 16px;
+      }
+
+      .pass-layout-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pass-main-stub {
+        border-right: none;
+        border-bottom: 2px dashed var(--ink);
+        padding: 20px 16px;
+      }
+
+      .pass-qr-stub {
+        padding: 24px 16px;
+      }
+
+      .proj-form-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .project-submission-box {
+        padding: 20px 16px;
+        box-shadow: 5px 5px 0 var(--ink);
+        margin-bottom: 2rem;
+      }
+
+      #btnSubmitProject {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .site-header {
+        padding: 10px 12px;
+        gap: 8px;
+      }
+
+      .brand-logo {
+        height: 26px !important;
+      }
+
+      .brand-text {
+        font-size: 0.92rem !important;
+      }
+
+      .site-header .neo-pill {
+        font-size: 10px !important;
+        padding: 4px 8px !important;
+      }
+
+      #btnLogoutTeam {
+        padding: 4px 10px !important;
+        font-size: 10px !important;
+      }
+
+      .team-marquee {
+        margin-top: 58px;
+        font-size: 11px;
+      }
+
+      .team-login-wrap {
+        padding: 24px 8px;
+      }
+
+      .team-auth-card {
+        padding: 24px 16px;
+        box-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .team-auth-title {
+        font-size: 1.65rem;
+      }
+
+      .team-page-container {
+        padding: 12px 10px 3rem;
+      }
+
+      .team-header-panel {
+        padding: 16px 14px;
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+
+      .dash-timer-card {
+        padding: 12px 14px;
+      }
+
+      #dashTimerVal {
+        font-size: 20px !important;
+      }
+
+      .gating-card {
+        padding: 16px 12px;
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+
+      .gating-card .button {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .squad-block-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .member-block-body {
+        padding: 16px 14px 12px;
+      }
+
+      .member-block-name {
+        font-size: 18px;
+      }
+
+      .member-block-footer {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 10px 14px;
+      }
+
+      .member-block-footer .btn-whatsapp,
+      .member-block-footer .button {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        padding: 8px 6px;
+        font-size: 11px;
+      }
+
+      .entry-pass-card {
+        box-shadow: 5px 5px 0 var(--ink);
+        border-width: 3px;
+      }
+
+      .entry-pass-top-bar {
+        padding: 10px 12px;
+        font-size: 11px;
+      }
+
+      #passTeamName {
+        font-size: 20px !important;
+      }
+
+      .pass-venue-grid {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+      }
+
+      .pass-actions-bar .button {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .project-submission-box {
+        padding: 16px 12px;
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+
+      .file-dropzone {
+        padding: 18px 10px;
+      }
+
+      #subGatewayCountdown {
+        font-size: 12px;
+      }
+
+      .pass-locked-overlay {
+        padding: 24px 12px;
+      }
+
+      #submissionLockedCard>div {
+        max-width: 100%;
+        box-sizing: border-box;
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Page Grid Background -->
+  <div class="page-grid" aria-hidden="true"></div>
+
+  <!-- Header Navigation -->
+  <header class="site-header" id="navbar">
+    <a class="brand" href="/" aria-label="HackSprint 3.0 Home">
+      <img class="brand-logo" src="images/hacksprint-logo.png" alt="HackSprint 3.0" />
+      <span class="brand-text">HACKSPRINT <span class="brand-accent">3.0</span></span>
+    </a>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span class="neo-pill" style="background: var(--ink);border-radius: 20px;padding: 7px; color: #fff;">TEAM
+        PORTAL</span>
+      <button type="button" class="button button-ghost" id="btnLogoutTeam"
+        style="display: none; padding: 6px 14px; font-size: 11px;">
+        <i class="fa-solid fa-arrow-right-from-bracket" style="margin-right: 4px;"></i> Log Out
+      </button>
+    </div>
+  </header>
+
+  <!-- Marquee Banner -->
+  <div class="marquee-banner team-marquee">
+    <div class="marquee-track">
+      <span>HACKSPRINT 3.0 • OFFICIAL BUILDER DASHBOARD • VERIFICATION GATEWAY • ENTRY PASS GENERATOR • NOV 14–15, 2026
+        • </span>
+      <span>HACKSPRINT 3.0 • OFFICIAL BUILDER DASHBOARD • VERIFICATION GATEWAY • ENTRY PASS GENERATOR • NOV 14–15, 2026
+        • </span>
+    </div>
+  </div>
+
+  <main class="team-page-container">
+
+    <!-- ==========================================================
+         VIEW 1: TEAM LOGIN
+         ========================================================== -->
+    <div id="teamLoginWrap" class="team-login-wrap">
+      <div class="team-auth-card">
+        <div class="team-auth-header">
+          <div class="team-auth-badge">
+            <span class="team-auth-badge-dot"></span>
+            <span>BUILDER DISPATCH GATEWAY</span>
+          </div>
+          <h1 class="team-auth-title">TEAM LOGIN</h1>
+          <p class="team-auth-sub">
+            Access your team roster, track organizer verification, meet your assigned 1st-year mentees, and claim your
+            check-in entry pass.
+          </p>
+        </div>
+
+        <div id="teamLoginError"
+          style="background: #FCE8E6; border: 2px solid var(--red); color: var(--red); padding: 10px 14px; font: 700 12px var(--mono); margin-bottom: 16px; box-shadow: 3px 3px 0 var(--red); display: none;">
+        </div>
+
+
+
+        <form id="teamLoginForm" onsubmit="handleTeamLoginSubmit(event); return false;">
+          <div class="team-field">
+            <label class="team-label" for="inputRegId">
+              <i class="fa-solid fa-id-badge" style="color: var(--green);"></i> REGISTRATION ID
+            </label>
+            <input type="text" id="inputRegId" class="team-input" placeholder="e.g. HS3-HSSN-0001" required
+              autocomplete="username" />
+            <div style="font: 500 11px var(--mono); color: var(--muted); margin-top: 4px;">
+              Generated during registration (e.g. HS3-HSSN-XXXX).
+            </div>
+          </div>
+
+          <div class="team-field">
+            <label class="team-label" for="inputLeaderMobile">
+              <i class="fa-solid fa-mobile-screen" style="color: var(--green);"></i> TEAM LEADER MOBILE NUMBER
+            </label>
+            <input type="tel" id="inputLeaderMobile" class="team-input" placeholder="10-digit mobile number" required
+              maxlength="15" autocomplete="tel" />
+
+          </div>
+
+          <button type="submit" class="button button-primary" id="btnSubmitLogin"
+            style="width: 100%; padding: 14px; font-size: 14px; text-transform: uppercase;">
+            <span>Access Team Portal</span>
+            <i class="fa-solid fa-arrow-right" style="margin-left: 6px;"></i>
+          </button>
+        </form>
+
+        <div
+          style="margin-top: 20px; padding-top: 16px; border-top: 1px dashed var(--line); font: 500 11.5px var(--mono); color: var(--muted); text-align: center;">
+          Need assistance with your registration ID? Reach out to <strong
+            style="color: var(--ink);">support@hacksprint.in</strong> or your student coordinators.
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================
+         VIEW 2: TEAM DASHBOARD (GATED & UNLOCKED)
+         ========================================================== -->
+    <div id="teamDashboardWrap" style="display: none;">
+
+      <!-- Team Overview Header Card -->
+      <div class="team-header-panel">
+        <div>
+          <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
+            <code id="dashRegId"
+              style="font: 700 13px var(--mono); color: var(--green); background: #FAF8F5; border: 1.5px solid var(--ink); padding: 2px 8px;">HS3-XXXX-XXXX</code>
+            <span id="dashCollegePill" class="neo-pill neo-pill-hassan">GEC Hassan</span>
+            <span id="dashSeatBadge" class="neo-pill"
+              style="background: #FEF3C7; color: #92400E; border: 1.5px solid var(--ink); font-weight: 800;">
+              SEAT: PENDING GATE CHECK-IN
+            </span>
+          </div>
+          <h1 class="team-hero-title" id="dashTeamName">TEAM NAME</h1>
+          <p id="dashTagline" style="font: 600 14px var(--mono); color: var(--muted); margin: 0;">
+            Building the next big thing at HackSprint 3.0.
+          </p>
+        </div>
+        <div class="dash-timer-card" id="dashTimerCard">
+          <div
+            style="display: inline-flex; align-items: center; gap: 6px; font: 700 11px var(--mono); color: var(--muted); text-transform: uppercase;"
+            id="dashTimerLabel">
+            <i class="fa-solid fa-clock-rotate-left" style="color: var(--green);"></i> 24-HOUR HACKATHON TIMER:
+          </div>
+          <div style="font: 900 24px var(--display); letter-spacing: -0.02em;" id="dashTimerVal">
+            --D --H --M --S
+          </div>
+          <div style="font: 600 11.5px var(--mono); color: var(--muted);" id="dashTimerSub">
+            Starts: Nov 14, 03:00 PM IST
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           STAGE 1: "UNDER PROCESS" NOTIFICATION CARD
+           ======================================================== -->
+      <div id="underProcessBanner" class="gating-card gating-card-under-process" style="display: none;">
+        <div class="gating-badge-row">
+          <span
+            style="font: 700 11.5px var(--mono); color: #B45309; text-transform: uppercase; letter-spacing: 0.04em;">
+            <i class="fa-solid fa-hourglass-half fa-spin" style="margin-right: 4px;"></i> REVIEW IN PROGRESS
+            &nbsp;•&nbsp; STAGE: PENDING ORGANIZER APPROVAL
+          </span>
+        </div>
+
+        <h2 class="gating-status-title" style="color: #92400E;">
+          YOUR REGISTRATION REQUEST IS UNDER PROCESS
+        </h2>
+        <p class="gating-desc" id="underProcessExplainer" style="margin-bottom: 0;">
+          Your team registration has been recorded! The HackSprint 3.0 organizing committee is currently reviewing your
+          payment proof and pairing your team with two first-year student mentees.
+        </p>
+      </div>
+
+      <!-- ========================================================
+           STAGE 2: "CONFIRMED & UNLOCKED" CELEBRATION CARD
+           ======================================================== -->
+      <div id="confirmedBanner" class="gating-card gating-card-confirmed" style="display: none;">
+        <div class="gating-badge-row">
+          <span class="neo-pill neo-pill-verified">
+            <i class="fa-solid fa-circle-check"></i> SQUAD CONFIRMED &amp; SEAT SECURED
+          </span>
+          <span style="font: 700 11px var(--mono); color: var(--green-dark);">STATUS: READY FOR DISPATCH</span>
+        </div>
+
+        <h2 class="gating-status-title" style="color: var(--green-dark);">
+          SQUAD CONFIRMED &amp; ENTRY PASS UNLOCKED!
+        </h2>
+        <p class="gating-desc">
+          Payment verified and complete squad locked in! Present your digital entry pass or printout at the registration
+          desk on <strong>Nov 14, 03:00 PM</strong> at Government Engineering College, Hassan for your seat allocation.
+        </p>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button type="button" class="button button-primary" onclick="window.print()">
+            <i class="fa-solid fa-print" style="margin-right: 6px;"></i> Print / Save Pass (PDF)
+          </button>
+          <a href="#entryPassSection" class="button button-outline">
+            <i class="fa-solid fa-qrcode" style="margin-right: 6px;"></i> View QR Gate Pass ➔
+          </a>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           SECTION 01: TEAM DETAILS WITH EACH MEMBER BLOCKED STYLE SUPER DESIGN
+           ======================================================== -->
+      <div style="margin-bottom: 2.75rem;">
+        <div style="margin-bottom: 1.25rem;">
+          <p class="eyebrow"><span class="eyebrow-rule"></span>01 / SQUAD ROSTER</p>
+          <h2 style="font: 900 22px var(--display); text-transform: uppercase; margin: 0 0 6px;">
+            TEAM BUILDERS
+          </h2>
+          <p id="squadArchitectureSubtitle" style="font: 500 13px var(--mono); color: var(--muted); margin: 0;">
+            5-Builder squad architecture: Core builders paired with allocated 1st-year mentees for 24 hours of non-stop
+            hacking.
+          </p>
+        </div>
+
+        <div class="squad-block-grid" id="squadBlockGrid">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- ========================================================
+           SECTION 02: OFFICIAL DIGITAL ENTRY PASS (BOARDING PASS DESIGN)
+           ======================================================== -->
+      <div id="entryPassSection">
+        <div style="margin-bottom: 1rem;">
+          <p class="eyebrow"><span class="eyebrow-rule"></span>02 / VENUE ADMITTANCE</p>
+          <h2 style="font: 900 22px var(--display); text-transform: uppercase; margin: 0 0 6px;">
+            OFFICIAL DIGITAL ENTRY PASS
+          </h2>
+        </div>
+
+        <!-- Locked Pass Placeholder (Shown when under process) -->
+        <div id="passLockedPlaceholder" class="pass-locked-overlay" style="display: none;">
+          <div class="pass-locked-icon">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <h3 style="font: 900 20px var(--display); text-transform: uppercase; margin: 0 0 8px; color: #92400E;">
+            OFFICIAL ENTRY PASS LOCKED
+          </h3>
+          <p id="passLockedExplainer"
+            style="font: 500 13.5px var(--mono); color: var(--muted); max-width: 520px; margin: 0 auto 16px;">
+            Your official entry pass and gate check-in QR code will be generated as soon as your payment is verified and
+            your first-year builders are assigned.
+          </p>
+          <span class="neo-pill neo-pill-pending" id="passLockedBadge">PENDING VERIFICATION</span>
+        </div>
+
+        <!-- Unlocked Ticket Card -->
+        <div id="passUnlockedCard" class="entry-pass-card" style="display: none;">
+          <!-- Top Bar -->
+          <div class="entry-pass-top-bar">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <img src="images/hacksprint-logo.png" alt="HackSprint 3.0" style="height: 26px; width: auto;" />
+              <strong style="font: 900 14px var(--mono); letter-spacing: 0.05em;">HACKSPRINT 3.0 ADMIT PASS</strong>
+            </div>
+            <div>
+              <span style="font: 700 11px var(--mono); color: var(--green);">TOKEN: </span>
+              <code style="font: 700 12px var(--mono); color: #FFFFFF;" id="passTokenCode">HS3-PASS-0000</code>
+            </div>
+          </div>
+
+          <!-- Pass Layout Grid -->
+          <div class="pass-layout-grid">
+            <!-- Left Main Stub -->
+            <div class="pass-main-stub">
+              <div
+                style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                <div>
+                  <span class="neo-pill" id="passCollegeBadge">GEC Hassan</span>
+                  <h3 style="font: 900 26px var(--display); text-transform: uppercase; margin: 8px 0 2px;"
+                    id="passTeamName">
+                    TEAM NAME
+                  </h3>
+                  <code style="font: 700 12px var(--mono); color: var(--green);" id="passRegId">HS3-HSSN-0000</code>
+                </div>
+                <div style="text-align: right;">
+                  <span class="neo-pill neo-pill-verified" id="passCheckInStatus">
+                    <i class="fa-solid fa-check"></i> ADMIT VALID
+                  </span>
+                  <div id="passAllocatedSeatNotice"
+                    style="margin-top: 6px; font: 700 12px var(--mono); color: var(--ink);"></div>
+                </div>
+              </div>
+
+              <!-- Venue & Timing Box -->
+              <div
+                style="background: #FAF8F5; border: 1.5px solid var(--ink); padding: 12px 14px; margin-bottom: 16px;">
+                <div class="pass-venue-grid">
+                  <div>
+                    <span style="font: 700 10.5px var(--mono); color: var(--muted); display: block;">REPORTING
+                      TIME:</span>
+                    <strong>Nov 14, 2026 &bull; 03:00 PM</strong>
+                  </div>
+                  <div>
+                    <span style="font: 700 10.5px var(--mono); color: var(--muted); display: block;">EVENT VENUE:</span>
+                    <strong>Main Auditorium &amp; Library, GEC Hassan</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Squad Roster -->
+              <div>
+                <span style="font: 700 11px var(--mono); color: var(--muted); text-transform: uppercase;">CONFIRMED
+                  SQUAD ROSTER:</span>
+                <div class="pass-roster-table-wrap">
+                  <table class="pass-roster-table">
+                    <thead>
+                      <tr>
+                        <th>BUILDER NAME</th>
+                        <th>USN</th>
+                        <th>ROLE</th>
+                      </tr>
+                    </thead>
+                    <tbody id="passRosterTbody">
+                      <!-- Populated via JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right QR Stub -->
+            <div class="pass-qr-stub">
+              <div class="pass-qr-box">
+                <div id="passQrCodeCanvas"></div>
+              </div>
+              <div
+                style="font: 700 10.5px var(--mono); color: var(--muted); text-transform: uppercase; margin-bottom: 6px;">
+                GATE CHECK-IN TOKEN
+              </div>
+              <p style="font: 500 11px var(--mono); color: var(--muted); margin: 0 0 12px;">
+                Scan at Main Gate Registration Desk on arrival for seat assignment.
+              </p>
+              <button type="button" class="button button-ghost" id="btnDownloadQr"
+                style="padding: 6px 12px; font-size: 11px;">
+                <i class="fa-solid fa-download" style="margin-right: 4px;"></i> Save QR Code
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="pass-actions-bar" id="passActionsBar" style="display: none; margin-bottom: 2.5rem;">
+          <button type="button" class="button button-primary" onclick="window.print()">
+            <i class="fa-solid fa-print" style="margin-right: 6px;"></i> Print / Save Entry Pass
+          </button>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           SECTION 03: FINAL PROJECT SUBMISSION (TITLE + GITHUB + ZIP)
+           ======================================================== -->
+      <div class="project-submission-box" id="projectSubmissionSection">
+        <div style="margin-bottom: 1.25rem;">
+          <p class="eyebrow"><span class="eyebrow-rule"></span>03 / FINAL PROJECT SUBMISSION</p>
+          <h2 style="font: 900 22px var(--display); text-transform: uppercase; margin: 0 0 6px;">
+            PROJECT SUBMISSION GATEWAY
+          </h2>
+          <p style="font: 500 13px var(--mono); color: var(--muted); margin: 0;">
+            Submit your project title, GitHub repository link, and project source code ZIP archive (.zip, up to 50MB)
+            once the hackathon commences.
+          </p>
+        </div>
+
+        <!-- Locked Submission Placeholder (Shown when before Nov 14, 3:00 PM IST) -->
+        <div id="submissionLockedCard" class="pass-locked-overlay"
+          style="display: none; border-color: #B45309; background: #FFFDF7; margin-bottom: 20px;">
+          <div class="pass-locked-icon" style="color: #B45309;">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <span class="neo-pill"
+            style="background: #FEF3C7; color: #92400E; border: 1.5px solid var(--ink); margin-bottom: 10px; font-weight: 800;">
+            <i class="fa-solid fa-clock"></i> GATEWAY CURRENTLY LOCKED
+          </span>
+          <h3 style="font: 900 22px var(--display); text-transform: uppercase; margin: 10px 0 8px; color: #92400E;">
+            SUBMISSION GATEWAY OPENS AT KICKOFF
+          </h3>
+          <p style="font: 500 13.5px var(--mono); color: var(--muted); max-width: 580px; margin: 0 auto 16px;">
+            The project submission gateway unlocks automatically on <strong>November 14, 2026 at 03:00 PM IST</strong>
+            when the 24-hour hackathon officially commences. You will be able to submit your Project Title, GitHub Repo
+            URL, and Source Code ZIP Archive.
+          </p>
+          <div
+            style="display: inline-flex; align-items: center; gap: 8px; background: #FFFFFF; border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); padding: 8px 18px; font: 700 13px var(--mono); color: #B45309;">
+            <i class="fa-solid fa-hourglass-start"></i> OPENS IN: <span id="subGatewayCountdown"
+              style="font-weight: 900; color: var(--ink);">--D --H --M --S</span>
+          </div>
+        </div>
+
+        <!-- Existing Submission Notification (shown if already submitted) -->
+        <div id="existingSubmissionNotice"
+          style="display: none; background: #F0FDF4; border: 2px solid var(--green); box-shadow: 4px 4px 0 var(--green); padding: 18px; margin-bottom: 20px;">
+          <div
+            style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+            <span class="neo-pill neo-pill-verified">
+              <i class="fa-solid fa-circle-check"></i> SUBMISSION RECORDED
+            </span>
+            <span id="subSubmittedTime" style="font: 700 11px var(--mono); color: var(--muted);"></span>
+          </div>
+          <h3 id="subTitleDisplay" style="font: 900 18px var(--display); margin: 0 0 6px; text-transform: uppercase;">
+          </h3>
+          <div style="font: 600 12.5px var(--mono); margin-bottom: 8px;">
+            GitHub: <a id="subGithubLink" href="#" target="_blank"
+              style="color: var(--blue-dark); text-decoration: underline;"></a>
+          </div>
+          <div style="font: 600 12px var(--mono); color: var(--muted);" id="subZipInfo"></div>
+          <div style="font: 500 11.5px var(--mono); color: var(--green-dark); margin-top: 10px;">
+            <i class="fa-solid fa-arrow-rotate-right"></i> You may re-submit or update files below at any time before
+            the 24-hour freeze.
+          </div>
+        </div>
+
+        <form id="projectSubmissionForm">
+          <div class="proj-form-grid">
+            <div>
+              <label class="team-label" for="projTitle">PROJECT TITLE / NAME <span
+                  style="color: var(--red);">*</span></label>
+              <input type="text" id="projTitle" class="team-input" placeholder="e.g. AgriGuard: AI Crop Health Platform"
+                required />
+            </div>
+            <div>
+              <label class="team-label" for="projGithubUrl">GITHUB REPOSITORY URL <span
+                  style="color: var(--red);">*</span></label>
+              <input type="url" id="projGithubUrl" class="team-input" placeholder="https://github.com/team/agri-guard"
+                required />
+            </div>
+          </div>
+
+          <div class="team-field">
+            <label class="team-label" for="projZipFile">SOURCE CODE ZIP ARCHIVE (.ZIP, MAX 50MB) <span
+                style="color: var(--red);">*</span></label>
+            <div class="file-dropzone" id="fileDropzone">
+              <input type="file" id="projZipFile" accept=".zip,application/zip" style="display: none;" />
+              <div class="file-dropzone-icon">
+                <i class="fa-solid fa-file-zipper" style="color: var(--green);"></i>
+              </div>
+              <strong
+                style="font: 800 13px var(--mono); text-transform: uppercase; display: block; margin-bottom: 4px;">
+                CLICK OR DRAG &amp; DROP PROJECT ZIP FILE HERE
+              </strong>
+              <div style="font: 500 12px var(--mono); color: var(--muted);" id="dropzoneText">
+                Accepts .zip archives up to 50MB
+              </div>
+            </div>
+            <div id="selectedFileInfo"
+              style="display: none; margin-top: 8px; font: 700 12px var(--mono); color: var(--green); background: #DCFCE7; padding: 6px 12px; border: 1px solid var(--green);">
+            </div>
+          </div>
+
+          <div id="projSubmitError"
+            style="display: none; background: #FEE2E2; border: 1.5px solid var(--red); color: var(--red); padding: 8px 12px; font: 700 12px var(--mono); margin-bottom: 14px;">
+          </div>
+          <div id="projSubmitSuccess"
+            style="display: none; background: #DCFCE7; border: 1.5px solid var(--green); color: var(--green-dark); padding: 8px 12px; font: 700 12px var(--mono); margin-bottom: 14px;">
+          </div>
+
+          <button type="submit" class="button button-primary" id="btnSubmitProject"
+            style="padding: 12px 24px; font-size: 13.5px; text-transform: uppercase;">
+            <i class="fa-solid fa-cloud-arrow-up" style="margin-right: 6px;"></i>
+            <span>Upload &amp; Submit Project</span>
+          </button>
+        </form>
+      </div>
+
+
+
+    </div>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="brand" href="/" aria-label="HackSprint 3.0 — home">
+            <img class="brand-logo" src="images/hacksprint-logo.png" alt="HackSprint 3.0" />
+            <span class="brand-text">HACKSPRINT <span class="brand-accent">3.0</span></span>
+          </a>
+          <p class="footer-tagline">COMPASS &times; GLUE &bull; Government Engineering College, Hassan</p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <a href="/#about">About</a>
+          <a href="/#rulebook">Rulebook</a>
+          <a href="/#problem-statements">Challenge</a>
+          <a href="/#timeline">Timeline</a>
+          <a href="/#prizes">Prizes</a>
+          <a href="/register">Register</a>
+          <a href="/team" style="font-weight: 800; color: var(--green);">Team Portal</a>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-credit">@ designed and developed by <strong>Prajwal K L</strong></p>
+        <p class="footer-copy">&copy; 2026 HackSprint 3.0. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Team Portal JavaScript Controller -->
+  <script>
+    const API_BASE = (window.location.port && window.location.port !== '3000' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
+      ? 'http://localhost:3000'
+      : (window.location.protocol === 'file:' ? 'http://localhost:3000' : '');
+
+    let teamAuthToken = localStorage.getItem('hacksprint_team_token') || '';
+    let currentDashboardData = null;
+
+    const teamLoginWrap = document.getElementById('teamLoginWrap');
+    const teamDashboardWrap = document.getElementById('teamDashboardWrap');
+    const btnLogoutTeam = document.getElementById('btnLogoutTeam');
+    const teamLoginForm = document.getElementById('teamLoginForm');
+    const teamLoginError = document.getElementById('teamLoginError');
+
+    // Login Form Submit Handler
+    async function handleTeamLoginSubmit(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      teamLoginError.style.display = 'none';
+
+      const registrationId = document.getElementById('inputRegId').value.trim();
+      const leaderMobile = document.getElementById('inputLeaderMobile').value.trim();
+
+      if (!registrationId || !leaderMobile) {
+        teamLoginError.textContent = 'Please enter both your Registration ID and Leader Mobile Number.';
+        teamLoginError.style.display = 'block';
+        return;
+      }
+
+      const btn = document.getElementById('btnSubmitLogin');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
+
+      try {
+        const res = await fetch(API_BASE + '/api/team/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ registrationId, mobile: leaderMobile, leaderMobile })
+        });
+        const text = await res.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (jsonErr) {
+          throw new Error('Server returned an unexpected response. Please make sure the local server is running on http://localhost:3000.');
+        }
+        if (!res.ok) throw new Error(data.error || 'Failed to authenticate.');
+
+        teamAuthToken = data.token;
+        localStorage.setItem('hacksprint_team_token', teamAuthToken);
+        localStorage.setItem('hacksprint_team_id', data.registrationId || registrationId);
+
+        // Clean up URL parameters so no ? remains in the address bar
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        await loadTeamDashboard();
+      } catch (err) {
+        teamLoginError.textContent = err.message;
+        teamLoginError.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Access Team Portal</span> <i class="fa-solid fa-arrow-right" style="margin-left: 6px;"></i>';
+      }
+    }
+
+    // Attach event listener to form
+    teamLoginForm.addEventListener('submit', handleTeamLoginSubmit);
+
+    // Auto-check session on load
+    if (teamAuthToken) {
+      loadTeamDashboard();
+    } else {
+      // Check if credentials exist in localStorage or URL parameters for effortless 1-click access
+      const urlParams = new URLSearchParams(window.location.search);
+      const qId = urlParams.get('id') || urlParams.get('regId') || localStorage.getItem('hacksprint_team_id') || '';
+      const qMobile = urlParams.get('mobile') || localStorage.getItem('hacksprint_team_mobile') || '';
+      const savedTeamName = localStorage.getItem('hacksprint_team_name') || '';
+
+      if (qId) document.getElementById('inputRegId').value = qId;
+      if (qMobile) document.getElementById('inputLeaderMobile').value = qMobile;
+
+      if (qId && qMobile) {
+        const autoNotice = document.getElementById('teamAutoFillNotice');
+        const autoText = document.getElementById('teamAutoFillText');
+        if (autoNotice) {
+          autoNotice.style.display = 'block';
+          if (autoText && savedTeamName) {
+            autoText.innerHTML = `Auto-filled credentials for team <strong>${escapeHtml(savedTeamName)}</strong>! Click below to enter your portal.`;
+          }
+        }
+        if (urlParams.get('auto') === '1' || urlParams.get('id')) {
+          setTimeout(() => {
+            handleTeamLoginSubmit();
+          }, 300);
+        }
+      }
+    }
+
+    // Logout
+    btnLogoutTeam.addEventListener('click', () => {
+      localStorage.removeItem('hacksprint_team_token');
+      teamAuthToken = '';
+      currentDashboardData = null;
+      teamDashboardWrap.style.display = 'none';
+      btnLogoutTeam.style.display = 'none';
+      teamLoginWrap.style.display = 'flex';
+    });
+
+    // Load Dashboard Data
+    async function loadTeamDashboard() {
+      try {
+        const res = await fetch(API_BASE + '/api/team/dashboard', {
+          headers: { 'Authorization': 'Bearer ' + teamAuthToken }
+        });
+
+        if (res.status === 401 || res.status === 403) {
+          localStorage.removeItem('hacksprint_team_token');
+          teamAuthToken = '';
+          teamDashboardWrap.style.display = 'none';
+          btnLogoutTeam.style.display = 'none';
+          teamLoginWrap.style.display = 'flex';
+          return;
+        }
+
+        const text = await res.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (jsonErr) {
+          throw new Error('Server returned an unexpected response. Please refresh or make sure http://localhost:3000 is active.');
+        }
+        if (!res.ok) throw new Error(data.error || 'Could not load dashboard.');
+
+        currentDashboardData = data;
+        renderDashboard(data);
+
+        teamLoginWrap.style.display = 'none';
+        teamDashboardWrap.style.display = 'block';
+        btnLogoutTeam.style.display = 'inline-block';
+      } catch (err) {
+        console.error(err);
+        teamLoginError.textContent = err.message;
+        teamLoginError.style.display = 'block';
+        teamLoginWrap.style.display = 'flex';
+      }
+    }
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // 24-Hour Hackathon Timer Controller (Starts Nov 14, 2026, 03:00 PM IST)
+    const KICKOFF_TIME = new Date('2026-11-14T15:00:00+05:30').getTime();
+    const END_TIME = KICKOFF_TIME + (24 * 60 * 60 * 1000);
+
+    function updateHackathonTimer() {
+      const now = Date.now();
+      const timerValEl = document.getElementById('dashTimerVal');
+      const timerLabelEl = document.getElementById('dashTimerLabel');
+      const timerSubEl = document.getElementById('dashTimerSub');
+      const subLockedCard = document.getElementById('submissionLockedCard');
+      const subForm = document.getElementById('projectSubmissionForm');
+      const subCountdownEl = document.getElementById('subGatewayCountdown');
+
+      if (now < KICKOFF_TIME) {
+        const diff = KICKOFF_TIME - now;
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        const countdownStr = `${String(d).padStart(2, '0')}D ${String(h).padStart(2, '0')}H ${String(m).padStart(2, '0')}M ${String(s).padStart(2, '0')}S`;
+
+        if (timerLabelEl) timerLabelEl.innerHTML = '<i class="fa-solid fa-clock-rotate-left" style="color: var(--amber);"></i> KICKOFF COUNTDOWN:';
+        if (timerValEl) {
+          timerValEl.textContent = countdownStr;
+          timerValEl.style.color = '#B45309';
+        }
+        if (timerSubEl) timerSubEl.textContent = 'Kickoff: Nov 14, 03:00 PM IST';
+
+        // Gateway is LOCKED before kickoff
+        if (subLockedCard) subLockedCard.style.display = 'block';
+        if (subForm) subForm.style.display = 'none';
+        if (subCountdownEl) subCountdownEl.textContent = countdownStr;
+      } else {
+        // Gateway is UNLOCKED at and after kickoff (per "dont close this", stays open indefinitely)
+        if (subLockedCard) subLockedCard.style.display = 'none';
+        if (subForm) subForm.style.display = 'block';
+
+        if (now < END_TIME) {
+          const diff = END_TIME - now;
+          const h = Math.floor(diff / (1000 * 60 * 60));
+          const m = Math.floor((diff / (1000 * 60)) % 60);
+          const s = Math.floor((diff / 1000) % 60);
+          if (timerLabelEl) timerLabelEl.innerHTML = '<i class="fa-solid fa-bolt" style="color: var(--green);"></i> 24-HOUR HACKATHON LIVE:';
+          if (timerValEl) {
+            timerValEl.textContent = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} REMAINING`;
+            timerValEl.style.color = '#15803D';
+          }
+          if (timerSubEl) timerSubEl.textContent = 'Timer ends: Nov 15, 03:00 PM IST';
+        } else {
+          if (timerLabelEl) timerLabelEl.innerHTML = '<i class="fa-solid fa-flag-checkered" style="color: var(--green);"></i> HACKATHON STATUS:';
+          if (timerValEl) {
+            timerValEl.textContent = 'SUBMISSIONS OPEN';
+            timerValEl.style.color = '#15803D';
+          }
+          if (timerSubEl) timerSubEl.textContent = 'Submission Gateway Active';
+        }
+      }
+    }
+
+    // Start timer interval
+    setInterval(updateHackathonTimer, 1000);
+    updateHackathonTimer();
+
+    function renderDashboard(data) {
+      const team = data.team;
+      const isHassan = team.college && team.college.includes('Hassan');
+      const isFullyUnlocked = Boolean(data.isFullyUnlocked);
+      const isPaymentVerified = Boolean(data.isPaymentVerified);
+      const hasAssignedFirstYears = Boolean(data.hasAssignedFirstYears);
+      const firstYearsCount = data.firstYearsCount || 0;
+
+      // 1. Header Details
+      document.getElementById('dashRegId').textContent = team.registrationId;
+      document.getElementById('dashTeamName').textContent = team.teamName;
+      document.getElementById('dashCollegePill').textContent = team.college;
+
+      const seatBadge = document.getElementById('dashSeatBadge');
+      const allocatedSeat = team.checkIn?.allocatedSeat || '';
+      if (allocatedSeat) {
+        seatBadge.textContent = `SEAT: ${allocatedSeat.toUpperCase()}`;
+        seatBadge.style.background = '#DCFCE7';
+        seatBadge.style.color = '#15803D';
+        seatBadge.style.border = '1.5px solid #15803D';
+      } else {
+        seatBadge.textContent = 'SEAT: PENDING GATE CHECK-IN';
+        seatBadge.style.background = '#FEF3C7';
+        seatBadge.style.color = '#92400E';
+        seatBadge.style.border = '1.5px solid #92400E';
+      }
+
+      document.getElementById('dashTagline').textContent = team.teamBranding?.tagline || 'Building the next big thing at HackSprint 3.0.';
+      updateHackathonTimer();
+
+      // Dynamic explainer texts depending on whether Hassan or Other College
+      const underProcessExplainer = document.getElementById('underProcessExplainer');
+      if (underProcessExplainer) {
+        if (isHassan) {
+          underProcessExplainer.textContent = 'Your team registration has been recorded! The HackSprint 3.0 organizing committee is currently reviewing your payment proof and pairing your team with two first-year student mentees.';
+        } else {
+          underProcessExplainer.textContent = 'Your team registration has been recorded! The HackSprint 3.0 organizing committee is currently reviewing your payment proof.';
+        }
+      }
+
+      const passLockedExplainer = document.getElementById('passLockedExplainer');
+      if (passLockedExplainer) {
+        if (isHassan) {
+          passLockedExplainer.textContent = 'Your official entry pass and gate check-in QR code will be generated as soon as your payment is verified and your first-year builders are assigned.';
+        } else {
+          passLockedExplainer.textContent = 'Your official entry pass and gate check-in QR code will be generated as soon as your payment is verified by the organizers.';
+        }
+      }
+
+      // 2. Gating Display
+      const underProcessBanner = document.getElementById('underProcessBanner');
+      const confirmedBanner = document.getElementById('confirmedBanner');
+      const passLockedPlaceholder = document.getElementById('passLockedPlaceholder');
+      const passUnlockedCard = document.getElementById('passUnlockedCard');
+      const passActionsBar = document.getElementById('passActionsBar');
+
+      if (!isFullyUnlocked) {
+        // Stage 1: Under Process
+        underProcessBanner.style.display = 'block';
+        confirmedBanner.style.display = 'none';
+        passLockedPlaceholder.style.display = 'block';
+        passUnlockedCard.style.display = 'none';
+        passActionsBar.style.display = 'none';
+      } else {
+        // Stage 2: Confirmed & Unlocked
+        underProcessBanner.style.display = 'none';
+        confirmedBanner.style.display = 'block';
+        passLockedPlaceholder.style.display = 'none';
+        passUnlockedCard.style.display = 'block';
+        passActionsBar.style.display = 'flex';
+      }
+
+      // 3. Render Squad Roster in Blocked Style Super Design
+      renderSquadBlocks(team);
+
+      // 4. Populate Entry Pass Details
+      if (isFullyUnlocked) {
+        document.getElementById('passTeamName').textContent = team.teamName;
+        document.getElementById('passRegId').textContent = team.registrationId;
+        document.getElementById('passCollegeBadge').textContent = team.college;
+        document.getElementById('passTokenCode').textContent = team.checkIn?.passToken || team.registrationId;
+
+        const checkInStatusEl = document.getElementById('passCheckInStatus');
+        const seatNoticeEl = document.getElementById('passAllocatedSeatNotice');
+        if (team.checkIn?.isCheckedIn) {
+          checkInStatusEl.className = 'neo-pill neo-pill-verified';
+          checkInStatusEl.innerHTML = '<i class="fa-solid fa-check-double"></i> CHECKED IN AT VENUE';
+          if (seatNoticeEl) {
+            seatNoticeEl.innerHTML = `ALLOCATED SEAT: <span style="background: #15803D; color: #fff; padding: 2px 8px; border-radius: 2px;">${escapeHtml(team.checkIn?.allocatedSeat || 'Assigned')}</span>`;
+          }
+        } else {
+          checkInStatusEl.className = 'neo-pill neo-pill-verified';
+          checkInStatusEl.innerHTML = '<i class="fa-solid fa-shield-halved"></i> ADMIT VALID';
+          if (seatNoticeEl) {
+            seatNoticeEl.innerHTML = `SEAT: <span style="color: #92400E;">Pending Desk Allocation</span>`;
+          }
+        }
+
+        // Build Pass Roster
+        const rosterTbody = document.getElementById('passRosterTbody');
+        rosterTbody.innerHTML = '';
+
+        // Leader
+        if (team.leader) {
+          rosterTbody.innerHTML += `
+            <tr>
+              <td><strong>${escapeHtml(team.leader.name)}</strong></td>
+              <td><code style="font-size: 11px;">${escapeHtml(team.leader.usn)}</code></td>
+              <td><span class="neo-pill neo-pill-verified">Team Leader</span></td>
+            </tr>
+          `;
+        }
+
+        // Registered members
+        if (team.members && team.members.length) {
+          team.members.forEach((m, idx) => {
+            rosterTbody.innerHTML += `
+              <tr>
+                <td><strong>${escapeHtml(m.name)}</strong></td>
+                <td><code style="font-size: 11px;">${escapeHtml(m.usn)}</code></td>
+                <td><span class="neo-pill">Builder ${idx + 2}</span></td>
+              </tr>
+            `;
+          });
+        }
+
+        // Assigned Freshmen (Only for GEC Hassan)
+        const assignedFreshmen = team.assignedFirstYears || [];
+        if (isHassan && assignedFreshmen.length > 0) {
+          assignedFreshmen.forEach((f, idx) => {
+            rosterTbody.innerHTML += `
+              <tr style="background: #F0FDF4;">
+                <td><strong>${escapeHtml(f.name)}</strong></td>
+                <td><code style="font-size: 11px;">${escapeHtml(f.usn)}</code></td>
+                <td><span class="neo-pill neo-pill-hassan">1st-Year Mentee</span></td>
+              </tr>
+            `;
+          });
+        }
+
+        // Render QR Code
+        renderPassQrCode(team);
+      }
+
+      // 5. Render Project Submission Status
+      renderProjectSubmissionStatus(team.projectSubmission);
+    }
+
+    // Render Members in Neo-Brutalist Blocked Cards
+    function renderSquadBlocks(team) {
+      const container = document.getElementById('squadBlockGrid');
+      if (!container) return;
+
+      const isHassan = team.college && team.college.includes('Hassan');
+      const subtitleEl = document.getElementById('squadArchitectureSubtitle');
+      if (subtitleEl) {
+        subtitleEl.textContent = isHassan
+          ? '5-Builder squad architecture: Core builders paired with allocated 1st-year mentees for 24 hours of non-stop hacking.'
+          : 'Complete official registered squad for 24 hours of non-stop hacking.';
+      }
+
+      let html = '';
+
+      function renderMemberCard({ roleBadge, roleStripe, roleTitle, name, usn, year, college, mobile, email }) {
+        const cleanPhone = (mobile || '').replace(/[^0-9]/g, '');
+        const waPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+        const waLink = `https://wa.me/${waPhone}`;
+
+        return `
+          <div class="member-block-card">
+            <div class="member-block-stripe ${roleStripe}"></div>
+            <div class="member-block-body">
+              <span class="member-block-badge ${roleBadge}">
+                ${roleTitle}
+              </span>
+              <h3 class="member-block-name">${escapeHtml(name)}</h3>
+              <div class="member-block-usn">USN: ${escapeHtml(usn)}</div>
+              <div class="member-block-meta">${escapeHtml(year || 'Senior')} &bull; ${escapeHtml(college || team.college)}</div>
+              <div class="member-block-details">
+                <div><i class="fa-solid fa-phone" style="width: 16px; color: var(--green);"></i> <strong>${escapeHtml(mobile || '—')}</strong></div>
+                ${email ? `<div style="margin-top: 4px;"><i class="fa-regular fa-envelope" style="width: 16px; color: var(--blue);"></i> ${escapeHtml(email)}</div>` : ''}
+              </div>
+            </div>
+            <div class="member-block-footer">
+              <a href="${waLink}" target="_blank" class="btn-whatsapp">
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp
+              </a>
+              ${mobile ? `<a href="tel:${escapeHtml(mobile)}" class="button button-ghost" style="padding: 8px 12px; font-size: 12px;"><i class="fa-solid fa-phone"></i> Call</a>` : ''}
+            </div>
+          </div>
+        `;
+      }
+
+      // 1. Team Leader Block
+      if (team.leader) {
+        html += renderMemberCard({
+          roleBadge: 'member-block-badge-leader',
+          roleStripe: 'member-block-stripe-leader',
+          roleTitle: '<i class="fa-solid fa-crown"></i> TEAM LEADER',
+          name: team.leader.name,
+          usn: team.leader.usn,
+          year: team.leader.year || 'Senior',
+          college: team.college,
+          mobile: team.leader.mobile,
+          email: team.leader.email
+        });
+      }
+
+      if (!isHassan) {
+        // NON-HASSAN COLLEGES:
+        // Render ALL registered team members (Builder 2, 3, 4, 5) from team.members
+        // Do NOT render 1st-year mentee cards, and do NOT render + ADD 3RD CORE BUILDER
+        if (Array.isArray(team.members)) {
+          team.members.forEach((m, idx) => {
+            const memberNum = idx + 2;
+            html += renderMemberCard({
+              roleBadge: 'member-block-badge-core',
+              roleStripe: 'member-block-stripe-core',
+              roleTitle: `<i class="fa-solid fa-code"></i> CORE BUILDER #${memberNum}`,
+              name: m.name,
+              usn: m.usn,
+              year: m.year || 'Core Squad',
+              college: team.college,
+              mobile: m.mobile,
+              email: m.email
+            });
+          });
+        }
+      } else {
+        // GEC HASSAN TEAMS:
+        // Leader + registered members (mem1, mem2) or optional 3rd member add + 2 1st-Year Mentees
+        const mem1 = team.members && team.members[0];
+        const mem2 = team.members && team.members[1];
+        const assignedFreshmen = team.assignedFirstYears || [];
+
+        // Member 2
+        if (mem1) {
+          html += renderMemberCard({
+            roleBadge: 'member-block-badge-core',
+            roleStripe: 'member-block-stripe-core',
+            roleTitle: '<i class="fa-solid fa-code"></i> CORE BUILDER #2',
+            name: mem1.name,
+            usn: mem1.usn,
+            year: mem1.year || 'Core Squad',
+            college: team.college,
+            mobile: mem1.mobile,
+            email: mem1.email
+          });
+        }
+
+        // Member 3 or "+ Add 3rd Member"
+        if (mem2) {
+          html += renderMemberCard({
+            roleBadge: 'member-block-badge-core',
+            roleStripe: 'member-block-stripe-core',
+            roleTitle: '<i class="fa-solid fa-code"></i> CORE BUILDER #3',
+            name: mem2.name,
+            usn: mem2.usn,
+            year: mem2.year || 'Core Squad',
+            college: team.college,
+            mobile: mem2.mobile,
+            email: mem2.email
+          });
+        } else {
+          // GEC Hassan: Registered with 2 core builders -> can add 3rd member
+          html += `
+            <div class="member-block-card" style="border-style: dashed; background: #FFFDF9;">
+              <div class="member-block-stripe member-block-stripe-pending"></div>
+              <div class="member-block-body">
+                <span class="member-block-badge member-block-badge-pending">
+                  <i class="fa-solid fa-user-plus"></i> CORE BUILDER #3 (OPTIONAL)
+                </span>
+                <h3 class="member-block-name" style="font-size: 18px;">+ ADD 3RD CORE BUILDER</h3>
+                <p style="font: 500 12px var(--mono); color: var(--muted); margin: 0 0 12px;">
+                  You registered with 2 core builders. Add your 3rd member below:
+                </p>
+                
+                <div id="addThirdMemberFormBox">
+                  <input type="text" id="addThirdName" class="team-input" placeholder="Full Name" style="padding: 7px 10px; font-size: 12px; margin-bottom: 6px;" />
+                  <input type="text" id="addThirdUsn" class="team-input" placeholder="USN (e.g. 4GH22CS050)" style="padding: 7px 10px; font-size: 12px; margin-bottom: 6px; text-transform: uppercase;" />
+                  <input type="tel" id="addThirdMobile" class="team-input" placeholder="10-digit Mobile" maxlength="10" style="padding: 7px 10px; font-size: 12px; margin-bottom: 6px;" />
+                  <select id="addThirdYear" class="team-input" style="padding: 7px 10px; font-size: 12px; margin-bottom: 8px;">
+                    <option value="2nd Year">2nd Year</option>
+                    <option value="3rd Year">3rd Year</option>
+                    <option value="4th Year">4th Year</option>
+                  </select>
+                  <button type="button" class="button button-primary" id="btnSubmitThirdMember" style="width: 100%; padding: 8px; font-size: 12px;">
+                    + Add Member 3 to Squad
+                  </button>
+                  <div id="addThirdError" style="display: none; color: var(--red); font: 700 11px var(--mono); margin-top: 6px;"></div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 1st-Year Mentee #1
+        const fy1 = assignedFreshmen[0];
+        if (fy1) {
+          const cleanPhone = (fy1.mobile || '').replace(/[^0-9]/g, '');
+          const waPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+          const waMsg = encodeURIComponent(`Hi ${fy1.name}! I am ${team.leader?.name}, leader of team "${team.teamName}" for HackSprint 3.0. Excited to build with you!`);
+          const waLink = `https://wa.me/${waPhone}?text=${waMsg}`;
+
+          html += `
+            <div class="member-block-card">
+              <div class="member-block-stripe member-block-stripe-freshman"></div>
+              <div class="member-block-body">
+                <span class="member-block-badge member-block-badge-freshman">
+                  <i class="fa-solid fa-seedling"></i> 1ST-YEAR MENTEE #1
+                </span>
+                <h3 class="member-block-name">${escapeHtml(fy1.name)}</h3>
+                <div class="member-block-usn">USN: ${escapeHtml(fy1.usn)}</div>
+                <div class="member-block-meta">1st Year &bull; ${escapeHtml(fy1.branch || 'CSE')} (${escapeHtml(fy1.section || 'A')})</div>
+                <div class="member-block-details">
+                  <div><i class="fa-solid fa-phone" style="width: 16px; color: var(--green);"></i> <strong>${escapeHtml(fy1.mobile || '—')}</strong></div>
+                  ${fy1.email ? `<div style="margin-top: 4px;"><i class="fa-regular fa-envelope" style="width: 16px; color: var(--blue);"></i> ${escapeHtml(fy1.email)}</div>` : ''}
+                </div>
+              </div>
+              <div class="member-block-footer">
+                <a href="${waLink}" target="_blank" class="btn-whatsapp">
+                  <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+                </a>
+                ${fy1.mobile ? `<a href="tel:${escapeHtml(fy1.mobile)}" class="button button-ghost" style="padding: 8px 12px; font-size: 12px;"><i class="fa-solid fa-phone"></i> Call</a>` : ''}
+              </div>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="member-block-card" style="border-style: dashed; background: #FFFDF9;">
+              <div class="member-block-stripe member-block-stripe-pending"></div>
+              <div class="member-block-body">
+                <span class="member-block-badge member-block-badge-pending">
+                  <i class="fa-solid fa-hourglass-half"></i> 1ST-YEAR MENTEE #1
+                </span>
+                <h3 class="member-block-name" style="font-size: 18px; color: #92400E;">ALLOCATION IN PROGRESS</h3>
+                <p style="font: 500 12.5px var(--mono); color: var(--muted); margin: 0 0 10px;">
+                  Organizers will pair your team with a 1st-year builder from the freshman pool.
+                </p>
+                <div style="font: 700 11px var(--mono); color: #B45309;">
+                  Status: Pending Admin Pair
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 1st-Year Mentee #2
+        const fy2 = assignedFreshmen[1];
+        if (fy2) {
+          const cleanPhone = (fy2.mobile || '').replace(/[^0-9]/g, '');
+          const waPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+          const waMsg = encodeURIComponent(`Hi ${fy2.name}! I am ${team.leader?.name}, leader of team "${team.teamName}" for HackSprint 3.0. Excited to build with you!`);
+          const waLink = `https://wa.me/${waPhone}?text=${waMsg}`;
+
+          html += `
+            <div class="member-block-card">
+              <div class="member-block-stripe member-block-stripe-freshman"></div>
+              <div class="member-block-body">
+                <span class="member-block-badge member-block-badge-freshman">
+                  <i class="fa-solid fa-seedling"></i> 1ST-YEAR MENTEE #2
+                </span>
+                <h3 class="member-block-name">${escapeHtml(fy2.name)}</h3>
+                <div class="member-block-usn">USN: ${escapeHtml(fy2.usn)}</div>
+                <div class="member-block-meta">1st Year &bull; ${escapeHtml(fy2.branch || 'CSE')} (${escapeHtml(fy2.section || 'A')})</div>
+                <div class="member-block-details">
+                  <div><i class="fa-solid fa-phone" style="width: 16px; color: var(--green);"></i> <strong>${escapeHtml(fy2.mobile || '—')}</strong></div>
+                  ${fy2.email ? `<div style="margin-top: 4px;"><i class="fa-regular fa-envelope" style="width: 16px; color: var(--blue);"></i> ${escapeHtml(fy2.email)}</div>` : ''}
+                </div>
+              </div>
+              <div class="member-block-footer">
+                <a href="${waLink}" target="_blank" class="btn-whatsapp">
+                  <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+                </a>
+                ${fy2.mobile ? `<a href="tel:${escapeHtml(fy2.mobile)}" class="button button-ghost" style="padding: 8px 12px; font-size: 12px;"><i class="fa-solid fa-phone"></i> Call</a>` : ''}
+              </div>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="member-block-card" style="border-style: dashed; background: #FFFDF9;">
+              <div class="member-block-stripe member-block-stripe-pending"></div>
+              <div class="member-block-body">
+                <span class="member-block-badge member-block-badge-pending">
+                  <i class="fa-solid fa-hourglass-half"></i> 1ST-YEAR MENTEE #2
+                </span>
+                <h3 class="member-block-name" style="font-size: 18px; color: #92400E;">ALLOCATION IN PROGRESS</h3>
+                <p style="font: 500 12.5px var(--mono); color: var(--muted); margin: 0 0 10px;">
+                  Organizers will pair your team with a 2nd first-year builder from the freshman pool.
+                </p>
+                <div style="font: 700 11px var(--mono); color: #B45309;">
+                  Status: Pending Admin Pair
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      container.innerHTML = html;
+
+      // Wire up Add 3rd Member button if present
+      const btnAddThird = document.getElementById('btnSubmitThirdMember');
+      if (btnAddThird) {
+        btnAddThird.onclick = async () => {
+          const name = document.getElementById('addThirdName').value.trim();
+          const usn = document.getElementById('addThirdUsn').value.trim();
+          const mobile = document.getElementById('addThirdMobile').value.trim();
+          const year = document.getElementById('addThirdYear').value;
+          const errBox = document.getElementById('addThirdError');
+          errBox.style.display = 'none';
+
+          if (!name || !usn || !mobile) {
+            errBox.textContent = 'Please fill out Name, USN, and Mobile.';
+            errBox.style.display = 'block';
+            return;
+          }
+
+          btnAddThird.disabled = true;
+          btnAddThird.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Adding...';
+
+          try {
+            const res = await fetch(API_BASE + '/api/team/add-third-member', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + teamAuthToken
+              },
+              body: JSON.stringify({ name, usn, mobile, year })
+            });
+            const d = await res.json();
+            if (!res.ok) throw new Error(d.error || 'Failed to add member.');
+
+            // Reload dashboard cleanly to reflect new member across all blocks
+            await loadTeamDashboard();
+          } catch (err) {
+            errBox.textContent = err.message;
+            errBox.style.display = 'block';
+          } finally {
+            btnAddThird.disabled = false;
+            btnAddThird.textContent = '+ Add Member 3 to Squad';
+          }
+        };
+      }
+    }
+
+    // Render Project Submission details
+    function renderProjectSubmissionStatus(submission) {
+      const noticeBox = document.getElementById('existingSubmissionNotice');
+      if (!noticeBox) return;
+
+      if (submission && submission.title) {
+        noticeBox.style.display = 'block';
+        document.getElementById('subTitleDisplay').textContent = submission.title;
+        const ghLink = document.getElementById('subGithubLink');
+        ghLink.href = submission.githubUrl;
+        ghLink.textContent = submission.githubUrl;
+
+        const sizeMb = submission.fileSize ? (submission.fileSize / (1024 * 1024)).toFixed(2) : '0';
+        document.getElementById('subZipInfo').innerHTML = `
+          Archive: <strong>${escapeHtml(submission.zipFileName || 'project.zip')}</strong> (${sizeMb} MB)
+          ${submission.zipFilePath ? `&bull; <a href="${submission.zipFilePath}" target="_blank" style="color: var(--green-dark); text-decoration: underline;">Download Archive</a>` : ''}
+        `;
+
+        if (submission.submittedAt) {
+          document.getElementById('subSubmittedTime').textContent = 'Submitted: ' + new Date(submission.submittedAt).toLocaleString('en-IN');
+        }
+
+        // Pre-fill inputs
+        document.getElementById('projTitle').value = submission.title;
+        document.getElementById('projGithubUrl').value = submission.githubUrl;
+        document.getElementById('projZipFile').required = false; // not required on update
+      } else {
+        noticeBox.style.display = 'none';
+        document.getElementById('projZipFile').required = true;
+      }
+    }
+
+    // Project Submission Drag & Drop & Upload
+    const projZipFile = document.getElementById('projZipFile');
+    const fileDropzone = document.getElementById('fileDropzone');
+    const selectedFileInfo = document.getElementById('selectedFileInfo');
+    const dropzoneText = document.getElementById('dropzoneText');
+
+    if (fileDropzone && projZipFile) {
+      fileDropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileDropzone.classList.add('dragover');
+      });
+      fileDropzone.addEventListener('dragleave', () => fileDropzone.classList.remove('dragover'));
+      fileDropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileDropzone.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          const file = e.dataTransfer.files[0];
+          if (!file.name.toLowerCase().endsWith('.zip')) {
+            alert('Please drop a valid .zip archive.');
+            return;
+          }
+          projZipFile.files = e.dataTransfer.files;
+          showSelectedFile(file);
+        }
+      });
+
+      projZipFile.addEventListener('change', () => {
+        if (projZipFile.files && projZipFile.files[0]) {
+          showSelectedFile(projZipFile.files[0]);
+        }
+      });
+    }
+
+    function showSelectedFile(file) {
+      if (!selectedFileInfo) return;
+      const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+      selectedFileInfo.innerHTML = `<i class="fa-solid fa-file-zipper"></i> Selected: <strong>${escapeHtml(file.name)}</strong> (${sizeMb} MB)`;
+      selectedFileInfo.style.display = 'block';
+      if (dropzoneText) dropzoneText.textContent = `Selected: ${file.name} (${sizeMb} MB)`;
+    }
+
+    // Submit Project Form
+    const projectSubmissionForm = document.getElementById('projectSubmissionForm');
+    const projSubmitError = document.getElementById('projSubmitError');
+    const projSubmitSuccess = document.getElementById('projSubmitSuccess');
+    const btnSubmitProject = document.getElementById('btnSubmitProject');
+
+    if (projectSubmissionForm) {
+      projectSubmissionForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        projSubmitError.style.display = 'none';
+        projSubmitSuccess.style.display = 'none';
+
+        const title = document.getElementById('projTitle').value.trim();
+        const githubUrl = document.getElementById('projGithubUrl').value.trim();
+        const file = projZipFile.files[0];
+
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('githubUrl', githubUrl);
+        if (file) formData.append('projectZip', file);
+
+        btnSubmitProject.disabled = true;
+        btnSubmitProject.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading Archive (Up to 50MB)...';
+
+        try {
+          const res = await fetch(API_BASE + '/api/team/project-submission', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + teamAuthToken
+            },
+            body: formData
+          });
+          const d = await res.json();
+          if (!res.ok) throw new Error(d.error || 'Failed to submit project.');
+
+          projSubmitSuccess.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + d.message;
+          projSubmitSuccess.style.display = 'block';
+
+          renderProjectSubmissionStatus(d.projectSubmission);
+        } catch (err) {
+          projSubmitError.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + err.message;
+          projSubmitError.style.display = 'block';
+        } finally {
+          btnSubmitProject.disabled = false;
+          btnSubmitProject.innerHTML = '<i class="fa-solid fa-cloud-arrow-up" style="margin-right: 6px;"></i> Upload &amp; Submit Project';
+        }
+      });
+    }
+
+
+
+    // QR Code Generator using local qrcode.min.js
+    function renderPassQrCode(team) {
+      const qrContainer = document.getElementById('passQrCodeCanvas');
+      if (!qrContainer) return;
+      qrContainer.innerHTML = '';
+
+      if (typeof QRCode === 'undefined') {
+        qrContainer.innerHTML = '<div style="font-size: 11px; color: var(--muted);">QR library loading...</div>';
+        return;
+      }
+
+      // Payload includes Reg ID, passToken, and teamName
+      const payload = JSON.stringify({
+        event: 'HackSprint 3.0',
+        regId: team.registrationId,
+        token: team.checkIn?.passToken || '',
+        team: team.teamName,
+        seat: team.seatNumber || ''
+      });
+
+      new QRCode(qrContainer, {
+        text: payload,
+        width: 160,
+        height: 160,
+        colorDark: "#0A0A0A",
+        colorLight: "#FFFFFF",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      // Wire download button
+      const btnDownloadQr = document.getElementById('btnDownloadQr');
+      if (btnDownloadQr) {
+        btnDownloadQr.onclick = () => {
+          const img = qrContainer.querySelector('img') || qrContainer.querySelector('canvas');
+          if (!img) return;
+          const a = document.createElement('a');
+          a.href = img.src || img.toDataURL();
+          a.download = `${team.registrationId}_EntryPass_QR.png`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        };
+      }
+    }
+  </script>
+</body>
+
+</html>

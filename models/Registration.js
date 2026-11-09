@@ -5,7 +5,8 @@ const MemberSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   usn: { type: String, required: true, trim: true, uppercase: true },
   mobile: { type: String, required: true, trim: true },
-  year: { type: String, required: true, enum: ['1st Year', '2nd Year', '3rd Year', '4th Year'] }
+  year: { type: String, required: true, enum: ['1st Year', '2nd Year', '3rd Year', '4th Year'] },
+  email: { type: String, trim: true, lowercase: true, default: '' }
 });
 
 const RegistrationSchema = new mongoose.Schema({
@@ -76,6 +77,39 @@ const RegistrationSchema = new mongoose.Schema({
     },
     verifiedAt: { type: Date },
     adminNotes: { type: String, default: '' }
+  },
+  // 1st Year Builders assigned by Admin
+  assignedFirstYears: [
+    {
+      studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'FirstYearStudent' },
+      name: { type: String, trim: true },
+      usn: { type: String, uppercase: true, trim: true },
+      mobile: { type: String, trim: true },
+      email: { type: String, trim: true, lowercase: true },
+      branch: { type: String, default: 'CSE' },
+      assignedAt: { type: Date, default: Date.now }
+    }
+  ],
+  // Team Branding & Customization
+  teamBranding: {
+    tagline: { type: String, default: '', trim: true },
+    githubUrl: { type: String, default: '', trim: true }
+  },
+  // Gate Check-in verification
+  checkIn: {
+    isCheckedIn: { type: Boolean, default: false },
+    checkedInAt: { type: Date, default: null },
+    passToken: { type: String, default: '' },
+    allocatedSeat: { type: String, default: '' }
+  },
+  // Final Project Submission (Title, GitHub Repo & ZIP Archive)
+  projectSubmission: {
+    title: { type: String, default: '', trim: true },
+    githubUrl: { type: String, default: '', trim: true },
+    zipFileName: { type: String, default: '' },
+    zipFilePath: { type: String, default: '' },
+    fileSize: { type: Number, default: 0 },
+    submittedAt: { type: Date, default: null }
   },
   registeredAt: {
     type: Date,

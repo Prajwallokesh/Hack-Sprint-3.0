@@ -10,6 +10,10 @@ node_modules/
 uploads/payments/*
 !uploads/payments/.gitkeep
 
+# Uploaded project files (preserve directory with .gitkeep)
+uploads/projects/*
+!uploads/projects/.gitkeep
+
 # System & OS files
 .DS_Store
 Thumbs.db

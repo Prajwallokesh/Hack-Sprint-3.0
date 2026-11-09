@@ -860,6 +860,124 @@
       text-align: left;
     }
 
+    /* Team Login Credentials Box */
+    .conf-credentials-card {
+      background: #FFFDF9;
+      border: 2px solid var(--ink);
+      box-shadow: 3.5px 3.5px 0 var(--ink);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .conf-cred-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .conf-cred-badge {
+      background: #FEF3C7;
+      border: 1.5px solid #B45309;
+      color: #92400E;
+      font: 800 11px var(--mono);
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .conf-cred-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 500px) {
+      .conf-cred-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .conf-cred-item {
+      background: #FFFFFF;
+      border: 1.5px solid var(--ink);
+      box-shadow: 2px 2px 0 var(--ink);
+      padding: 9px 12px;
+      border-radius: 6px;
+    }
+
+    .conf-cred-label {
+      font: 800 9px var(--mono);
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .conf-cred-val-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .conf-cred-code {
+      font: 800 13.5px var(--mono);
+      color: var(--ink);
+      letter-spacing: 0.02em;
+    }
+
+    .btn-copy-cred {
+      background: var(--surface);
+      border: 1.5px solid var(--ink);
+      box-shadow: 1.5px 1.5px 0 var(--ink);
+      border-radius: 4px;
+      padding: 3px 8px;
+      cursor: pointer;
+      font: 700 10.5px var(--mono);
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all var(--dur-fast);
+      flex-shrink: 0;
+    }
+
+    .btn-copy-cred:hover {
+      background: var(--ink);
+      color: #FFFFFF;
+    }
+
+    .btn-copy-cred.copied {
+      background: #DCFCE7;
+      color: #15803D;
+      border-color: #15803D;
+    }
+
+    .conf-cred-note {
+      background: #EFF6FF;
+      border: 1.5px dashed #3B82F6;
+      border-radius: 6px;
+      padding: 9px 12px;
+      font: 500 11.5px var(--mono);
+      color: #1E40AF;
+      line-height: 1.4;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
     /* Pass Actions */
     .conf-pass-actions {
       display: flex;
@@ -982,6 +1100,7 @@
       <a href="/#rulebook">Rulebook</a>
       <a href="/#problem-statements">Challenge</a>
       <a href="/#prizes">Prizes</a>
+      <a href="/team" style="font-weight: 800; color: var(--green);">Team Login</a>
       <a href="/" class="nav-cta-btn">&larr; Back to Overview</a>
     </nav>
   </header>
@@ -1008,6 +1127,9 @@
       <div style="display: inline-flex; align-items: center; gap: 10px; background: #FEF7E0; border: 2px solid var(--ink); box-shadow: 2.5px 2.5px 0 var(--ink); padding: 8px 14px; margin-top: 10px; font-family: var(--mono); font-size: 13px; font-weight: 700; color: #B06000;">
         <i class="fa-solid fa-hourglass-half" style="color: #EA4335;"></i>
         <span>REGISTRATION CLOSES ON 12 NOV, 11:59:00 PM</span>
+      </div>
+      <div style="margin-top: 10px; font-family: var(--mono); font-size: 12.5px; font-weight: 600;">
+        Already registered? <a href="/team" style="color: var(--blue-dark); text-decoration: underline; font-weight: 800;">Log in to Team Portal &amp; Entry Pass &rarr;</a>
       </div>
     </div>
 
@@ -1312,14 +1434,14 @@
               <div class="conf-check-badge">
                 <i class="fa-solid fa-check" aria-hidden="true"></i>
               </div>
-              <p class="eyebrow" style="justify-content: center;"><span class="eyebrow-rule"></span>OFFICIAL ENTRY PASS GENERATED</p>
+              <p class="eyebrow" style="justify-content: center;"><span class="eyebrow-rule"></span>REGISTRATION CONFIRMATION RECEIPT</p>
               <h2 class="conf-hero-title">REGISTRATION CONFIRMED!</h2>
               <p class="conf-hero-desc">
-                Your team registration has been recorded. Save your unique digital entry pass below to check in at GEC Hassan on <strong>November 14, 2026</strong>.
+                Your team registration has been recorded. This is your <strong>Registration Confirmation Receipt</strong>. Your official <strong>Digital Entry Check-In Pass</strong> (with venue gate QR code) will be unlocked in your <strong>Team Dashboard</strong> once the committee reviews payment and pairs your squad!
               </p>
             </div>
 
-            <!-- UNIFIED DIGITAL ENTRY PASS TICKET -->
+            <!-- UNIFIED CONFIRMATION RECEIPT TICKET -->
             <div class="conf-ticket-card" id="confTicketCard">
               <div class="conf-ticket-top-bar" aria-hidden="true"></div>
 
@@ -1327,7 +1449,7 @@
                 <!-- Ticket Header -->
                 <div class="conf-ticket-header">
                   <div class="conf-ticket-branding">
-                    <span class="conf-ticket-tag">OFFICIAL ENTRY PASS</span>
+                    <span class="conf-ticket-tag" id="confTicketTag">REGISTRATION CONFIRMATION RECEIPT</span>
                     <h3 class="conf-ticket-team" id="confTeamName">—</h3>
                   </div>
                   <div class="conf-ticket-reg-badge" id="confRegId">
@@ -1335,14 +1457,49 @@
                   </div>
                 </div>
 
-                <!-- Unique QR Viewport -->
+                <!-- Registration Confirmation QR Viewport -->
                 <div class="conf-qr-section">
                   <div class="conf-qr-viewport">
                     <div id="confQrMount" class="conf-qr-mount"></div>
                   </div>
                   <div class="conf-qr-caption">
-                    <strong>UNIQUE TEAM QR CODE</strong>
-                    <span>Present this QR at the venue check-in desk on Nov 14</span>
+                    <strong id="confQrTitle">REGISTRATION CONFIRMATION QR</strong>
+                    <span id="confQrSub">Scan to verify team registration receipt &amp; credentials</span>
+                  </div>
+                </div>
+
+                <!-- TEAM LOGIN CREDENTIALS BOX -->
+                <div class="conf-credentials-card">
+                  <div class="conf-cred-header">
+                    <span class="conf-cred-badge"><i class="fa-solid fa-key"></i> TEAM PORTAL LOGIN CREDENTIALS</span>
+                    <span style="font: 700 10.5px var(--mono); color: var(--muted); text-transform: uppercase;">1-CLICK ACCESS</span>
+                  </div>
+                  <p style="font: 500 11.5px var(--mono); margin: 0 0 10px; color: var(--ink);">
+                    Log in to your <strong>Team Dashboard</strong> at any time using your Registration ID and Leader Mobile:
+                  </p>
+                  <div class="conf-cred-grid">
+                    <div class="conf-cred-item">
+                      <span class="conf-cred-label">REGISTRATION ID</span>
+                      <div class="conf-cred-val-row">
+                        <code id="confCredRegId" class="conf-cred-code">HS3-HSSN-0000</code>
+                        <button type="button" class="btn-copy-cred" id="btnCopyCredRegId" title="Copy Registration ID">
+                          <i class="fa-regular fa-copy"></i> <span>Copy</span>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="conf-cred-item">
+                      <span class="conf-cred-label">LEADER MOBILE (LOGIN KEY)</span>
+                      <div class="conf-cred-val-row">
+                        <code id="confCredMobile" class="conf-cred-code">0000000000</code>
+                        <button type="button" class="btn-copy-cred" id="btnCopyCredMobile" title="Copy Mobile">
+                          <i class="fa-regular fa-copy"></i> <span>Copy</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="conf-cred-note">
+                    <i class="fa-solid fa-circle-info" style="color: #2563EB; font-size: 13px; margin-top: 1px;"></i>
+                    <span><strong>Venue Entry Pass:</strong> Your official gate check-in pass will be generated after payment verification &amp; slot allocation on the Team Dashboard.</span>
                   </div>
                 </div>
 
@@ -1369,18 +1526,21 @@
                 <!-- GEC Hassan 1st-Year Allocation Notice -->
                 <div id="confSpecialNotice" class="conf-special-notice" style="display: none;">
                   <i class="fa-solid fa-leaf" style="color: #1B5E20; font-size: 14px;"></i>
-                  <span><strong>GEC Hassan Policy:</strong> 2 first-year students will be allocated to your team by the organizing committee.</span>
+                  <span><strong>GEC Hassan Policy:</strong> 2 first-year student mentees will be paired with your squad in the Team Dashboard!</span>
                 </div>
 
                 <!-- Pass Download Actions -->
                 <div class="conf-pass-actions">
-                  <button type="button" class="button button-primary conf-btn-download" id="btnDownloadPass">
+                  <a href="/team" id="confGoToDashboardBtn" class="button button-primary" style="width: 100%; padding: 14px 20px; font: 800 14px var(--mono); letter-spacing: 0.02em; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; margin-bottom: 8px;">
+                    <i class="fa-solid fa-gauge-high"></i> Open Team Dashboard &rarr;
+                  </a>
+                  <button type="button" class="button button-ghost conf-btn-download" id="btnDownloadPass" style="font-size: 12.5px; padding: 10px 16px;">
                     <i class="fa-solid fa-cloud-arrow-down" style="margin-right: 8px;"></i>
-                    Download Team QR Pass (.png)
+                    Download Confirmation Receipt (.png)
                   </button>
                   <span class="conf-auto-download-hint" id="autoDownloadHint">
                     <i class="fa-solid fa-circle-check" style="color: var(--green); margin-right: 5px;"></i>
-                    Auto-downloading unique pass to your device...
+                    Auto-downloading confirmation receipt to your device...
                   </span>
                 </div>
               </div>
@@ -1430,6 +1590,7 @@
           <a href="/#rulebook">Rulebook</a>
           <a href="/#problem-statements">Challenge</a>
           <a href="/#prizes">Prizes</a>
+      <a href="/team" style="font-weight: 800; color: var(--green);">Team Login</a>
           <a href="mailto:hacksprint3@gechassan.ac.in">Contact</a>
         </nav>
       </div>
@@ -1488,11 +1649,13 @@
     function updateSeatDisplay() {
       const urgencyBox = document.getElementById('seatUrgencyBox');
       const waitlistCollegeSpan = document.getElementById('waitlistCollegeSpan');
+      const btnNext1 = document.getElementById('btnNext1');
       if (waitlistCollegeSpan) waitlistCollegeSpan.textContent = selectedCollege || 'your college';
 
       if (!urgencyBox) return;
       if (!selectedCollege || !seatsQuotas || !seatsQuotas[selectedCollege]) {
         urgencyBox.style.display = 'none';
+        if (btnNext1) { btnNext1.disabled = false; btnNext1.title = ''; }
         updateStep3WaitlistView(false);
         return;
       }
@@ -1501,8 +1664,40 @@
       const remaining = info.remaining;
       const isWaitlist = info.isWaitlist;
 
+      // Strict Cap for other colleges: once 5 registrations are reached, halt registrations
+      if (selectedCollege !== 'GEC Hassan' && (remaining <= 0 || info.confirmed >= 5)) {
+        urgencyBox.style.display = 'block';
+        urgencyBox.style.background = '#FEF2F2';
+        urgencyBox.style.borderColor = '#DC2626';
+        urgencyBox.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #DC2626; box-shadow: 0 0 8px #DC2626;"></span>
+              <strong style="font: 900 12.5px var(--mono); color: #B91C1C; letter-spacing: 0.04em;">
+                REGISTRATION SLOTS HAVE BEEN FILLED FULL FOR YOUR COLLEGE (5/5 SEATS OCCUPIED)
+              </strong>
+            </div>
+            <span style="font: 700 11px var(--mono); background: #FEE2E2; color: #991B1B; padding: 2px 8px; border-radius: 4px; border: 1px solid #FCA5A5;">0 SEATS LEFT</span>
+          </div>
+          <div style="font-size: 13px; color: #7F1D1D; margin-top: 6px; font-weight: 500;">
+            All 5 allocated team registration slots for <strong>${selectedCollege}</strong> have reached full capacity. Registrations for this institution are now closed.
+          </div>
+        `;
+        if (btnNext1) {
+          btnNext1.disabled = true;
+          btnNext1.title = `Registration slots full for ${selectedCollege}`;
+        }
+        updateStep3WaitlistView(false);
+        return;
+      }
+
+      if (btnNext1) {
+        btnNext1.disabled = false;
+        btnNext1.title = '';
+      }
+
       if (isWaitlist) {
-        // College quota full -> Waitlist Mode
+        // College quota full -> Waitlist Mode (For GEC Hassan)
         urgencyBox.style.display = 'block';
         urgencyBox.style.background = '#EFF6FF';
         urgencyBox.style.borderColor = '#2563EB';
@@ -1733,6 +1928,13 @@
 
     document.getElementById('btnNext1').addEventListener('click', () => {
       if (!selectedCollege) { showError('Please select your college first.'); return; }
+
+      // Strict check for other colleges when slots are full (5/5 seats)
+      if (selectedCollege !== 'GEC Hassan' && seatsQuotas && seatsQuotas[selectedCollege] && (seatsQuotas[selectedCollege].remaining <= 0 || seatsQuotas[selectedCollege].confirmed >= 5)) {
+        showError(`Registration slots have been filled full for ${selectedCollege} (5/5 seats occupied).`);
+        return;
+      }
+
       const teamName = document.getElementById('teamName').value.trim();
       const leaderName = document.getElementById('leaderName').value.trim();
       const leaderUsn = document.getElementById('leaderUsn').value.trim();
@@ -1998,6 +2200,20 @@
           throw new Error(data.error || 'Registration failed.');
         }
 
+        // Automatically store team login credentials into localStorage for instant 1-click access
+        if (data.teamToken) {
+          localStorage.setItem('hacksprint_team_token', data.teamToken);
+        }
+        if (data.registrationId) {
+          localStorage.setItem('hacksprint_team_id', data.registrationId);
+        }
+        if (data.leaderMobile) {
+          localStorage.setItem('hacksprint_team_mobile', data.leaderMobile);
+        }
+        if (data.teamName) {
+          localStorage.setItem('hacksprint_team_name', data.teamName);
+        }
+
         const leaderName = document.getElementById('leaderName').value.trim();
 
         // Populate Unified Digital Entry Pass Ticket
@@ -2007,9 +2223,61 @@
         document.getElementById('confLeaderName').textContent = leaderName;
         document.getElementById('confMembersCount').textContent = data.totalMembers + ' Registered' + (data.college.includes('Hassan') ? ' (+2 Assigned)' : '');
 
+        const leaderMobile = data.leaderMobile || document.getElementById('leaderMobile').value.trim();
+
+        // Populate Unified Digital Entry Pass Ticket & Credentials
+        document.getElementById('confRegId').textContent = data.registrationId;
+        document.getElementById('confTeamName').textContent = data.teamName;
+        document.getElementById('confCollege').textContent = data.college;
+        document.getElementById('confLeaderName').textContent = leaderName;
+        document.getElementById('confMembersCount').textContent = data.totalMembers + ' Registered' + (data.college.includes('Hassan') ? ' (+2 Assigned)' : '');
+
+        // Populate Team Login Credentials Box
+        const credRegIdEl = document.getElementById('confCredRegId');
+        if (credRegIdEl) credRegIdEl.textContent = data.registrationId;
+        const credMobileEl = document.getElementById('confCredMobile');
+        if (credMobileEl) credMobileEl.textContent = leaderMobile;
+
+        // Wire copy buttons for credentials
+        const btnCopyReg = document.getElementById('btnCopyCredRegId');
+        if (btnCopyReg) {
+          btnCopyReg.onclick = async () => {
+            try {
+              await navigator.clipboard.writeText(data.registrationId);
+              btnCopyReg.classList.add('copied');
+              btnCopyReg.querySelector('span').textContent = 'Copied!';
+              setTimeout(() => {
+                btnCopyReg.classList.remove('copied');
+                btnCopyReg.querySelector('span').textContent = 'Copy';
+              }, 2000);
+            } catch (e) {}
+          };
+        }
+
+        const btnCopyMob = document.getElementById('btnCopyCredMobile');
+        if (btnCopyMob) {
+          btnCopyMob.onclick = async () => {
+            try {
+              await navigator.clipboard.writeText(leaderMobile);
+              btnCopyMob.classList.add('copied');
+              btnCopyMob.querySelector('span').textContent = 'Copied!';
+              setTimeout(() => {
+                btnCopyMob.classList.remove('copied');
+                btnCopyMob.querySelector('span').textContent = 'Copy';
+              }, 2000);
+            } catch (e) {}
+          };
+        }
+
+        // Wire Go to Dashboard CTA button with auto-login query params
+        const btnGoDash = document.getElementById('confGoToDashboardBtn');
+        if (btnGoDash) {
+          btnGoDash.href = `/team?id=${encodeURIComponent(data.registrationId)}&mobile=${encodeURIComponent(leaderMobile)}&auto=1`;
+        }
+
         if (data.isWaitlist) {
           const eyebrowEl = document.querySelector('#stepSection4 .eyebrow');
-          if (eyebrowEl) eyebrowEl.innerHTML = '<span class="eyebrow-rule"></span>PRIORITY WAITING LIST PASS GENERATED';
+          if (eyebrowEl) eyebrowEl.innerHTML = '<span class="eyebrow-rule"></span>PRIORITY WAITING LIST RECEIPT';
           
           const heroTitle = document.querySelector('#stepSection4 .conf-hero-title');
           if (heroTitle) heroTitle.textContent = 'WAITLIST ENTRY RECORDED!';
@@ -2024,6 +2292,15 @@
             document.getElementById('confAmount').textContent = '₹0 (Deferred - Waitlist)';
           }
 
+          const ticketTag = document.getElementById('confTicketTag');
+          if (ticketTag) {
+            ticketTag.textContent = 'PRIORITY WAITING LIST';
+            ticketTag.style.color = '#2563EB';
+          }
+
+          const qrTitle = document.getElementById('confQrTitle');
+          if (qrTitle) qrTitle.textContent = 'PRIORITY WAITLIST QR';
+
           const waTitle = document.querySelector('#whatsappCard .conf-wa-title');
           if (waTitle) waTitle.textContent = 'JOIN OFFICIAL WAITING LIST WHATSAPP GROUP';
 
@@ -2037,20 +2314,23 @@
           }
         } else {
           const eyebrowEl = document.querySelector('#stepSection4 .eyebrow');
-          if (eyebrowEl) eyebrowEl.innerHTML = '<span class="eyebrow-rule"></span>OFFICIAL ENTRY PASS GENERATED';
+          if (eyebrowEl) eyebrowEl.innerHTML = '<span class="eyebrow-rule"></span>REGISTRATION CONFIRMATION RECEIPT';
 
           const heroTitle = document.querySelector('#stepSection4 .conf-hero-title');
           if (heroTitle) heroTitle.textContent = 'REGISTRATION CONFIRMED!';
 
           const heroDesc = document.querySelector('#stepSection4 .conf-hero-desc');
-          if (heroDesc) heroDesc.innerHTML = 'Your team registration has been recorded. Save your unique digital entry pass below to check in at GEC Hassan on <strong>November 14, 2026</strong>.';
+          if (heroDesc) heroDesc.innerHTML = 'Your team registration has been recorded. This is your <strong>Registration Confirmation Receipt &amp; QR</strong>. Your official <strong>Digital Entry Check-In Pass</strong> (with venue gate QR code) will be unlocked in your <strong>Team Dashboard</strong> once the committee reviews payment and pairs your squad!';
 
-          const ticketTag = document.querySelector('#stepSection4 .conf-ticket-tag');
+          const ticketTag = document.getElementById('confTicketTag');
           if (ticketTag) {
-            ticketTag.textContent = 'OFFICIAL ENTRY PASS';
+            ticketTag.textContent = 'REGISTRATION CONFIRMATION RECEIPT';
             ticketTag.style.background = '';
             ticketTag.style.color = '';
           }
+
+          const qrTitle = document.getElementById('confQrTitle');
+          if (qrTitle) qrTitle.textContent = 'REGISTRATION CONFIRMATION QR';
 
           document.getElementById('confAmount').textContent = '₹' + data.fee + ' (Submitted)';
 
@@ -2165,7 +2445,7 @@
 
         ctx.fillStyle = data.isWaitlist ? '#3B82F6' : '#22C55E';
         ctx.font = '800 12px "Space Mono", monospace';
-        ctx.fillText(data.isWaitlist ? 'HACKSPRINT 3.0 • PRIORITY WAITING LIST PASS' : 'HACKSPRINT 3.0 • OFFICIAL ENTRY PASS', 65, 88);
+        ctx.fillText(data.isWaitlist ? 'HACKSPRINT 3.0 • PRIORITY WAITING LIST RECEIPT' : 'HACKSPRINT 3.0 • REGISTRATION CONFIRMATION RECEIPT', 65, 88);
 
         ctx.fillStyle = '#FFFFFF';
         ctx.font = '900 26px "Outfit", sans-serif';
@@ -2239,10 +2519,10 @@
         ctx.fillStyle = '#0A0A0A';
         ctx.font = '800 12px "Space Mono", monospace';
         ctx.textAlign = 'center';
-        ctx.fillText('UNIQUE VENUE CHECK-IN QR CODE', 400, 642);
+        ctx.fillText('REGISTRATION CONFIRMATION QR CODE', 400, 642);
         ctx.fillStyle = '#78716C';
         ctx.font = '600 12px "Outfit", sans-serif';
-        ctx.fillText('Present this pass at the GEC Hassan entry desk on Nov 14, 2026', 400, 662);
+        ctx.fillText('Official Venue Entry Pass will be unlocked on Team Dashboard after review', 400, 662);
         ctx.textAlign = 'left';
 
         // Dashed Divider
@@ -2304,7 +2584,7 @@
         ctx.fillText('ORGANIZED BY COMPASS × GLUE • GOVERNMENT ENGINEERING COLLEGE, HASSAN', 400, 965);
         ctx.fillStyle = '#78716C';
         ctx.font = '600 11px "Outfit", sans-serif';
-        ctx.fillText('Bring this official pass on arrival • Gate check-in opens at 8:00 AM IST', 400, 985);
+        ctx.fillText('Team Dashboard: http://localhost:3000/team • Login with Registration ID & Mobile', 400, 985);
         ctx.textAlign = 'left';
 
         return canvas.toDataURL('image/png');
@@ -2317,7 +2597,7 @@
         if (!currentPassDataUrl) return;
 
         const safeName = (data.teamName || 'Team').replace(/[^a-zA-Z0-9_-]/g, '_');
-        const filename = `HackSprint3_${safeName}_QR_Pass.png`;
+        const filename = `HackSprint3_${safeName}_Registration_Receipt.png`;
 
         const a = document.createElement('a');
         a.href = currentPassDataUrl;

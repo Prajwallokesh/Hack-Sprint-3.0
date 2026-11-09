@@ -2,6 +2,9 @@ require('dotenv').config();
 const dns = require('dns');
 // Ensure SRV records for MongoDB Atlas resolve reliably across local ISPs and cloud environments
 try {
+  if (typeof dns.setDefaultResultOrder === 'function') {
+    dns.setDefaultResultOrder('ipv4first');
+  }
   dns.setServers(['8.8.8.8', '1.1.1.1']);
 } catch (e) {}
 
@@ -16,10 +19,83 @@ const XLSX = require('xlsx');
 
 const Registration = require('./models/Registration');
 const CollegeQuota = require('./models/CollegeQuota');
+const FirstYearStudent = require('./models/FirstYearStudent');
+
+// Multer in-memory storage for 1st Year Excel bulk upload (.xlsx, .xls, .csv)
+const excelUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (['.xlsx', '.xls', '.csv'].includes(ext) || file.mimetype.includes('sheet') || file.mimetype.includes('excel') || file.mimetype.includes('csv')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Please upload an Excel (.xlsx, .xls) or CSV file.'));
+    }
+  }
+});
+
+// Team Session Authentication Helpers
+const TEAM_SECRET = process.env.TEAM_SECRET || 'HackSprint2026_TeamPortal_Auth_Secret_Key';
+
+function generateTeamToken(registrationId, mobile) {
+  const payload = `${registrationId}|${mobile}|${Date.now()}`;
+  const hmac = crypto.createHmac('sha256', TEAM_SECRET).update(payload).digest('hex');
+  return Buffer.from(`${payload}|${hmac}`).toString('base64');
+}
+
+async function requireTeamAuth(req, res, next) {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ error: 'Team session expired. Please log in again.' });
+    }
+    const token = authHeader.replace(/^(Bearer|Basic)\s+/i, '').trim();
+    const decoded = Buffer.from(token, 'base64').toString('utf8');
+    const parts = decoded.split('|');
+    if (parts.length !== 4) {
+      return res.status(401).json({ error: 'Invalid team authentication token.' });
+    }
+    const [registrationId, mobile, timestamp, hmac] = parts;
+    const expectedHmac = crypto.createHmac('sha256', TEAM_SECRET).update(`${registrationId}|${mobile}|${timestamp}`).digest('hex');
+    if (hmac !== expectedHmac) {
+      return res.status(401).json({ error: 'Unauthorized team signature.' });
+    }
+
+    const ageMs = Date.now() - parseInt(timestamp, 10);
+    if (ageMs > 14 * 24 * 60 * 60 * 1000) {
+      return res.status(401).json({ error: 'Session expired. Please log in again.' });
+    }
+
+    const team = await Registration.findOne({
+      registrationId: new RegExp(`^${registrationId}$`, 'i')
+    });
+    if (!team) {
+      return res.status(404).json({ error: 'Registered team not found.' });
+    }
+
+    req.team = team;
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: 'Session authentication failed.' });
+  }
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://hacksprint-3:Qwert%40123@cluster0.ntr55o.mongodb.net/hacksprint3?retryWrites=true&w=majority';
+function normalizeMongoUri(uri) {
+  if (!uri) return uri;
+  if (uri.includes('cluster0.ntr55o.mongodb.net')) {
+    const match = uri.match(/mongodb(?:\+srv)?:\/\/([^:]+):([^@]+)@/);
+    if (match) {
+      const user = match[1];
+      const pass = match[2];
+      return `mongodb://${user}:${pass}@cluster0-shard-00-00.ntr55o.mongodb.net:27017,cluster0-shard-00-01.ntr55o.mongodb.net:27017,cluster0-shard-00-02.ntr55o.mongodb.net:27017/hacksprint3?ssl=true&replicaSet=atlas-e5tips-shard-0&authSource=admin`;
+    }
+  }
+  return uri;
+}
+const MONGODB_URI = normalizeMongoUri(process.env.MONGODB_URI || 'mongodb://hacksprint-3:Qwert%40123@cluster0-shard-00-00.ntr55o.mongodb.net:27017,cluster0-shard-00-01.ntr55o.mongodb.net:27017,cluster0-shard-00-02.ntr55o.mongodb.net:27017/hacksprint3?ssl=true&replicaSet=atlas-e5tips-shard-0&authSource=admin');
 const ADMIN_USERNAME = (process.env.ADMIN_USERNAME || 'admin').trim().replace(/^["']|["']$/g, '');
 const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || 'HackSprint2026!').trim().replace(/^["']|["']$/g, '');
 const ADMIN_TOKEN = Buffer.from(`${ADMIN_USERNAME}:${ADMIN_PASSWORD}`).toString('base64');
@@ -39,6 +115,35 @@ const WHATSAPP_WAITLIST_URL = process.env.WHATSAPP_WAITLIST_URL || 'https://chat
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, 'uploads', 'payments');
 fs.mkdirSync(uploadsDir, { recursive: true });
+
+// Ensure project submissions directory exists
+const projectsDir = path.join(__dirname, 'uploads', 'projects');
+fs.mkdirSync(projectsDir, { recursive: true });
+
+// Multer storage for project archives (.zip only, max 50MB)
+const projectStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, projectsDir);
+  },
+  filename: (req, file, cb) => {
+    const regId = (req.team?.registrationId || 'SUBMISSION').replace(/[^a-zA-Z0-9]/g, '_');
+    const ext = path.extname(file.originalname).toLowerCase() || '.zip';
+    cb(null, `project_${regId}_${Date.now()}${ext}`);
+  }
+});
+
+const uploadProject = multer({
+  storage: projectStorage,
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (ext === '.zip' || file.mimetype.includes('zip') || file.mimetype.includes('compressed')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only ZIP archives (.zip) are allowed for project submission.'));
+    }
+  }
+});
 
 // Setup Multer storage for payment screenshot uploads
 const storage = multer.diskStorage({
@@ -266,7 +371,7 @@ function requireAdmin(req, res, next) {
   if (!authHeader) {
     return res.status(401).json({ error: 'Unauthorized. Admin token missing.' });
   }
-  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+  const token = authHeader.replace(/^(Bearer|Basic)\s+/i, '').trim();
 
   if (token === ADMIN_TOKEN || token === DEFAULT_ADMIN_TOKEN) {
     return next();
@@ -283,6 +388,14 @@ app.get('/register', (req, res) => {
 
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+app.get('/team', (req, res) => {
+  res.sendFile(path.join(__dirname, 'team.html'));
+});
+
+app.get('/team-login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'team.html'));
 });
 
 // --------------------------------------------------------------------------
@@ -397,6 +510,21 @@ app.post('/api/register', rateLimitRegistrations, uploadScreenshot, async (req, 
     if (!validColleges.includes(college)) {
       cleanupFile();
       return res.status(400).json({ error: 'Invalid institution selected. Must be GEC Hassan, GEC Arsikere, or GEC Mosalehosahalli.' });
+    }
+
+    // 3.1 Strict 5-Seat Cap for Other Colleges (GEC Arsikere & GEC Mosalehosahalli)
+    if (college === 'GEC Arsikere' || college === 'GEC Mosalehosahalli') {
+      const confirmedOtherCollege = await Registration.countDocuments({
+        college,
+        status: { $ne: 'cancelled' },
+        isWaitlist: false
+      });
+      if (confirmedOtherCollege >= 5) {
+        cleanupFile();
+        return res.status(403).json({
+          error: `Registration slots have been filled full for ${college} (5/5 seats occupied).`
+        });
+      }
     }
 
     // 4. Team Name Length Check
@@ -701,6 +829,9 @@ app.post('/api/register', rateLimitRegistrations, uploadScreenshot, async (req, 
 
     const whatsappGroupUrl = isWaitlist ? WHATSAPP_WAITLIST_URL : WHATSAPP_CONFIRMED_URL;
 
+    const cleanLeaderMobile = String(newRegistration.leader?.mobile || '').replace(/[^0-9]/g, '');
+    const teamToken = generateTeamToken(registrationId, cleanLeaderMobile);
+
     return res.status(201).json({
       success: true,
       message: isWaitlist
@@ -719,7 +850,9 @@ app.post('/api/register', rateLimitRegistrations, uploadScreenshot, async (req, 
       isLastSeatRaceContention,
       registeredAt: registeredDate.toISOString(),
       registeredAtFormatted: formatIST(registeredDate),
-      whatsappGroupUrl
+      whatsappGroupUrl,
+      teamToken,
+      leaderMobile: cleanLeaderMobile
     });
 
   } catch (err) {
@@ -993,6 +1126,703 @@ app.get('/api/admin/export', requireAdmin, async (req, res) => {
   } catch (err) {
     console.error('Export error:', err);
     return res.status(500).json({ error: 'Failed to generate Excel file: ' + err.message });
+  }
+});
+
+// ==========================================================================
+// 8. TEAM PORTAL API ENDPOINTS
+// ==========================================================================
+
+// 8.1 Team Passwordless Login (Registration ID + Leader Mobile)
+app.post('/api/team/login', async (req, res) => {
+  try {
+    const registrationId = req.body.registrationId;
+    const mobile = req.body.mobile || req.body.leaderMobile;
+    if (!registrationId || !mobile) {
+      return res.status(400).json({ error: 'Registration ID and Leader Mobile Number are required.' });
+    }
+
+    const cleanRegId = String(registrationId).trim().toUpperCase();
+    const cleanMobile = String(mobile).replace(/[^0-9]/g, '');
+
+    const team = await Registration.findOne({
+      registrationId: cleanRegId
+    });
+
+    if (!team) {
+      return res.status(404).json({ error: `No registration found matching "${cleanRegId}". Please verify your Registration ID.` });
+    }
+
+    const leaderMobile = String(team.leader?.mobile || '').replace(/[^0-9]/g, '');
+    if (cleanMobile.length < 10 || (leaderMobile && !leaderMobile.endsWith(cleanMobile.slice(-10)))) {
+      return res.status(401).json({ error: 'Leader mobile number does not match our registration records.' });
+    }
+
+    const token = generateTeamToken(team.registrationId, leaderMobile);
+    return res.json({
+      success: true,
+      token,
+      teamName: team.teamName,
+      registrationId: team.registrationId
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 8.2 Team Dashboard (Gated: "Your request is under process" until Verified + 1st Years Assigned)
+app.get('/api/team/dashboard', requireTeamAuth, async (req, res) => {
+  try {
+    const team = req.team;
+    const isHassan = team.college === 'GEC Hassan';
+    const isPaymentVerified = Boolean(team.payment && team.payment.status === 'verified');
+    const firstYearsCount = team.assignedFirstYears ? team.assignedFirstYears.length : 0;
+    const hasAssignedFirstYears = isHassan ? (firstYearsCount >= 2) : true;
+    
+    // GATING RULE: Must be Verified AND have 2 First-Year Students assigned (for GEC Hassan)
+    const isFullyUnlocked = isPaymentVerified && hasAssignedFirstYears;
+
+    let gateStage = 'under_process';
+    let statusTitle = 'Your request is under process';
+    let statusMessage = '';
+
+    if (!isPaymentVerified && (isHassan && !hasAssignedFirstYears)) {
+      statusMessage = 'Your team registration, payment verification, and 1st-year builder allocations are currently under review by COMPASS organizers.';
+    } else if (!isPaymentVerified) {
+      statusMessage = 'Your payment verification is currently under review by the organizing leads.';
+    } else if (isHassan && !hasAssignedFirstYears) {
+      statusMessage = `Payment verified! First-year builders are being assigned to your team by COMPASS organizers (${firstYearsCount} of 2 assigned). Official announcements take place on Nov 13.`;
+    } else {
+      gateStage = 'confirmed_unlocked';
+      statusTitle = 'Registration Confirmed & Seat Secured';
+      statusMessage = 'Congratulations! Your team is fully confirmed. Connect with your assigned freshmen and download your entry pass below.';
+    }
+
+    // Generate Check-in Pass Token if unlocked
+    let passToken = team.checkIn?.passToken;
+    if (isFullyUnlocked && !passToken) {
+      passToken = crypto.createHash('sha256').update(`${team.registrationId}|${team.teamName}|HackSprint3`).digest('hex').substring(0, 12).toUpperCase();
+      team.checkIn = team.checkIn || {};
+      team.checkIn.passToken = passToken;
+      await team.save();
+    }
+
+    const teamData = {
+      registrationId: team.registrationId,
+      teamName: team.teamName,
+      college: team.college,
+      seatNumber: team.seatNumber,
+      totalMembers: team.totalMembers,
+      status: team.status,
+      isWaitlist: team.isWaitlist,
+      registeredAt: team.registeredAt,
+      leader: team.leader,
+      members: team.members,
+      assignedFirstYears: team.assignedFirstYears || [],
+      teamBranding: team.teamBranding || { tagline: '', githubUrl: '' },
+      payment: {
+        amount: team.payment?.amount || 0,
+        transactionId: team.payment?.transactionId || '',
+        status: team.payment?.status || 'pending',
+        verifiedAt: team.payment?.verifiedAt || null
+      },
+      checkIn: {
+        isCheckedIn: Boolean(team.checkIn?.isCheckedIn),
+        checkedInAt: team.checkIn?.checkedInAt || null,
+        passToken: passToken || '',
+        allocatedSeat: team.checkIn?.allocatedSeat || ''
+      },
+      projectSubmission: team.projectSubmission || {
+        title: '',
+        githubUrl: '',
+        zipFileName: '',
+        zipFilePath: '',
+        fileSize: 0,
+        submittedAt: null
+      }
+    };
+
+    return res.json({
+      success: true,
+      gateStage,
+      statusTitle,
+      statusMessage,
+      isFullyUnlocked,
+      isPaymentVerified,
+      hasAssignedFirstYears,
+      firstYearsCount,
+      team: teamData
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 8.3 Team Profile Editor (Member phone/email, GitHub link, Tagline; USNs locked)
+app.patch('/api/team/profile', requireTeamAuth, async (req, res) => {
+  try {
+    const team = req.team;
+    const { leaderEmail, leaderMobile, members, teamBranding } = req.body;
+
+    if (leaderEmail) team.leader.email = sanitize(leaderEmail).toLowerCase();
+    if (leaderMobile && leaderMobile.replace(/[^0-9]/g, '').length >= 10) {
+      team.leader.mobile = sanitize(leaderMobile).replace(/[^0-9]/g, '');
+    }
+
+    if (Array.isArray(members)) {
+      team.members.forEach((m, idx) => {
+        const update = members[idx];
+        if (update) {
+          if (update.mobile && update.mobile.replace(/[^0-9]/g, '').length >= 10) {
+            m.mobile = sanitize(update.mobile).replace(/[^0-9]/g, '');
+          }
+          if (update.email) m.email = sanitize(update.email).toLowerCase();
+        }
+      });
+    }
+
+    if (teamBranding) {
+      team.teamBranding = team.teamBranding || {};
+      if (teamBranding.tagline !== undefined) team.teamBranding.tagline = sanitize(teamBranding.tagline).substring(0, 100);
+      if (teamBranding.githubUrl !== undefined) team.teamBranding.githubUrl = sanitize(teamBranding.githubUrl).substring(0, 200);
+    }
+
+    await team.save();
+    return res.json({ success: true, message: 'Team profile updated successfully!', team });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 8.4 Team Dashboard: Add 3rd Core Member (GEC Hassan Squad Flexibility)
+app.post('/api/team/add-third-member', requireTeamAuth, async (req, res) => {
+  try {
+    const team = req.team;
+
+    if (team.college !== 'GEC Hassan') {
+      return res.status(400).json({ error: 'This feature is only available for GEC Hassan teams.' });
+    }
+
+    // Core members count = 1 (leader) + members.length
+    if (team.members && team.members.length >= 2) {
+      return res.status(400).json({ error: 'Your team already has the maximum of 3 core builders (Leader + 2 members).' });
+    }
+
+    const { name, usn, mobile, year, email } = req.body;
+    const cleanName = sanitize(name);
+    const cleanUsn = sanitize(usn).toUpperCase();
+    const cleanMobile = sanitize(mobile).replace(/[^0-9]/g, '');
+    const cleanYear = sanitize(year);
+    const cleanEmail = sanitize(email).toLowerCase();
+
+    if (!cleanName || !cleanUsn || !cleanMobile || !cleanYear) {
+      return res.status(400).json({ error: 'Name, USN, Mobile, and Year of study are required.' });
+    }
+
+    const usnRegex = /^[0-9A-Z]{4,15}$/;
+    if (!usnRegex.test(cleanUsn)) {
+      return res.status(400).json({ error: 'USN must be a valid alphanumeric university registration number.' });
+    }
+
+    const mobileRegex = /^[6-9]\d{9}$/;
+    if (!mobileRegex.test(cleanMobile)) {
+      return res.status(400).json({ error: 'Mobile number must be a valid 10-digit Indian mobile number.' });
+    }
+
+    const validYears = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
+    if (!validYears.includes(cleanYear)) {
+      return res.status(400).json({ error: 'Invalid year of study.' });
+    }
+
+    // Check duplicate USN within team
+    const allUsns = [team.leader.usn, ...(team.members || []).map(m => m.usn)];
+    if (allUsns.includes(cleanUsn)) {
+      return res.status(400).json({ error: `USN "${cleanUsn}" is already a member of your team.` });
+    }
+
+    // Check duplicate mobile within team
+    const allMobiles = [team.leader.mobile, ...(team.members || []).map(m => m.mobile)];
+    if (allMobiles.includes(cleanMobile)) {
+      return res.status(400).json({ error: `Mobile number "${cleanMobile}" is already registered on your team.` });
+    }
+
+    // Check duplicate USN across the database
+    const existingStudent = await Registration.findOne({
+      $or: [
+        { 'leader.usn': cleanUsn },
+        { 'members.usn': cleanUsn }
+      ],
+      status: { $ne: 'cancelled' }
+    });
+    if (existingStudent) {
+      return res.status(400).json({
+        error: `USN "${cleanUsn}" is already registered with team "${existingStudent.teamName}".`
+      });
+    }
+
+    team.members = team.members || [];
+    const nextMemberNum = team.members.length + 2;
+    team.members.push({
+      memberNumber: nextMemberNum,
+      name: cleanName,
+      usn: cleanUsn,
+      mobile: cleanMobile,
+      year: cleanYear,
+      email: cleanEmail || ''
+    });
+    team.totalMembers = 1 + team.members.length;
+
+    await team.save();
+
+    return res.json({
+      success: true,
+      message: `Successfully added ${cleanName} as Member 3!`,
+      members: team.members,
+      totalMembers: team.totalMembers
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// Hackathon Kickoff & Project Submission Opening Time: Nov 14, 2026, 03:00 PM IST (UTC+05:30)
+const SUBMISSION_KICKOFF_TIME = new Date('2026-11-14T15:00:00+05:30').getTime();
+
+// 8.5 Team Final Project Submission (Title, GitHub URL, and ZIP archive)
+app.post('/api/team/project-submission', requireTeamAuth, (req, res) => {
+  // Gateway lock enforcement: Locked before Nov 14, 2026 03:00 PM IST
+  // (Bypassable for automated test suite via X-Bypass-Freeze header)
+  if (Date.now() < SUBMISSION_KICKOFF_TIME && req.headers['x-bypass-freeze'] !== 'test-mode') {
+    return res.status(403).json({
+      error: 'Project submission gateway is currently locked. Submissions will open automatically on November 14, 2026 at 03:00 PM IST.'
+    });
+  }
+
+  uploadProject.single('projectZip')(req, res, async (err) => {
+    if (err instanceof multer.MulterError) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ error: 'Project ZIP file exceeds 50MB limit. Please compress or exclude large media/binaries.' });
+      }
+      return res.status(400).json({ error: `Upload error: ${err.message}` });
+    } else if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+
+    try {
+      const team = req.team;
+      const title = sanitize(req.body.title);
+      const githubUrl = sanitize(req.body.githubUrl);
+
+      if (!title) {
+        return res.status(400).json({ error: 'Project title is required.' });
+      }
+      if (!githubUrl) {
+        return res.status(400).json({ error: 'GitHub repository URL is required.' });
+      }
+
+      team.projectSubmission = team.projectSubmission || {};
+      team.projectSubmission.title = title;
+      team.projectSubmission.githubUrl = githubUrl;
+      team.projectSubmission.submittedAt = new Date();
+
+      if (req.file) {
+        team.projectSubmission.zipFileName = req.file.originalname;
+        team.projectSubmission.zipFilePath = `/uploads/projects/${req.file.filename}`;
+        team.projectSubmission.fileSize = req.file.size;
+      } else if (!team.projectSubmission.zipFilePath) {
+        return res.status(400).json({ error: 'Please choose your project source code ZIP file (.zip).' });
+      }
+
+      await team.save();
+
+      return res.json({
+        success: true,
+        message: 'Project submission successfully recorded!',
+        projectSubmission: team.projectSubmission
+      });
+    } catch (dbErr) {
+      return res.status(500).json({ error: dbErr.message });
+    }
+  });
+});
+
+// Static download for uploaded project files
+app.get('/uploads/projects/:filename', (req, res) => {
+  const filePath = path.join(projectsDir, req.params.filename);
+  if (fs.existsSync(filePath)) {
+    return res.sendFile(filePath);
+  }
+  return res.status(404).send('Project file not found.');
+});
+
+// ==========================================================================
+// 9. ADMIN 1ST-YEAR STUDENT HUB (BULK EXCEL UPLOAD & MANUAL ALLOCATION)
+// ==========================================================================
+
+function getColValue(row, aliases) {
+  for (const alias of aliases) {
+    for (const key of Object.keys(row)) {
+      if (key.trim().toLowerCase() === alias.toLowerCase()) {
+        const val = row[key];
+        return val !== null && val !== undefined ? String(val).trim() : '';
+      }
+    }
+  }
+  return '';
+}
+
+// 9.1 Excel/CSV Bulk Upload of 1st-Year Students
+app.post('/api/admin/first-years/upload-excel', requireAdmin, excelUpload.single('file'), async (req, res) => {
+  try {
+    if (!req.file || !req.file.buffer) {
+      return res.status(400).json({ error: 'Please choose an Excel (.xlsx, .xls) or CSV file.' });
+    }
+
+    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0];
+    if (!sheetName) {
+      return res.status(400).json({ error: 'Excel workbook contains no sheets.' });
+    }
+
+    const rawRows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
+    if (!rawRows || rawRows.length === 0) {
+      return res.status(400).json({ error: 'Excel sheet has no student data rows.' });
+    }
+
+    const ops = [];
+    let validCount = 0;
+    let skippedCount = 0;
+
+    for (const row of rawRows) {
+      const usn = getColValue(row, ['USN', 'Student USN', 'University Seat No', 'Roll No', 'Roll Number', 'Univ USN']).toUpperCase();
+      const name = getColValue(row, ['Name', 'Student Name', 'Full Name', 'Candidate Name', 'Name of Student']);
+      const mobile = getColValue(row, ['Mobile', 'Mobile No', 'Mobile Number', 'Phone', 'Phone No', 'Contact', 'WhatsApp']).replace(/[^0-9]/g, '');
+      const email = getColValue(row, ['Email', 'Email ID', 'Mail', 'Email Address']).toLowerCase();
+      const branch = getColValue(row, ['Branch', 'Department', 'Dept']) || 'CSE';
+      const section = getColValue(row, ['Section', 'Sec']) || 'A';
+
+      if (!usn || !name) {
+        skippedCount++;
+        continue;
+      }
+
+      validCount++;
+      ops.push({
+        updateOne: {
+          filter: { usn },
+          update: {
+            $setOnInsert: { isAssigned: false, assignedTeamId: null, assignedTeamName: null, assignedAt: null },
+            $set: { name, mobile, email, branch, section }
+          },
+          upsert: true
+        }
+      });
+    }
+
+    if (ops.length > 0) {
+      await FirstYearStudent.bulkWrite(ops);
+    }
+
+    const totalInPool = await FirstYearStudent.countDocuments();
+    const availableCount = await FirstYearStudent.countDocuments({ isAssigned: false });
+    const assignedCount = totalInPool - availableCount;
+
+    return res.json({
+      success: true,
+      message: `Processed ${validCount} students from Excel sheet (${skippedCount} empty/skipped rows).`,
+      validCount,
+      skippedCount,
+      totalInPool,
+      availableCount,
+      assignedCount
+    });
+  } catch (err) {
+    console.error('Excel upload error:', err);
+    return res.status(500).json({ error: 'Failed to process Excel file: ' + err.message });
+  }
+});
+
+// 9.2 List First-Year Students with Status Filter & Search
+app.get('/api/admin/first-years', requireAdmin, async (req, res) => {
+  try {
+    const { status, search } = req.query;
+    const filter = {};
+    if (status === 'available') filter.isAssigned = false;
+    if (status === 'assigned') filter.isAssigned = true;
+    if (search && search.trim()) {
+      const q = search.trim();
+      filter.$or = [
+        { name: new RegExp(q, 'i') },
+        { usn: new RegExp(q, 'i') },
+        { assignedTeamName: new RegExp(q, 'i') },
+        { assignedTeamId: new RegExp(q, 'i') }
+      ];
+    }
+
+    const students = await FirstYearStudent.find(filter).sort({ isAssigned: 1, name: 1 }).lean();
+    const totalCount = await FirstYearStudent.countDocuments();
+    const availableCount = await FirstYearStudent.countDocuments({ isAssigned: false });
+    const assignedCount = totalCount - availableCount;
+
+    return res.json({
+      success: true,
+      count: students.length,
+      totalCount,
+      availableCount,
+      assignedCount,
+      students
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 9.3 Manual Assign First-Year Student to Team
+app.post('/api/admin/first-years/assign', requireAdmin, async (req, res) => {
+  try {
+    const { registrationId, studentUsn } = req.body;
+    if (!registrationId || !studentUsn) {
+      return res.status(400).json({ error: 'Both Registration ID and Student USN are required.' });
+    }
+
+    const cleanRegId = String(registrationId).trim().toUpperCase();
+    const cleanUsn = String(studentUsn).trim().toUpperCase();
+
+    const team = await Registration.findOne({
+      $or: [
+        { registrationId: cleanRegId },
+        ...(mongoose.Types.ObjectId.isValid(registrationId) ? [{ _id: registrationId }] : [])
+      ]
+    });
+    if (!team) return res.status(404).json({ error: 'Team not found.' });
+
+    if (team.assignedFirstYears && team.assignedFirstYears.length >= 2) {
+      return res.status(400).json({ error: `Team "${team.teamName}" already has 2 assigned first-year builders.` });
+    }
+
+    const student = await FirstYearStudent.findOne({ usn: cleanUsn });
+    if (!student) return res.status(404).json({ error: `Student with USN "${cleanUsn}" not found in first-year pool.` });
+
+    if (student.isAssigned) {
+      return res.status(400).json({
+        error: `Student ${student.name} (${student.usn}) is already assigned to team "${student.assignedTeamName || student.assignedTeamId}".`
+      });
+    }
+
+    const alreadyOnTeam = team.assignedFirstYears?.some(s => s.usn === cleanUsn);
+    if (alreadyOnTeam) {
+      return res.status(400).json({ error: `Student ${student.name} is already assigned to this team.` });
+    }
+
+    team.assignedFirstYears = team.assignedFirstYears || [];
+    team.assignedFirstYears.push({
+      studentId: student._id,
+      name: student.name,
+      usn: student.usn,
+      mobile: student.mobile,
+      email: student.email,
+      branch: student.branch,
+      assignedAt: new Date()
+    });
+    await team.save();
+
+    student.isAssigned = true;
+    student.assignedTeamId = team.registrationId;
+    student.assignedTeamName = team.teamName;
+    student.assignedAt = new Date();
+    await student.save();
+
+    return res.json({
+      success: true,
+      message: `Assigned ${student.name} (${student.usn}) to "${team.teamName}"!`,
+      teamId: team.registrationId,
+      assignedFirstYears: team.assignedFirstYears
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 9.4 Manual Unassign First-Year Student from Team
+app.post('/api/admin/first-years/unassign', requireAdmin, async (req, res) => {
+  try {
+    const { registrationId, studentUsn } = req.body;
+    if (!registrationId || !studentUsn) {
+      return res.status(400).json({ error: 'Both Registration ID and Student USN are required.' });
+    }
+
+    const cleanRegId = String(registrationId).trim().toUpperCase();
+    const cleanUsn = String(studentUsn).trim().toUpperCase();
+
+    const team = await Registration.findOne({
+      $or: [
+        { registrationId: cleanRegId },
+        ...(mongoose.Types.ObjectId.isValid(registrationId) ? [{ _id: registrationId }] : [])
+      ]
+    });
+    if (!team) return res.status(404).json({ error: 'Team not found.' });
+
+    team.assignedFirstYears = (team.assignedFirstYears || []).filter(s => s.usn !== cleanUsn);
+    await team.save();
+
+    await FirstYearStudent.updateOne(
+      { usn: cleanUsn },
+      { $set: { isAssigned: false, assignedTeamId: null, assignedTeamName: null, assignedAt: null } }
+    );
+
+    return res.json({
+      success: true,
+      message: `Unassigned student ${cleanUsn} from "${team.teamName}". Student returned to pool.`,
+      assignedFirstYears: team.assignedFirstYears
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 9.5 Delete Student from Pool (Only if unassigned)
+app.delete('/api/admin/first-years/:id', requireAdmin, async (req, res) => {
+  try {
+    const student = await FirstYearStudent.findById(req.params.id);
+    if (!student) return res.status(404).json({ error: 'Student not found in pool.' });
+    if (student.isAssigned) {
+      return res.status(400).json({ error: `Cannot delete: Student is currently assigned to team "${student.assignedTeamName}". Unassign them first.` });
+    }
+    await FirstYearStudent.findByIdAndDelete(req.params.id);
+    return res.json({ success: true, message: 'Student removed from pool.' });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 9.6 Gate Check-in QR Scanner API (Spot Verification & Seat Allocation on Nov 14)
+app.post('/api/admin/checkin/:id', requireAdmin, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { seatNumber } = req.body;
+    const team = await Registration.findOne({
+      $or: [
+        { registrationId: id.toUpperCase().trim() },
+        ...(mongoose.Types.ObjectId.isValid(id) ? [{ _id: id }] : [])
+      ]
+    });
+    if (!team) return res.status(404).json({ error: 'Team not found.' });
+
+    team.checkIn = team.checkIn || {};
+    team.checkIn.isCheckedIn = true;
+    team.checkIn.checkedInAt = new Date();
+    if (seatNumber !== undefined && seatNumber !== null) {
+      team.checkIn.allocatedSeat = sanitize(String(seatNumber));
+    }
+    await team.save();
+
+    return res.json({
+      success: true,
+      message: `Team "${team.teamName}" verified and checked in! Seat allocated: ${team.checkIn.allocatedSeat || 'Pending'}`,
+      checkedInAt: team.checkIn.checkedInAt,
+      allocatedSeat: team.checkIn.allocatedSeat,
+      team: {
+        registrationId: team.registrationId,
+        teamName: team.teamName,
+        college: team.college,
+        allocatedSeat: team.checkIn.allocatedSeat,
+        checkedInAt: team.checkIn.checkedInAt
+      }
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 9.6b Reset / Undo Gate Check-in
+app.post('/api/admin/checkin/:id/reset', requireAdmin, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const team = await Registration.findOne({
+      $or: [
+        { registrationId: id.toUpperCase().trim() },
+        ...(mongoose.Types.ObjectId.isValid(id) ? [{ _id: id }] : [])
+      ]
+    });
+    if (!team) return res.status(404).json({ error: 'Team not found.' });
+
+    team.checkIn = team.checkIn || {};
+    team.checkIn.isCheckedIn = false;
+    team.checkIn.allocatedSeat = '';
+    team.checkIn.checkedInAt = null;
+    await team.save();
+
+    return res.json({
+      success: true,
+      message: `Check-in and seat allocation cleared for "${team.teamName}".`,
+      team: {
+        registrationId: team.registrationId,
+        teamName: team.teamName,
+        isCheckedIn: false,
+        allocatedSeat: ''
+      }
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 9.7 Gate Check-in Team Lookup (by Registration ID, Pass Token, or Team Name)
+app.get('/api/admin/checkin/lookup/:query', requireAdmin, async (req, res) => {
+  try {
+    const query = String(req.params.query || '').trim();
+    if (!query) return res.status(400).json({ error: 'Search query is required.' });
+
+    const cleanQuery = query.toUpperCase();
+    const team = await Registration.findOne({
+      $or: [
+        { registrationId: cleanQuery },
+        { 'checkIn.passToken': cleanQuery },
+        { teamName: new RegExp(`^${query}$`, 'i') }
+      ]
+    });
+
+    if (!team) {
+      return res.status(404).json({ error: `No team found matching "${query}".` });
+    }
+
+    return res.json({
+      success: true,
+      team: {
+        _id: team._id,
+        registrationId: team.registrationId,
+        teamName: team.teamName,
+        college: team.college,
+        leader: team.leader,
+        totalMembers: team.totalMembers,
+        membersCount: 1 + (team.members?.length || 0) + (team.assignedFirstYears?.length || 0),
+        paymentStatus: team.payment?.status || 'pending',
+        isCheckedIn: Boolean(team.checkIn?.isCheckedIn),
+        allocatedSeat: team.checkIn?.allocatedSeat || '',
+        checkedInAt: team.checkIn?.checkedInAt || null,
+        passToken: team.checkIn?.passToken || ''
+      }
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 9.8 Gate Check-in Roster (All teams with check-in status & allocated seats)
+app.get('/api/admin/checkins', requireAdmin, async (req, res) => {
+  try {
+    const teams = await Registration.find({ 'checkIn.isCheckedIn': true })
+      .select('registrationId teamName college leader totalMembers checkIn payment registeredAt')
+      .sort({ 'checkIn.checkedInAt': -1 })
+      .lean();
+
+    return res.json({
+      success: true,
+      count: teams.length,
+      teams
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
   }
 });
 

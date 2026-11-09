@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="styles.css" />
   <!-- QR Code Live Camera Scanner Library -->
   <script src="/js/html5-qrcode.min.js"></script>
+  <!-- SheetJS Excel Library -->
+  <script src="/js/xlsx.full.min.js"></script>
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
   <link rel="apple-touch-icon" href="images/hacksprint-icon-192.png" />
@@ -740,9 +742,28 @@
       color: #78350F;
     }
 
+    .gate-console-grid {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 24px;
+      align-items: flex-start;
+      margin-bottom: 3rem;
+    }
+
     /* ==========================================================
        RESPONSIVE BREAKPOINTS FOR ADMIN
        ========================================================== */
+    @media (max-width: 1024px) {
+      .gate-console-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .fy-team-row {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+    }
+
     @media (max-width: 960px) {
       .admin-page-container {
         padding: 20px 1.25rem 4rem;
@@ -770,20 +791,35 @@
       }
 
       .admin-marquee {
-        margin-top: 68px;
+        margin-top: 66px;
       }
 
       .site-header {
-        padding: 8px 14px;
+        padding: 10px 14px;
       }
 
       .admin-user-tag {
         display: none;
       }
 
+      .admin-main-tabs {
+        gap: 8px;
+        padding-bottom: 10px;
+        margin-bottom: 1.5rem;
+      }
+
+      .admin-tab-btn {
+        flex: 1;
+        min-width: 100%;
+        justify-content: space-between;
+        padding: 10px 14px;
+        font-size: 12px;
+      }
+
       .neo-kpi-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
+        margin-bottom: 1.5rem;
       }
 
       .neo-kpi-card {
@@ -791,17 +827,26 @@
       }
 
       .neo-kpi-value {
-        font-size: 22px;
+        font-size: 20px;
       }
 
       .mobile-table-hint {
         display: block;
       }
 
+      table.neo-data-table {
+        min-width: 600px;
+      }
+
+      .neo-modal-backdrop {
+        padding: 10px;
+      }
+
       .neo-modal-box {
-        width: 96vw;
+        width: 100%;
         max-height: 94vh;
         border-radius: 0;
+        box-shadow: 6px 6px 0 var(--ink);
       }
 
       .neo-modal-header {
@@ -822,15 +867,67 @@
 
       .neo-modal-footer button {
         width: 100%;
+        justify-content: center;
+        text-align: center;
       }
 
       .scanner-viewport-wrap {
         max-width: 280px;
         height: 280px;
       }
+
+      .fy-section-card {
+        padding: 18px 14px;
+        box-shadow: 4px 4px 0 var(--ink);
+        margin-bottom: 1.5rem;
+      }
+
+      .excel-dropzone {
+        padding: 24px 14px;
+      }
     }
 
     @media (max-width: 500px) {
+      .site-header {
+        padding: 10px 12px;
+        gap: 6px;
+      }
+
+      .brand-logo {
+        height: 26px !important;
+      }
+
+      .brand-text {
+        font-size: 0.92rem !important;
+      }
+
+      .admin-public-link {
+        display: none;
+      }
+
+      .admin-nav {
+        gap: 6px;
+      }
+
+      .admin-nav .neo-pill {
+        font-size: 10px !important;
+        padding: 4px 8px !important;
+      }
+
+      .btn-admin-logout {
+        padding: 4px 8px !important;
+        font-size: 10px !important;
+      }
+
+      .admin-page-container {
+        padding: 12px 8px 3rem;
+      }
+
+      .neo-kpi-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
       .neo-controls-filters {
         flex-direction: column;
       }
@@ -858,6 +955,247 @@
 
       .scanner-manual-input-row button {
         width: 100%;
+      }
+
+      .fy-assign-controls {
+        flex-direction: column;
+      }
+
+      .fy-assign-controls select,
+      .fy-assign-controls button {
+        width: 100%;
+      }
+    }
+
+    /* ============================================================
+       ADMIN MAIN TABS & 1ST-YEAR ALLOCATION STYLES
+       ============================================================ */
+    .admin-main-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 14px;
+    }
+
+    .admin-tab-btn {
+      font: 800 13px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 12px 22px;
+      background: var(--surface);
+      border: var(--border-ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.15s ease;
+      color: var(--ink);
+    }
+
+    .admin-tab-btn:hover {
+      background: #FEF7E0;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+
+    .admin-tab-btn.active {
+      background: var(--ink);
+      color: #FFFFFF;
+      box-shadow: 4px 4px 0 var(--green);
+    }
+
+    .admin-tab-btn.active i {
+      color: var(--green);
+    }
+
+    .admin-tab-badge {
+      font: 700 11px var(--mono);
+      padding: 2px 8px;
+      background: var(--green);
+      color: #FFFFFF;
+      border: 1.5px solid var(--ink);
+      box-shadow: 1px 1px 0 var(--ink);
+    }
+
+    .admin-tab-btn.active .admin-tab-badge {
+      background: #FFFFFF;
+      color: var(--ink);
+    }
+
+    /* First-Year Allocation View Styles */
+    .fy-section-card {
+      background: var(--surface);
+      border: var(--border-ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      padding: 24px;
+      margin-bottom: 2rem;
+    }
+
+    .fy-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+      border-bottom: 1.5px dashed var(--line);
+      padding-bottom: 12px;
+    }
+
+    .fy-section-title {
+      font: 900 18px var(--display);
+      text-transform: uppercase;
+      margin: 0;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Excel Bulk Dropzone */
+    .excel-dropzone {
+      border: 3px dashed var(--ink);
+      background: #FAF8F5;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .excel-dropzone:hover,
+    .excel-dropzone.dragover {
+      background: #FEF7E0;
+      border-color: var(--green);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    .excel-dropzone-icon {
+      font-size: 38px;
+      color: var(--green);
+      margin-bottom: 10px;
+    }
+
+    .excel-dropzone-title {
+      font: 900 16px var(--display);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .excel-dropzone-sub {
+      font: 500 12.5px var(--mono);
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    /* Manual Team Allocation Table & Cards */
+    .fy-team-row {
+      background: #FFFFFF;
+      border: var(--border-ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      padding: 16px;
+      margin-bottom: 16px;
+      display: grid;
+      grid-template-columns: 260px 1fr 340px;
+      gap: 16px;
+      align-items: center;
+      transition: transform 0.15s ease;
+    }
+
+    .fy-team-row:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+
+    .fy-team-meta-name {
+      font: 900 16px var(--display);
+      text-transform: uppercase;
+      line-height: 1.15;
+      margin-bottom: 4px;
+    }
+
+    .fy-team-meta-id {
+      font: 700 11px var(--mono);
+      color: var(--green);
+    }
+
+    .fy-students-slot-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .fy-assigned-chip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: #E8F5E9;
+      border: 1.5px solid var(--green);
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .fy-unassign-btn {
+      background: #FCE8E6;
+      border: 1px solid var(--red);
+      color: var(--red);
+      font: 700 11px var(--mono);
+      padding: 2px 6px;
+      cursor: pointer;
+      transition: background 0.1s ease;
+    }
+
+    .fy-unassign-btn:hover {
+      background: var(--red);
+      color: #FFFFFF;
+    }
+
+    .fy-assign-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .fy-student-select {
+      flex: 1;
+      background: #FFFFFF;
+      border: 1.5px solid var(--ink);
+      font: 700 12px var(--mono);
+      padding: 8px 10px;
+      box-shadow: 2px 2px 0 var(--ink);
+      outline: none;
+    }
+
+    .fy-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font: 800 11px var(--mono);
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border: 1.5px solid var(--ink);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .fy-status-complete {
+      background: #E6F4EA;
+      color: var(--green-dark);
+      border-color: var(--green-dark);
+    }
+
+    .fy-status-partial {
+      background: #FEF7E0;
+      color: #92400E;
+      border-color: #92400E;
+    }
+
+    @media (max-width: 992px) {
+      .fy-team-row {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -969,101 +1307,411 @@
         </h1>
       </div>
 
-      <!-- KPI Metrics -->
-      <div class="neo-kpi-grid">
-        <div class="neo-kpi-card">
-          <div class="neo-kpi-bar" style="background: var(--blue);"></div>
-          <div class="neo-kpi-title">TOTAL TEAMS</div>
-          <div class="neo-kpi-value" id="metricTeams">0</div>
+      <!-- Admin Main Tabs Navigation -->
+      <div class="admin-main-tabs" role="tablist">
+        <button type="button" class="admin-tab-btn active" id="tabBtnTeams">
+          <i class="fa-solid fa-users"></i> 01 / TEAMS &amp; VERIFICATION
+        </button>
+        <button type="button" class="admin-tab-btn" id="tabBtnFirstYears">
+          <i class="fa-solid fa-user-graduate"></i> 02 / 1ST-YEAR ALLOCATION &amp; POOL
+          <span class="admin-tab-badge" id="freshmenPoolBadge">0</span>
+        </button>
+        <button type="button" class="admin-tab-btn" id="tabBtnGateCheckIn">
+          <i class="fa-solid fa-qrcode"></i> 03 / LIVE GATE CHECK-IN
+          <span class="admin-tab-badge" id="gateCheckInBadge" style="background: #2563EB;">0</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: TEAMS & VERIFICATION -->
+      <div id="adminTabTeams">
+        <!-- KPI Metrics -->
+        <div class="neo-kpi-grid">
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--blue);"></div>
+            <div class="neo-kpi-title">TOTAL TEAMS</div>
+            <div class="neo-kpi-value" id="metricTeams">0</div>
+          </div>
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--red);"></div>
+            <div class="neo-kpi-title">TOTAL BUILDERS</div>
+            <div class="neo-kpi-value" id="metricBuilders">0</div>
+          </div>
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--green);"></div>
+            <div class="neo-kpi-title">GEC HASSAN (₹100)</div>
+            <div class="neo-kpi-value" id="metricHassan">0</div>
+          </div>
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--yellow);"></div>
+            <div class="neo-kpi-title">OTHER GECS (₹400)</div>
+            <div class="neo-kpi-value" id="metricOthers">0</div>
+          </div>
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--green);"></div>
+            <div class="neo-kpi-title">REVENUE COLLECTED</div>
+            <div class="neo-kpi-value" id="metricRevenue">₹0</div>
+          </div>
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--red);"></div>
+            <div class="neo-kpi-title">PENDING PROOFS</div>
+            <div class="neo-kpi-value" id="metricPending">0</div>
+          </div>
         </div>
-        <div class="neo-kpi-card">
-          <div class="neo-kpi-bar" style="background: var(--red);"></div>
-          <div class="neo-kpi-title">TOTAL BUILDERS</div>
-          <div class="neo-kpi-value" id="metricBuilders">0</div>
+
+        <!-- Controls & Filter Bar -->
+        <div class="neo-controls-bar">
+          <div class="neo-controls-filters">
+            <input type="text" id="searchInput" class="neo-search-input" placeholder="Search team, leader, USN, UTR..." />
+            <select id="collegeFilter" class="neo-filter-select">
+              <option value="">All Colleges</option>
+              <option value="GEC Hassan">GEC Hassan</option>
+              <option value="GEC Arsikere">GEC Arsikere</option>
+              <option value="GEC Mosalehosahalli">GEC Mosalehosahalli</option>
+            </select>
+            <select id="statusFilter" class="neo-filter-select">
+              <option value="">All Statuses</option>
+              <option value="confirmed">Confirmed Only</option>
+              <option value="waitlist">Waitlist Only</option>
+              <option value="pending">Pending</option>
+              <option value="verified">Verified</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="neo-controls-actions">
+            <button type="button" class="button button-dark" id="btnOpenScanner"
+              style="padding: 10px 16px; font-size: 13px;">
+              <i class="fa-solid fa-qrcode" style="margin-right: 6px; color: var(--green);"></i> Scan Team QR
+            </button>
+            <button type="button" class="button button-ghost" id="btnRefresh"
+              style="padding: 10px 14px; font-size: 13px;">
+              <i class="fa-solid fa-rotate" style="margin-right: 4px;"></i> Reload
+            </button>
+            <a href="#" id="btnExport" class="button button-primary" style="padding: 10px 18px; font-size: 13px;">
+              Export (.xlsx) <i class="fa-solid fa-file-excel" style="margin-left: 6px;"></i>
+            </a>
+          </div>
         </div>
-        <div class="neo-kpi-card">
-          <div class="neo-kpi-bar" style="background: var(--green);"></div>
-          <div class="neo-kpi-title">GEC HASSAN (₹100)</div>
-          <div class="neo-kpi-value" id="metricHassan">0</div>
-        </div>
-        <div class="neo-kpi-card">
-          <div class="neo-kpi-bar" style="background: var(--yellow);"></div>
-          <div class="neo-kpi-title">OTHER GECS (₹400)</div>
-          <div class="neo-kpi-value" id="metricOthers">0</div>
-        </div>
-        <div class="neo-kpi-card">
-          <div class="neo-kpi-bar" style="background: var(--green);"></div>
-          <div class="neo-kpi-title">REVENUE COLLECTED</div>
-          <div class="neo-kpi-value" id="metricRevenue">₹0</div>
-        </div>
-        <div class="neo-kpi-card">
-          <div class="neo-kpi-bar" style="background: var(--red);"></div>
-          <div class="neo-kpi-title">PENDING PROOFS</div>
-          <div class="neo-kpi-value" id="metricPending">0</div>
+
+        <!-- Registrations Data Table -->
+        <div class="neo-table-frame">
+          <table class="neo-data-table">
+            <thead>
+              <tr>
+                <th>REG ID</th>
+                <th>REGISTERED</th>
+                <th>TEAM NAME</th>
+                <th>COLLEGE</th>
+                <th>LEADER &amp; USN</th>
+                <th>BUILDERS</th>
+                <th>FEE</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="registrationsTbody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+          <div id="tableEmpty"
+            style="padding: 40px; text-align: center; color: var(--muted); font: 700 13px var(--mono); display: none;">
+            NO REGISTRATIONS FOUND MATCHING FILTER CRITERIA.
+          </div>
         </div>
       </div>
 
-      <!-- Controls & Filter Bar -->
-      <div class="neo-controls-bar">
-        <div class="neo-controls-filters">
-          <input type="text" id="searchInput" class="neo-search-input" placeholder="Search team, leader, USN, UTR..." />
-          <select id="collegeFilter" class="neo-filter-select">
-            <option value="">All Colleges</option>
-            <option value="GEC Hassan">GEC Hassan</option>
-            <option value="GEC Arsikere">GEC Arsikere</option>
-            <option value="GEC Mosalehosahalli">GEC Mosalehosahalli</option>
-          </select>
-          <select id="statusFilter" class="neo-filter-select">
-            <option value="">All Statuses</option>
-            <option value="confirmed">Confirmed Only</option>
-            <option value="waitlist">Waitlist Only</option>
-            <option value="pending">Pending</option>
-            <option value="verified">Verified</option>
-            <option value="rejected">Rejected</option>
-          </select>
+      <!-- TAB 2: 1ST-YEAR ALLOCATION & POOL -->
+      <div id="adminTabFirstYears" style="display: none;">
+        <!-- KPI Grid for 1st Years -->
+        <div class="neo-kpi-grid">
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--blue);"></div>
+            <div class="neo-kpi-title">TOTAL 1ST-YEAR POOL</div>
+            <div class="neo-kpi-value" id="fyMetricTotal">0</div>
+          </div>
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--green);"></div>
+            <div class="neo-kpi-title">AVAILABLE (UNASSIGNED)</div>
+            <div class="neo-kpi-value" id="fyMetricAvailable">0</div>
+          </div>
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--yellow);"></div>
+            <div class="neo-kpi-title">ASSIGNED TO TEAMS</div>
+            <div class="neo-kpi-value" id="fyMetricAssigned">0</div>
+          </div>
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--red);"></div>
+            <div class="neo-kpi-title">HASSAN TEAMS READY</div>
+            <div class="neo-kpi-value" id="fyMetricHassanReady">0 / 0</div>
+          </div>
         </div>
-        <div class="neo-controls-actions">
-          <button type="button" class="button button-dark" id="btnOpenScanner"
-            style="padding: 10px 16px; font-size: 13px;">
-            <i class="fa-solid fa-qrcode" style="margin-right: 6px; color: var(--green);"></i> Scan Team QR
-          </button>
-          <button type="button" class="button button-ghost" id="btnRefresh"
-            style="padding: 10px 14px; font-size: 13px;">
-            <i class="fa-solid fa-rotate" style="margin-right: 4px;"></i> Reload
-          </button>
-          <a href="#" id="btnExport" class="button button-primary" style="padding: 10px 18px; font-size: 13px;">
-            Export (.xlsx) <i class="fa-solid fa-file-excel" style="margin-left: 6px;"></i>
-          </a>
+
+        <!-- Section 1: Excel / CSV Bulk Upload Dropzone -->
+        <div class="fy-section-card">
+          <div class="fy-section-header">
+            <h2 class="fy-section-title">
+              <i class="fa-solid fa-file-excel" style="color: var(--green);"></i> BULK IMPORT 1ST-YEAR STUDENTS
+            </h2>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="button button-outline" id="btnDownloadSampleTemplate"
+                style="padding: 8px 14px; font-size: 12px;">
+                <i class="fa-solid fa-download" style="margin-right: 6px;"></i> Download Excel Template
+              </button>
+            </div>
+          </div>
+
+          <div class="excel-dropzone" id="fyExcelDropzone">
+            <input type="file" id="fyExcelFileInput" accept=".xlsx, .xls, .csv" style="display: none;" />
+            <div class="excel-dropzone-icon">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+            <div class="excel-dropzone-title">DRAG &amp; DROP STUDENT EXCEL / CSV HERE</div>
+            <div class="excel-dropzone-sub">Supports <strong>.xlsx, .xls, .csv</strong> (Max 5MB)</div>
+            <button type="button" class="button button-primary" id="btnChooseFyFile"
+              style="padding: 10px 20px; font-size: 13px;">
+              <i class="fa-solid fa-folder-open" style="margin-right: 6px;"></i> Browse File
+            </button>
+            <div id="selectedFileName" style="margin-top: 10px; font: 700 12px var(--mono); color: var(--green-dark); display: none;"></div>
+          </div>
+
+          <div id="fyUploadResultAlert" style="display: none; margin-top: 16px; padding: 14px 18px; border: var(--border-ink); box-shadow: 3px 3px 0 var(--ink);"></div>
+
+          <div style="margin-top: 14px; font: 500 11.5px var(--mono); color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+            <span><i class="fa-solid fa-circle-info" style="color: var(--blue);"></i> RECOGNIZED COLUMNS:</span>
+            <span class="neo-pill">USN</span>
+            <span class="neo-pill">Student Name</span>
+            <span class="neo-pill">Mobile / Phone</span>
+            <span class="neo-pill">Email</span>
+            <span class="neo-pill">Branch (Default CSE)</span>
+            <span class="neo-pill">Section (Default A)</span>
+          </div>
         </div>
-      </div>
 
-      <!-- Mobile swipe hint -->
+        <!-- Section 2: Manual Team Allocation Console -->
+        <div class="fy-section-card">
+          <div class="fy-section-header">
+            <div>
+              <h2 class="fy-section-title">
+                <i class="fa-solid fa-people-arrows" style="color: var(--blue);"></i> MANUAL SQUAD ALLOCATION (GEC HASSAN)
+              </h2>
+              <p style="font: 500 12px var(--mono); color: var(--muted); margin: 4px 0 0;">
+                Allot 2 first-year builders to each registered GEC Hassan team. Dashboard entry passes unlock only after <strong>Payment is Verified AND 2 Freshmen are Allotted</strong>.
+              </p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <select id="fyTeamFilterSelect" class="neo-filter-select" style="font-size: 12px; padding: 6px 12px;">
+                <option value="all">All GEC Hassan Teams</option>
+                <option value="needs_allocation">Needs Freshmen (&lt; 2)</option>
+                <option value="ready">Fully Allotted (2/2)</option>
+              </select>
+            </div>
+          </div>
 
-
-      <!-- Registrations Data Table -->
-      <div class="neo-table-frame">
-        <table class="neo-data-table">
-          <thead>
-            <tr>
-              <th>REG ID</th>
-              <th>REGISTERED</th>
-              <th>TEAM NAME</th>
-              <th>COLLEGE</th>
-              <th>LEADER &amp; USN</th>
-              <th>BUILDERS</th>
-              <th>FEE</th>
-              <th>STATUS</th>
-              <th>ACTION</th>
-            </tr>
-          </thead>
-          <tbody id="registrationsTbody">
+          <div id="fyTeamAllocationContainer">
             <!-- Populated via JS -->
-          </tbody>
-        </table>
-        <div id="tableEmpty"
-          style="padding: 40px; text-align: center; color: var(--muted); font: 700 13px var(--mono); display: none;">
-          NO REGISTRATIONS FOUND MATCHING FILTER CRITERIA.
+          </div>
+          <div id="fyTeamAllocationEmpty" style="display: none; padding: 30px; text-align: center; color: var(--muted); font: 700 13px var(--mono); background: #FAF8F5; border: 1.5px dashed var(--line);">
+            NO GEC HASSAN TEAMS FOUND MATCHING FILTER.
+          </div>
         </div>
+
+        <!-- Section 3: First-Year Students Pool Directory -->
+        <div class="fy-section-card">
+          <div class="fy-section-header">
+            <div>
+              <h2 class="fy-section-title">
+                <i class="fa-solid fa-list-check" style="color: var(--ink);"></i> FIRST-YEAR STUDENTS POOL DIRECTORY
+              </h2>
+              <p style="font: 500 12px var(--mono); color: var(--muted); margin: 4px 0 0;">
+                All uploaded first-year applicants eligible for matching.
+              </p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <input type="text" id="fyPoolSearchInput" class="neo-search-input" placeholder="Search pool by USN, Name, Phone..." style="font-size: 12px; padding: 6px 12px; min-width: 220px;" />
+              <select id="fyPoolStatusSelect" class="neo-filter-select" style="font-size: 12px; padding: 6px 12px;">
+                <option value="all">All Students</option>
+                <option value="available">Available (Unassigned)</option>
+                <option value="assigned">Assigned</option>
+              </select>
+              <button type="button" class="button button-ghost" id="btnRefreshFyPool" style="padding: 6px 12px; font-size: 12px;">
+                <i class="fa-solid fa-rotate"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="neo-table-frame">
+            <table class="neo-data-table">
+              <thead>
+                <tr>
+                  <th>USN</th>
+                  <th>STUDENT NAME</th>
+                  <th>MOBILE</th>
+                  <th>EMAIL</th>
+                  <th>BRANCH / SEC</th>
+                  <th>STATUS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="fyPoolTbody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+            <div id="fyPoolEmpty" style="padding: 30px; text-align: center; color: var(--muted); font: 700 13px var(--mono); display: none;">
+              NO 1ST-YEAR STUDENTS FOUND IN POOL. UPLOAD AN EXCEL SHEET ABOVE TO POPULATE.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: LIVE GATE CHECK-IN & SEAT ALLOCATION -->
+      <div id="adminTabGateCheckIn" style="display: none;">
+        <!-- Check-in KPI bar -->
+        <div class="neo-kpi-grid">
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--green);"></div>
+            <div class="neo-kpi-title">TOTAL CHECKED-IN</div>
+            <div class="neo-kpi-value" id="kpiCheckedInTotal">0 / 0</div>
+          </div>
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--blue);"></div>
+            <div class="neo-kpi-title">GEC HASSAN CHECKED-IN</div>
+            <div class="neo-kpi-value" id="kpiCheckedInHassan">0 / 30</div>
+          </div>
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--yellow);"></div>
+            <div class="neo-kpi-title">GEC ARSIKERE CHECKED-IN</div>
+            <div class="neo-kpi-value" id="kpiCheckedInArsikere">0 / 5</div>
+          </div>
+          <div class="neo-kpi-card">
+            <div class="neo-kpi-bar" style="background: var(--purple, #7C3AED);"></div>
+            <div class="neo-kpi-title">GEC MOSALEHOSAHALLI</div>
+            <div class="neo-kpi-value" id="kpiCheckedInMosale">0 / 5</div>
+          </div>
+        </div>
+
+        <!-- 2-Column Gate Operations Grid -->
+        <div class="gate-console-grid">
+          
+          <!-- LEFT COLUMN: SCANNER & DESK ALLOCATOR -->
+          <div style="background: #FFFFFF; border: var(--border-ink); box-shadow: 6px 6px 0 var(--ink); padding: 22px;">
+            <div style="margin-bottom: 14px;">
+              <p class="eyebrow" style="margin-bottom: 4px;"><span class="eyebrow-rule"></span>GATE DESK CONSOLE</p>
+              <h2 style="font: 900 18px var(--display); text-transform: uppercase; margin: 0;">
+                SCAN ENTRY PASS OR SEARCH TEAM
+              </h2>
+            </div>
+
+            <!-- Camera Scanner Frame -->
+            <div style="margin-bottom: 16px;">
+              <div id="gateCameraFrame" style="width: 100%; border: 2px solid var(--ink); background: #0A0A0A; min-height: 220px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                <div id="gateQrReader" style="width: 100%;"></div>
+                <div id="gateCameraPlaceholder" style="text-align: center; color: #FFFFFF; padding: 20px;">
+                  <i class="fa-solid fa-camera" style="font-size: 32px; color: var(--green); margin-bottom: 8px;"></i>
+                  <div style="font: 700 12px var(--mono);">CAMERA STANDBY</div>
+                  <div style="font: 500 11px var(--mono); color: #9CA3AF; margin-top: 4px;">Click "Start Camera Scanner" below</div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <button type="button" class="button button-dark" id="btnToggleGateCamera" style="flex: 1; padding: 8px; font-size: 11.5px;">
+                  <i class="fa-solid fa-video"></i> Start Camera Scanner
+                </button>
+                <select id="gateCameraSelect" class="neo-select" style="max-width: 150px; font-size: 11px; padding: 6px 8px;">
+                  <option value="">Detecting Cameras...</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Manual / Barcode Search Input -->
+            <div style="margin-bottom: 16px;">
+              <label class="field-label" style="font-size: 11px;">SCANNER BARCODE / REGISTRATION ID / PASS TOKEN</label>
+              <div style="display: flex; gap: 6px;">
+                <input type="text" id="gateScanInput" class="neo-input" placeholder="e.g. HS3-HSSN-AC8G" style="font-family: var(--mono); text-transform: uppercase;" />
+                <button type="button" class="button button-primary" id="btnGateLookup" style="padding: 10px 14px; font-size: 12px; white-space: nowrap;">
+                  <i class="fa-solid fa-magnifying-glass"></i> Lookup
+                </button>
+              </div>
+              <div style="font: 500 10.5px var(--mono); color: var(--muted); margin-top: 4px;">
+                Supports 2D USB handheld barcode guns, camera scans, or manual typing.
+              </div>
+            </div>
+
+            <!-- Lookup Result Card (Dynamic) -->
+            <div id="gateScannedTeamCard" style="display: none; background: #FAF8F5; border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); padding: 16px; margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                <div>
+                  <span id="gateTeamCollegeBadge" class="neo-pill neo-pill-hassan">GEC Hassan</span>
+                  <h3 id="gateTeamNameDisplay" style="font: 900 18px var(--display); margin: 6px 0 2px; text-transform: uppercase;">TEAM NAME</h3>
+                  <code id="gateRegIdDisplay" style="font: 700 12px var(--mono); color: var(--green);">HS3-XXXX-XXXX</code>
+                </div>
+                <div id="gateCheckInStatusBadge">
+                  <span class="neo-pill" style="background: #FEE2E2; color: #991B1B;">NOT CHECKED IN</span>
+                </div>
+              </div>
+
+              <div style="font-size: 12.5px; line-height: 1.5; margin-bottom: 12px; border-top: 1px dashed var(--line); padding-top: 8px;">
+                <div>Leader: <strong id="gateLeaderName">Akash M</strong> &bull; <span id="gateLeaderMobile">6362929189</span></div>
+                <div>Payment: <strong id="gatePayStatus" style="color: var(--green-dark);">VERIFIED</strong></div>
+                <div>Builders: <strong id="gateSquadCount">5 Members</strong></div>
+              </div>
+
+              <!-- Seat Allocation Input -->
+              <div style="background: #FFFFFF; border: 1.5px solid var(--ink); padding: 12px; margin-bottom: 12px;">
+                <label class="field-label" for="gateSeatInput" style="font-size: 11px; color: var(--green-dark);">
+                  <i class="fa-solid fa-chair"></i> ALLOCATE PHYSICAL SEAT / DESK NUMBER <span class="req">*</span>
+                </label>
+                <input type="text" id="gateSeatInput" class="neo-input" placeholder="e.g. DESK #12, LAB-B04, SEAT 14" style="font-weight: 800; font-size: 14px; text-transform: uppercase;" required />
+              </div>
+
+              <button type="button" class="button button-primary" id="btnConfirmCheckIn" style="width: 100%; padding: 12px; font-size: 13.5px; text-transform: uppercase;">
+                <i class="fa-solid fa-check-double" style="margin-right: 6px;"></i>
+                <span>Confirm Check-in &amp; Allocate Seat</span>
+              </button>
+
+              <div id="gateActionFeedback" style="display: none; margin-top: 10px; font: 700 12px var(--mono); padding: 8px 10px; border: 1px solid transparent;"></div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN: LIVE GATE CHECK-IN ROSTER -->
+          <div style="background: #FFFFFF; border: var(--border-ink); box-shadow: 6px 6px 0 var(--ink); padding: 22px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <p class="eyebrow" style="margin-bottom: 4px;"><span class="eyebrow-rule"></span>LIVE ROSTER</p>
+                <h2 style="font: 900 18px var(--display); text-transform: uppercase; margin: 0;">
+                  CHECKED-IN TEAMS AT VENUE
+                </h2>
+              </div>
+              <div>
+                <button type="button" class="button button-ghost" id="btnRefreshCheckins" style="padding: 6px 12px; font-size: 11px;">
+                  <i class="fa-solid fa-rotate"></i> Refresh Roster
+                </button>
+              </div>
+            </div>
+
+            <!-- Checked-in Roster Table -->
+            <div class="neo-table-frame" style="max-height: 520px; overflow-y: auto;">
+              <table class="neo-data-table">
+                <thead>
+                  <tr>
+                    <th>SEAT NUMBER</th>
+                    <th>TEAM NAME</th>
+                    <th>COLLEGE</th>
+                    <th>LEADER CONTACT</th>
+                    <th>CHECKED IN TIME</th>
+                    <th>ACTION</th>
+                  </tr>
+                </thead>
+                <tbody id="gateCheckinsTbody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+              <div id="gateCheckinsEmpty" style="padding: 30px; text-align: center; color: var(--muted); font: 700 12.5px var(--mono); display: none;">
+                NO TEAMS CHECKED IN YET. SCAN TEAM PASSES ON THE LEFT CONSOLE AS TEAMS ARRIVE AT THE REGISTRATION DESK.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
       </div>
     </div>
 
@@ -1123,6 +1771,21 @@
 
           <!-- Members Container -->
           <div id="modalMembersContainer"></div>
+
+          <!-- Assigned 1st-Year Students Container -->
+          <div id="modalFirstYearsSection" style="margin-top: 14px; padding-top: 12px; border-top: 1.5px dashed var(--line); display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font: 700 11px var(--mono); color: var(--blue-dark); text-transform: uppercase;">
+                ASSIGNED 1ST-YEAR BUILDERS
+              </span>
+              <span id="modalFyBadge" class="neo-pill">0 / 2 ALLOTTED</span>
+            </div>
+            <div id="modalAssignedFyList"></div>
+            <button type="button" class="button button-ghost" id="btnModalManageAllocation"
+              style="margin-top: 8px; width: 100%; font-size: 11px; padding: 6px;">
+              <i class="fa-solid fa-user-plus" style="margin-right: 4px;"></i> Open Allocation Console (Tab 02)
+            </button>
+          </div>
         </div>
 
         <!-- Right: Payment & Verification -->
@@ -1277,17 +1940,29 @@
   </div>
 
   <!-- Site Footer -->
-  <footer role="contentinfo"
-    style="border-top: var(--border-ink); background: var(--surface); padding: 40px var(--section-x);">
-    <div
-      style="max-width: var(--content-max); margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
-      <div class="brand" style="display: flex; align-items: center; gap: 10px;">
-        <img class="brand-logo" src="images/hacksprint-logo.png" alt="HackSprint 3.0"
-          style="height: 34px; width: auto;" />
-        <span style="font-weight: 900; font-size: 1.15rem; color: var(--ink);">HACKSPRINT <b>3.0</b> ADMIN</span>
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="brand" href="/" aria-label="HackSprint 3.0 — home">
+            <img class="brand-logo" src="images/hacksprint-logo.png" alt="HackSprint 3.0" />
+            <span class="brand-text">HACKSPRINT <span class="brand-accent">3.0</span> <span style="font-size: 0.85rem; color: var(--muted); font-family: var(--mono); margin-left: 6px;">ADMIN</span></span>
+          </a>
+          <p class="footer-tagline">COMPASS &times; GLUE &bull; Government Engineering College, Hassan</p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <a href="/" target="_blank">Public Site ↗</a>
+          <a href="/register" target="_blank">Register ↗</a>
+          <a href="/team" target="_blank">Team Portal ↗</a>
+          <a href="/admin">Admin Console</a>
+        </nav>
       </div>
-      <p style="font-size: 0.85rem; color: var(--gray-600); margin: 0;">COMPASS × GLUE • Government Engineering College,
-        Hassan</p>
+
+      <div class="footer-bottom">
+        <p class="footer-credit">@ designed and developed by <strong>Prajwal K L</strong></p>
+        <p class="footer-copy">&copy; 2026 HackSprint 3.0. All rights reserved.</p>
+      </div>
     </div>
   </footer>
 
@@ -1295,6 +1970,8 @@
     let authToken = localStorage.getItem('hacksprint_admin_token') || '';
     let registrationsData = [];
     let currentActiveDoc = null;
+    let firstYearsData = [];
+    let activeAdminTab = 'teams';
 
     const loginScreen = document.getElementById('loginScreen');
     const dashboardScreen = document.getElementById('dashboardScreen');
@@ -1372,6 +2049,7 @@
       dashboardScreen.style.display = 'block';
       loadRegistrations();
       loadStats();
+      loadFirstYears();
 
       document.getElementById('btnExport').onclick = (e) => {
         e.preventDefault();
@@ -1405,6 +2083,7 @@
         const data = await res.json();
         registrationsData = data.registrations || [];
         renderTable();
+        renderTeamAllocationList();
       } catch (err) {
         console.error(err);
       }
@@ -1588,6 +2267,32 @@
         });
       }
 
+      // Render Assigned First-Year Students in Modal
+      const modalFySection = document.getElementById('modalFirstYearsSection');
+      const modalFyBadge = document.getElementById('modalFyBadge');
+      const modalFyList = document.getElementById('modalAssignedFyList');
+      if (doc.college && doc.college.includes('Hassan')) {
+        modalFySection.style.display = 'block';
+        const assigned = doc.assignedFirstYears || [];
+        modalFyBadge.textContent = `${assigned.length} / 2 ALLOTTED`;
+        modalFyBadge.className = `neo-pill ${assigned.length >= 2 ? 'neo-pill-verified' : 'neo-pill-pending'}`;
+        if (assigned.length === 0) {
+          modalFyList.innerHTML = '<div style="font: 500 12px var(--mono); color: var(--muted); padding: 6px 0;">No 1st-year students allotted yet.</div>';
+        } else {
+          modalFyList.innerHTML = assigned.map(s => `
+            <div style="background: #E8F5E9; border: 1.5px solid var(--green); padding: 8px 10px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong>${escapeHtml(s.name)}</strong> <code style="font-size: 11px;">(${escapeHtml(s.usn)})</code>
+                <div style="font-size: 11px; color: var(--muted);">${escapeHtml(s.branch || 'CSE')} &bull; ${escapeHtml(s.mobile || '—')}</div>
+              </div>
+              <button type="button" class="fy-unassign-btn" onclick="unassignStudentFromTeam('${escapeHtml(doc.registrationId)}', '${escapeHtml(s.usn)}')">✕ Remove</button>
+            </div>
+          `).join('');
+        }
+      } else {
+        modalFySection.style.display = 'none';
+      }
+
       document.getElementById('modalPayAmount').textContent = '₹' + (doc.payment ? doc.payment.amount : 0);
       document.getElementById('modalPayUtr').textContent = doc.payment ? doc.payment.transactionId : '—';
       document.getElementById('modalAdminNotes').value = (doc.payment && doc.payment.adminNotes) || '';
@@ -1759,6 +2464,474 @@
         alert('Failed to delete: ' + err.message);
       }
     });
+
+    /* ==========================================================
+       TAB SWITCHING CONTROLLER
+       ========================================================== */
+    const tabBtnTeams = document.getElementById('tabBtnTeams');
+    const tabBtnFirstYears = document.getElementById('tabBtnFirstYears');
+    const tabBtnGateCheckIn = document.getElementById('tabBtnGateCheckIn');
+    const adminTabTeams = document.getElementById('adminTabTeams');
+    const adminTabFirstYears = document.getElementById('adminTabFirstYears');
+    const adminTabGateCheckIn = document.getElementById('adminTabGateCheckIn');
+
+    function switchAdminTab(tabName) {
+      activeAdminTab = tabName;
+      [tabBtnTeams, tabBtnFirstYears, tabBtnGateCheckIn].forEach(b => { if (b) b.classList.remove('active'); });
+      [adminTabTeams, adminTabFirstYears, adminTabGateCheckIn].forEach(t => { if (t) t.style.display = 'none'; });
+
+      if (tabName === 'teams') {
+        if (tabBtnTeams) tabBtnTeams.classList.add('active');
+        if (adminTabTeams) adminTabTeams.style.display = 'block';
+      } else if (tabName === 'firstYears') {
+        if (tabBtnFirstYears) tabBtnFirstYears.classList.add('active');
+        if (adminTabFirstYears) adminTabFirstYears.style.display = 'block';
+        loadFirstYears();
+      } else if (tabName === 'gateCheckIn') {
+        if (tabBtnGateCheckIn) tabBtnGateCheckIn.classList.add('active');
+        if (adminTabGateCheckIn) adminTabGateCheckIn.style.display = 'block';
+        loadGateCheckins();
+      }
+    }
+
+    if (tabBtnTeams) tabBtnTeams.addEventListener('click', () => switchAdminTab('teams'));
+    if (tabBtnFirstYears) tabBtnFirstYears.addEventListener('click', () => switchAdminTab('firstYears'));
+    if (tabBtnGateCheckIn) tabBtnGateCheckIn.addEventListener('click', () => switchAdminTab('gateCheckIn'));
+
+    const btnModalManageAllocation = document.getElementById('btnModalManageAllocation');
+    if (btnModalManageAllocation) {
+      btnModalManageAllocation.addEventListener('click', () => {
+        closeInspector();
+        switchAdminTab('firstYears');
+      });
+    }
+
+    /* ==========================================================
+       FIRST-YEAR STUDENT POOL & ALLOCATION LOGIC
+       ========================================================== */
+    async function loadFirstYears() {
+      try {
+        const res = await fetch('/api/admin/first-years', {
+          headers: { 'Authorization': 'Bearer ' + authToken }
+        });
+        if (res.status === 401 || res.status === 403) {
+          localStorage.removeItem('hacksprint_admin_token');
+          location.reload();
+          return;
+        }
+        const data = await res.json();
+        firstYearsData = data.students || [];
+
+        // Update badge & KPI
+        const total = firstYearsData.length;
+        const available = firstYearsData.filter(s => !s.isAssigned).length;
+        const assigned = firstYearsData.filter(s => s.isAssigned).length;
+
+        const badge = document.getElementById('freshmenPoolBadge');
+        if (badge) badge.textContent = total;
+        const mTot = document.getElementById('fyMetricTotal');
+        if (mTot) mTot.textContent = total;
+        const mAvail = document.getElementById('fyMetricAvailable');
+        if (mAvail) mAvail.textContent = available;
+        const mAssigned = document.getElementById('fyMetricAssigned');
+        if (mAssigned) mAssigned.textContent = assigned;
+
+        renderFirstYearsPool();
+        renderTeamAllocationList();
+      } catch (err) {
+        console.error('Error loading first-year pool:', err);
+      }
+    }
+
+    const fyPoolSearchInput = document.getElementById('fyPoolSearchInput');
+    const fyPoolStatusSelect = document.getElementById('fyPoolStatusSelect');
+    if (fyPoolSearchInput) fyPoolSearchInput.addEventListener('input', renderFirstYearsPool);
+    if (fyPoolStatusSelect) fyPoolStatusSelect.addEventListener('change', renderFirstYearsPool);
+    const btnRefreshFyPool = document.getElementById('btnRefreshFyPool');
+    if (btnRefreshFyPool) btnRefreshFyPool.addEventListener('click', loadFirstYears);
+
+    function renderFirstYearsPool() {
+      const q = (fyPoolSearchInput ? fyPoolSearchInput.value : '').toLowerCase().trim();
+      const statusFilter = fyPoolStatusSelect ? fyPoolStatusSelect.value : 'all';
+
+      const filtered = firstYearsData.filter(s => {
+        if (statusFilter === 'available' && s.isAssigned) return false;
+        if (statusFilter === 'assigned' && !s.isAssigned) return false;
+        if (q) {
+          const matchUsn = (s.usn || '').toLowerCase().includes(q);
+          const matchName = (s.name || '').toLowerCase().includes(q);
+          const matchMobile = (s.mobile || '').toLowerCase().includes(q);
+          const matchBranch = (s.branch || '').toLowerCase().includes(q);
+          if (!matchUsn && !matchName && !matchMobile && !matchBranch) return false;
+        }
+        return true;
+      });
+
+      const tbody = document.getElementById('fyPoolTbody');
+      const emptyBox = document.getElementById('fyPoolEmpty');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (!filtered.length) {
+        if (emptyBox) emptyBox.style.display = 'block';
+        return;
+      }
+      if (emptyBox) emptyBox.style.display = 'none';
+
+      filtered.forEach(s => {
+        const tr = document.createElement('tr');
+        const isAssigned = Boolean(s.isAssigned);
+        tr.innerHTML = `
+          <td><code style="font-family: var(--mono); font-weight: 700; color: var(--green);">${escapeHtml(s.usn)}</code></td>
+          <td><strong>${escapeHtml(s.name)}</strong></td>
+          <td><span style="font-family: var(--mono); font-size: 12px;">${escapeHtml(s.mobile)}</span></td>
+          <td><span style="font-size: 12px; color: var(--muted);">${escapeHtml(s.email || '—')}</span></td>
+          <td><span class="neo-pill">${escapeHtml(s.branch || 'CSE')} (${escapeHtml(s.section || 'A')})</span></td>
+          <td>
+            ${isAssigned 
+              ? `<span class="neo-pill neo-pill-verified"><i class="fa-solid fa-check"></i> Assigned: ${escapeHtml(s.assignedTeamName || s.assignedTeamId)}</span>`
+              : `<span class="neo-pill neo-pill-pending"><i class="fa-regular fa-clock"></i> Available</span>`}
+          </td>
+          <td>
+            ${!isAssigned
+              ? `<button type="button" class="button button-ghost" style="padding: 4px 8px; font-size: 11px; color: var(--red); border-color: var(--red);" onclick="deleteStudentFromPool('${s._id}', '${escapeHtml(s.name)}')"><i class="fa-solid fa-trash-can"></i></button>`
+              : `<span style="font: 700 11px var(--mono); color: var(--muted);">Locked</span>`}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    const fyTeamFilterSelect = document.getElementById('fyTeamFilterSelect');
+    if (fyTeamFilterSelect) fyTeamFilterSelect.addEventListener('change', renderTeamAllocationList);
+
+    function renderTeamAllocationList() {
+      const hassanTeams = registrationsData.filter(r => r.college && r.college.includes('Hassan'));
+      const filter = fyTeamFilterSelect ? fyTeamFilterSelect.value : 'all';
+
+      // Count completed
+      const fullyReadyCount = hassanTeams.filter(t => (t.payment?.status === 'verified') && (t.assignedFirstYears?.length >= 2)).length;
+      const readyMetric = document.getElementById('fyMetricHassanReady');
+      if (readyMetric) readyMetric.textContent = `${fullyReadyCount} / ${hassanTeams.length} Ready`;
+
+      const filteredTeams = hassanTeams.filter(t => {
+        const assignedCount = t.assignedFirstYears ? t.assignedFirstYears.length : 0;
+        if (filter === 'needs_allocation' && assignedCount >= 2) return false;
+        if (filter === 'ready' && assignedCount < 2) return false;
+        return true;
+      });
+
+      const container = document.getElementById('fyTeamAllocationContainer');
+      const emptyBox = document.getElementById('fyTeamAllocationEmpty');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!filteredTeams.length) {
+        if (emptyBox) emptyBox.style.display = 'block';
+        return;
+      }
+      if (emptyBox) emptyBox.style.display = 'none';
+
+      // List of available students for dropdown
+      const availableStudents = firstYearsData.filter(s => !s.isAssigned);
+
+      filteredTeams.forEach(team => {
+        const row = document.createElement('div');
+        row.className = 'fy-team-row';
+
+        const assignedList = team.assignedFirstYears || [];
+        const assignedCount = assignedList.length;
+        const isVerified = team.payment && team.payment.status === 'verified';
+        const isPassReady = isVerified && assignedCount >= 2;
+
+        let passStatusHtml = isPassReady
+          ? `<span class="fy-status-badge fy-status-complete"><i class="fa-solid fa-circle-check"></i> PASS READY</span>`
+          : `<span class="fy-status-badge fy-status-partial"><i class="fa-solid fa-hourglass-half"></i> UNDER PROCESS</span>`;
+
+        let paymentPill = isVerified
+          ? `<span class="neo-pill neo-pill-verified">Payment Verified</span>`
+          : `<span class="neo-pill neo-pill-pending">Payment Pending</span>`;
+
+        // Build assigned chips
+        let chipsHtml = '';
+        if (assignedList.length > 0) {
+          chipsHtml = assignedList.map(s => `
+            <div class="fy-assigned-chip">
+              <div>
+                <i class="fa-solid fa-user-graduate" style="color: var(--green); margin-right: 4px;"></i>
+                <strong>${escapeHtml(s.name)}</strong> <code style="font-size: 11px;">(${escapeHtml(s.usn)})</code>
+                <span style="font-size: 11px; color: var(--muted); margin-left: 4px;">[${escapeHtml(s.branch || 'CSE')}]</span>
+              </div>
+              <button type="button" class="fy-unassign-btn" onclick="unassignStudentFromTeam('${escapeHtml(team.registrationId)}', '${escapeHtml(s.usn)}')">✕ Unassign</button>
+            </div>
+          `).join('');
+        } else {
+          chipsHtml = `<div style="font: 500 12px var(--mono); color: var(--muted); padding: 4px 0;">No 1st-year students allotted yet.</div>`;
+        }
+
+        // Build assign control if < 2
+        let assignControlHtml = '';
+        if (assignedCount < 2) {
+          if (availableStudents.length === 0) {
+            assignControlHtml = `<div style="font: 700 11.5px var(--mono); color: var(--red); padding: 4px 0;"><i class="fa-solid fa-triangle-exclamation"></i> First-year pool empty. Upload more students above.</div>`;
+          } else {
+            const options = availableStudents.map(s => `
+              <option value="${escapeHtml(s.usn)}">${escapeHtml(s.usn)} - ${escapeHtml(s.name)} (${escapeHtml(s.branch || 'CSE')}-${escapeHtml(s.section || 'A')})</option>
+            `).join('');
+            assignControlHtml = `
+              <div class="fy-assign-controls" style="margin-top: 6px;">
+                <select class="fy-student-select" id="select_assign_${team.registrationId}">
+                  <option value="">-- Choose 1st Year (${availableStudents.length} available) --</option>
+                  ${options}
+                </select>
+                <button type="button" class="button button-primary" style="padding: 6px 12px; font-size: 11px; white-space: nowrap;" onclick="handleAssignClick('${escapeHtml(team.registrationId)}')">
+                  <i class="fa-solid fa-plus"></i> Allot
+                </button>
+              </div>
+            `;
+          }
+        }
+
+        row.innerHTML = `
+          <!-- Left: Team Details -->
+          <div>
+            <div class="fy-team-meta-id">${escapeHtml(team.registrationId)}</div>
+            <div class="fy-team-meta-name">${escapeHtml(team.teamName)}</div>
+            <div style="font-size: 12px; color: var(--muted); margin-bottom: 6px;">Leader: <strong>${escapeHtml(team.leader?.name || '—')}</strong> (${escapeHtml(team.leader?.mobile || '—')})</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              ${paymentPill}
+              ${passStatusHtml}
+            </div>
+          </div>
+
+          <!-- Middle: Assigned Students List -->
+          <div>
+            <div style="font: 700 10.5px var(--mono); color: var(--muted); text-transform: uppercase; margin-bottom: 6px; display: flex; justify-content: space-between;">
+              <span>ALLOTTED 1ST-YEARS:</span>
+              <strong style="color: ${assignedCount >= 2 ? 'var(--green-dark)' : '#B45309'};">${assignedCount} / 2 ALLOTTED</strong>
+            </div>
+            <div class="fy-students-slot-wrap">
+              ${chipsHtml}
+            </div>
+          </div>
+
+          <!-- Right: Allocation Action -->
+          <div>
+            <div style="font: 700 10.5px var(--mono); color: var(--muted); text-transform: uppercase; margin-bottom: 6px;">
+              ${assignedCount < 2 ? 'MANUAL ALLOTMENT ACTION:' : 'SQUAD STATUS:'}
+            </div>
+            ${assignedCount < 2 
+              ? assignControlHtml 
+              : `<div style="background: #E8F5E9; border: 1.5px solid var(--green); padding: 10px; font: 700 12px var(--mono); color: var(--green-dark); text-align: center;"><i class="fa-solid fa-circle-check"></i> SQUAD FULL (2/2 ALLOTTED)</div>`}
+          </div>
+        `;
+
+        container.appendChild(row);
+      });
+    }
+
+    window.handleAssignClick = function(registrationId) {
+      const selectEl = document.getElementById(`select_assign_${registrationId}`);
+      if (!selectEl || !selectEl.value) {
+        alert('Please choose a student from the dropdown list to allot.');
+        return;
+      }
+      assignStudentToTeam(registrationId, selectEl.value);
+    };
+
+    window.assignStudentToTeam = async function(registrationId, studentUsn) {
+      try {
+        const res = await fetch('/api/admin/first-years/assign', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + authToken
+          },
+          body: JSON.stringify({ registrationId, studentUsn })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to allot student.');
+        showToast(`✓ ${data.message}`);
+        await loadRegistrations();
+        await loadFirstYears();
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    window.unassignStudentFromTeam = async function(registrationId, studentUsn) {
+      if (!confirm(`Are you sure you want to remove ${studentUsn} from this team and return them to the available pool?`)) {
+        return;
+      }
+      try {
+        const res = await fetch('/api/admin/first-years/unassign', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + authToken
+          },
+          body: JSON.stringify({ registrationId, studentUsn })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to unassign student.');
+        showToast(`✓ ${data.message}`);
+        await loadRegistrations();
+        await loadFirstYears();
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    window.deleteStudentFromPool = async function(studentId, name) {
+      if (!confirm(`Remove "${name}" permanently from first-year applicant pool?`)) {
+        return;
+      }
+      try {
+        const res = await fetch(`/api/admin/first-years/${studentId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': 'Bearer ' + authToken }
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to delete student.');
+        showToast('Student removed from pool.');
+        await loadFirstYears();
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    // Excel Bulk Upload Handlers
+    const fyExcelDropzone = document.getElementById('fyExcelDropzone');
+    const fyExcelFileInput = document.getElementById('fyExcelFileInput');
+    const btnChooseFyFile = document.getElementById('btnChooseFyFile');
+    const fyUploadResultAlert = document.getElementById('fyUploadResultAlert');
+
+    if (btnChooseFyFile && fyExcelFileInput) {
+      btnChooseFyFile.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fyExcelFileInput.click();
+      });
+    }
+
+    if (fyExcelDropzone && fyExcelFileInput) {
+      fyExcelDropzone.addEventListener('click', () => fyExcelFileInput.click());
+
+      fyExcelDropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fyExcelDropzone.classList.add('dragover');
+      });
+
+      fyExcelDropzone.addEventListener('dragleave', () => {
+        fyExcelDropzone.classList.remove('dragover');
+      });
+
+      fyExcelDropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fyExcelDropzone.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          uploadFirstYearsExcel(e.dataTransfer.files[0]);
+        }
+      });
+
+      fyExcelFileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          uploadFirstYearsExcel(e.target.files[0]);
+        }
+      });
+    }
+
+    async function uploadFirstYearsExcel(file) {
+      if (!file) return;
+      const validExts = ['.xlsx', '.xls', '.csv'];
+      const fileName = file.name.toLowerCase();
+      if (!validExts.some(ext => fileName.endsWith(ext))) {
+        alert('Please choose an Excel (.xlsx, .xls) or CSV file.');
+        return;
+      }
+
+      const fileNameEl = document.getElementById('selectedFileName');
+      if (fileNameEl) {
+        fileNameEl.textContent = `Uploading: ${file.name} (${(file.size / 1024).toFixed(1)} KB)...`;
+        fileNameEl.style.display = 'block';
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const res = await fetch('/api/admin/first-years/upload-excel', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + authToken },
+          body: formData
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Excel upload failed.');
+
+        if (fyUploadResultAlert) {
+          fyUploadResultAlert.style.display = 'block';
+          fyUploadResultAlert.style.background = '#E6F4EA';
+          fyUploadResultAlert.style.borderColor = 'var(--green)';
+          fyUploadResultAlert.innerHTML = `
+            <div style="font: 900 15px var(--display); color: var(--green-dark); margin-bottom: 4px;">
+              <i class="fa-solid fa-circle-check"></i> IMPORT COMPLETED SUCCESSFULLY
+            </div>
+            <div style="font: 700 12px var(--mono); color: var(--ink);">
+              Total Rows in File: <strong>${data.totalRows}</strong> &bull;
+              Added: <strong style="color: var(--green);">${data.inserted}</strong> &bull;
+              Updated: <strong style="color: var(--blue);">${data.updated}</strong> &bull;
+              Skipped: <strong>${data.skipped}</strong>
+            </div>
+            ${data.errors && data.errors.length ? `<div style="font: 500 11px var(--mono); color: var(--red); margin-top: 6px;">Warnings: ${escapeHtml(data.errors.join(' | '))}</div>` : ''}
+          `;
+        }
+
+        if (fileNameEl) fileNameEl.textContent = `✓ Uploaded: ${file.name}`;
+        await loadFirstYears();
+        showToast(`Imported ${data.inserted} first-year students!`);
+      } catch (err) {
+        if (fyUploadResultAlert) {
+          fyUploadResultAlert.style.display = 'block';
+          fyUploadResultAlert.style.background = '#FCE8E6';
+          fyUploadResultAlert.style.borderColor = 'var(--red)';
+          fyUploadResultAlert.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color: var(--red); margin-right: 6px;"></i> <strong>Upload Failed:</strong> ${escapeHtml(err.message)}`;
+        }
+      }
+    }
+
+    // Sample Excel Template Generator
+    const btnDownloadSampleTemplate = document.getElementById('btnDownloadSampleTemplate');
+    if (btnDownloadSampleTemplate) {
+      btnDownloadSampleTemplate.addEventListener('click', () => {
+        if (typeof XLSX === 'undefined') {
+          alert('Excel library still loading, please retry in a second.');
+          return;
+        }
+        const sampleData = [
+          { 'USN': '4GH24CS001', 'Name': 'Rahul Sharma', 'Mobile': '9876543210', 'Email': 'rahul.cs24@gechassan.ac.in', 'Branch': 'CSE', 'Section': 'A' },
+          { 'USN': '4GH24CS002', 'Name': 'Ananya Gowda', 'Mobile': '9876543211', 'Email': 'ananya.cs24@gechassan.ac.in', 'Branch': 'CSE', 'Section': 'B' },
+          { 'USN': '4GH24EC003', 'Name': 'Kiran Kumar', 'Mobile': '9876543212', 'Email': 'kiran.ec24@gechassan.ac.in', 'Branch': 'ECE', 'Section': 'A' },
+          { 'USN': '4GH24IS004', 'Name': 'Priya Patel', 'Mobile': '9876543213', 'Email': 'priya.is24@gechassan.ac.in', 'Branch': 'ISE', 'Section': 'A' },
+          { 'USN': '4GH24ME005', 'Name': 'Darshan S', 'Mobile': '9876543214', 'Email': 'darshan.me24@gechassan.ac.in', 'Branch': 'MECH', 'Section': 'A' }
+        ];
+
+        const ws = XLSX.utils.json_to_sheet(sampleData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'FirstYearStudents');
+        XLSX.writeFile(wb, 'HackSprint3_FirstYear_Template.xlsx');
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.style.cssText = 'position: fixed; bottom: 24px; right: 24px; background: var(--ink); color: #fff; padding: 12px 18px; border: 2px solid var(--green); box-shadow: 4px 4px 0 var(--green); font: 700 12.5px var(--mono); z-index: 999999; animation: fadeIn 0.2s ease;';
+      toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--green); margin-right: 8px;"></i>${escapeHtml(msg)}`;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
 
     /* ==========================================================
        LIVE CAMERA QR SCANNER & CHECK-IN CONTROLLER
@@ -1998,6 +3171,353 @@
           if (val) handleScannedId(val);
         }
       });
+    }
+
+    /* ==========================================================
+       TAB 03: LIVE GATE CHECK-IN & SEAT ALLOCATION CONTROLLER
+       ========================================================== */
+    let currentGateTeam = null;
+    let gateCameraInstance = null;
+    let isGateCameraRunning = false;
+
+    // Web Audio API Success Chime (Zero external audio file dependency)
+    function playSuccessChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1); // A5
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.38);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.4);
+      } catch (e) {
+        console.warn('Audio chime unsupported:', e);
+      }
+    }
+
+    // Load Check-in Roster
+    async function loadGateCheckins() {
+      try {
+        const res = await fetch('/api/admin/checkins', {
+          headers: { 'Authorization': 'Bearer ' + authToken }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const checkedInTeams = data.teams || [];
+
+        // Update KPIs
+        const totalCheckedIn = checkedInTeams.length;
+        const totalTeamsCount = registrationsData ? registrationsData.length : totalCheckedIn;
+        
+        let hassanCount = 0;
+        let arsikereCount = 0;
+        let mosaleCount = 0;
+
+        checkedInTeams.forEach(t => {
+          if (t.college === 'GEC Hassan') hassanCount++;
+          else if (t.college === 'GEC Arsikere') arsikereCount++;
+          else if (t.college === 'GEC Mosalehosahalli') mosaleCount++;
+        });
+
+        document.getElementById('kpiCheckedInTotal').textContent = `${totalCheckedIn} / ${totalTeamsCount}`;
+        document.getElementById('kpiCheckedInHassan').textContent = `${hassanCount} / 30`;
+        document.getElementById('kpiCheckedInArsikere').textContent = `${arsikereCount} / 5`;
+        document.getElementById('kpiCheckedInMosale').textContent = `${mosaleCount} / 5`;
+        
+        const badge = document.getElementById('gateCheckInBadge');
+        if (badge) badge.textContent = `${totalCheckedIn} CHECKED-IN`;
+
+        // Render Roster Table
+        const tbody = document.getElementById('gateCheckinsTbody');
+        const emptyEl = document.getElementById('gateCheckinsEmpty');
+        tbody.innerHTML = '';
+
+        if (!checkedInTeams.length) {
+          emptyEl.style.display = 'block';
+          return;
+        }
+        emptyEl.style.display = 'none';
+
+        checkedInTeams.forEach(t => {
+          const seat = t.checkIn?.allocatedSeat || 'Pending Seat';
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>
+              <span class="neo-pill" style="background: #15803D; color: #FFFFFF; font-weight: 800;">
+                ${escapeHtml(seat)}
+              </span>
+            </td>
+            <td>
+              <strong>${escapeHtml(t.teamName)}</strong>
+              <div style="font: 700 11px var(--mono); color: var(--green);">${escapeHtml(t.registrationId)}</div>
+            </td>
+            <td><span class="neo-pill neo-pill-hassan">${escapeHtml(t.college)}</span></td>
+            <td>
+              <div>${escapeHtml(t.leader?.name || '—')}</div>
+              <div style="font: 600 11px var(--mono); color: var(--muted);">${escapeHtml(t.leader?.mobile || '—')}</div>
+            </td>
+            <td>
+              <div style="font: 600 12px var(--mono);">
+                ${t.checkIn?.checkedInAt ? new Date(t.checkIn.checkedInAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : '—'}
+              </div>
+            </td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <button type="button" class="button button-ghost" style="padding: 4px 10px; font-size: 11px;" onclick="lookupGateTeam('${t.registrationId}')" title="Modify allocated seat">
+                  <i class="fa-solid fa-pen-to-square"></i> Edit
+                </button>
+                <button type="button" class="button button-ghost" style="padding: 4px 8px; font-size: 11px; color: var(--red); border-color: var(--red);" onclick="resetGateCheckIn('${t.registrationId}', '${escapeHtml(t.teamName)}')" title="Undo check-in">
+                  <i class="fa-solid fa-undo"></i> Undo
+                </button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error('Error loading check-ins:', err);
+      }
+    }
+
+    // Lookup Team by Reg ID / Barcode / Pass Token
+    async function lookupGateTeam(query) {
+      if (!query || !String(query).trim()) return;
+      const cleanQ = String(query).trim();
+
+      const feedback = document.getElementById('gateActionFeedback');
+      if (feedback) feedback.style.display = 'none';
+
+      try {
+        const res = await fetch(`/api/admin/checkin/lookup/${encodeURIComponent(cleanQ)}`, {
+          headers: { 'Authorization': 'Bearer ' + authToken }
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Team not found.');
+
+        currentGateTeam = data.team;
+        renderGateTeamCard(data.team);
+      } catch (err) {
+        alert('Lookup failed: ' + err.message);
+      }
+    }
+
+    // Reset / Undo Check-in
+    async function resetGateCheckIn(regId, teamName) {
+      if (!confirm(`Are you sure you want to cancel / undo check-in for team "${teamName}" (${regId})?`)) {
+        return;
+      }
+      try {
+        const res = await fetch(`/api/admin/checkin/${encodeURIComponent(regId)}/reset`, {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + authToken }
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to reset check-in.');
+        await loadCheckInRoster();
+        const card = document.getElementById('gateScannedTeamCard');
+        if (currentGateTeam && currentGateTeam.registrationId === regId && card) {
+          card.style.display = 'none';
+          currentGateTeam = null;
+        }
+      } catch (err) {
+        alert('Could not reset check-in: ' + err.message);
+      }
+    }
+
+    function renderGateTeamCard(team) {
+      const card = document.getElementById('gateScannedTeamCard');
+      card.style.display = 'block';
+
+      document.getElementById('gateTeamNameDisplay').textContent = team.teamName;
+      document.getElementById('gateRegIdDisplay').textContent = team.registrationId;
+      document.getElementById('gateTeamCollegeBadge').textContent = team.college;
+      document.getElementById('gateLeaderName').textContent = team.leader?.name || '—';
+      document.getElementById('gateLeaderMobile').textContent = team.leader?.mobile || '—';
+      document.getElementById('gatePayStatus').textContent = (team.paymentStatus || 'pending').toUpperCase();
+      document.getElementById('gateSquadCount').textContent = `${team.membersCount || team.totalMembers || 5} Members`;
+
+      const statusBadge = document.getElementById('gateCheckInStatusBadge');
+      const seatInput = document.getElementById('gateSeatInput');
+      const btnConfirm = document.getElementById('btnConfirmCheckIn');
+
+      if (team.isCheckedIn) {
+        statusBadge.innerHTML = `<span class="neo-pill neo-pill-verified"><i class="fa-solid fa-check-double"></i> CHECKED IN</span>`;
+        seatInput.value = team.allocatedSeat || '';
+        btnConfirm.innerHTML = `<i class="fa-solid fa-arrows-rotate" style="margin-right: 6px;"></i> Update Allocated Seat`;
+      } else {
+        statusBadge.innerHTML = `<span class="neo-pill" style="background: #FEF3C7; color: #92400E;"><i class="fa-solid fa-hourglass-half"></i> NOT CHECKED IN</span>`;
+        seatInput.value = team.allocatedSeat || '';
+        btnConfirm.innerHTML = `<i class="fa-solid fa-check-double" style="margin-right: 6px;"></i> Confirm Check-in &amp; Allocate Seat`;
+      }
+
+      seatInput.focus();
+    }
+
+    // Confirm Check-in Button Click
+    const btnConfirmCheckIn = document.getElementById('btnConfirmCheckIn');
+    if (btnConfirmCheckIn) {
+      btnConfirmCheckIn.addEventListener('click', async () => {
+        if (!currentGateTeam) return;
+
+        const seatNumber = document.getElementById('gateSeatInput').value.trim();
+        if (!seatNumber) {
+          alert('Please enter the allocated seat/desk number (e.g. DESK #12).');
+          document.getElementById('gateSeatInput').focus();
+          return;
+        }
+
+        btnConfirmCheckIn.disabled = true;
+        btnConfirmCheckIn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+
+        try {
+          const res = await fetch(`/api/admin/checkin/${encodeURIComponent(currentGateTeam.registrationId)}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + authToken
+            },
+            body: JSON.stringify({ seatNumber })
+          });
+          const d = await res.json();
+          if (!res.ok) throw new Error(d.error || 'Check-in failed.');
+
+          // Play success chime
+          playSuccessChime();
+
+          const feedback = document.getElementById('gateActionFeedback');
+          feedback.style.display = 'block';
+          feedback.style.background = '#DCFCE7';
+          feedback.style.borderColor = 'var(--green)';
+          feedback.style.color = 'var(--green-dark)';
+          feedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${escapeHtml(d.message)}`;
+
+          currentGateTeam.isCheckedIn = true;
+          currentGateTeam.allocatedSeat = seatNumber;
+          renderGateTeamCard(currentGateTeam);
+
+          loadGateCheckins();
+        } catch (err) {
+          alert('Check-in error: ' + err.message);
+        } finally {
+          btnConfirmCheckIn.disabled = false;
+        }
+      });
+    }
+
+    // Gate Barcode / Input lookup
+    const btnGateLookup = document.getElementById('btnGateLookup');
+    const gateScanInput = document.getElementById('gateScanInput');
+    if (btnGateLookup && gateScanInput) {
+      btnGateLookup.addEventListener('click', () => lookupGateTeam(gateScanInput.value));
+      gateScanInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          lookupGateTeam(gateScanInput.value);
+        }
+      });
+    }
+
+    document.getElementById('btnRefreshCheckins')?.addEventListener('click', loadGateCheckins);
+
+    // Camera Scanner on Gate Tab
+    const btnToggleGateCamera = document.getElementById('btnToggleGateCamera');
+    const gateCameraPlaceholder = document.getElementById('gateCameraPlaceholder');
+    const gateCameraSelect = document.getElementById('gateCameraSelect');
+
+    if (btnToggleGateCamera) {
+      btnToggleGateCamera.addEventListener('click', async () => {
+        if (isGateCameraRunning) {
+          stopGateCamera();
+        } else {
+          startGateCamera();
+        }
+      });
+    }
+
+    async function startGateCamera() {
+      if (typeof Html5Qrcode === 'undefined') {
+        alert('Scanner library is still loading. Please try again in a few moments.');
+        return;
+      }
+      try {
+        if (!gateCameraInstance) {
+          gateCameraInstance = new Html5Qrcode('gateQrReader');
+        }
+
+        const cameras = await Html5Qrcode.getCameras();
+        if (!cameras || !cameras.length) {
+          alert('No camera detected on this device. Please use the barcode input or USB scanner.');
+          return;
+        }
+
+        if (gateCameraSelect) {
+          gateCameraSelect.innerHTML = '';
+          cameras.forEach((cam, i) => {
+            const opt = document.createElement('option');
+            opt.value = cam.id;
+            opt.textContent = cam.label || `Camera ${i + 1}`;
+            gateCameraSelect.appendChild(opt);
+          });
+        }
+
+        let chosenCamId = cameras[0].id;
+        const rear = cameras.find(c => /back|rear|environment/i.test(c.label));
+        if (rear) chosenCamId = rear.id;
+        if (gateCameraSelect) gateCameraSelect.value = chosenCamId;
+
+        if (gateCameraPlaceholder) gateCameraPlaceholder.style.display = 'none';
+
+        await gateCameraInstance.start(
+          chosenCamId,
+          { fps: 10, qrbox: { width: 200, height: 200 }, aspectRatio: 1.0 },
+          (decodedText) => {
+            handleGateQrDecoded(decodedText);
+          },
+          (err) => {}
+        );
+
+        isGateCameraRunning = true;
+        btnToggleGateCamera.innerHTML = '<i class="fa-solid fa-video-slash"></i> Stop Camera';
+        btnToggleGateCamera.className = 'button button-outline';
+      } catch (e) {
+        console.error('Gate camera error:', e);
+        alert('Could not start camera: ' + e.message);
+      }
+    }
+
+    async function stopGateCamera() {
+      if (gateCameraInstance && isGateCameraRunning) {
+        try {
+          await gateCameraInstance.stop();
+        } catch (e) {}
+        isGateCameraRunning = false;
+        if (gateCameraPlaceholder) gateCameraPlaceholder.style.display = 'block';
+        if (btnToggleGateCamera) {
+          btnToggleGateCamera.innerHTML = '<i class="fa-solid fa-video"></i> Start Camera Scanner';
+          btnToggleGateCamera.className = 'button button-dark';
+        }
+      }
+    }
+
+    function handleGateQrDecoded(decoded) {
+      if (!decoded) return;
+      let regId = decoded.trim();
+      try {
+        const parsed = JSON.parse(decoded);
+        if (parsed.regId) regId = parsed.regId;
+        else if (parsed.token) regId = parsed.token;
+      } catch (e) {}
+
+      if (gateScanInput) gateScanInput.value = regId;
+      lookupGateTeam(regId);
     }
 
     // Resilient Marquee Scroller for all motion environments
