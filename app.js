@@ -144,6 +144,20 @@ export const S4_CONFIG = {
       url: '#',
       logo: 'images/compass-logo.png',
       alt: 'COMPASS — Computer Science Students Association, GECH'
+    },
+    {
+      name: 'GLUE',
+      tier: 'partner',
+      url: '#',
+      logo: 'images/glue-logo.png',
+      alt: 'GLUE — Open Source Developers Club, GECH'
+    },
+    {
+      name: 'MITRAKOOTA',
+      tier: 'partner',
+      url: '#',
+      logo: 'images/mitrakoota-logo.png',
+      alt: 'Mitrakoota — Alumni Association, GEC Hassan'
     }
   ],
   venue: {
