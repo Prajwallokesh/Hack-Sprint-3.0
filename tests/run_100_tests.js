@@ -25,8 +25,8 @@ function getRegisterUrl() {
   return BASE_URL;
 }
 
-const ADMIN_USER = (process.env.ADMIN_USERNAME || 'admin').trim().replace(/^["']|["']$/g, '');
-const ADMIN_PASS = (process.env.ADMIN_PASSWORD || 'HackSprint2026!').trim().replace(/^["']|["']$/g, '');
+const ADMIN_USER = (process.env.ADMIN_USERNAME || 'Rishank').trim().replace(/^["']|["']$/g, '');
+const ADMIN_PASS = (process.env.ADMIN_PASSWORD || 'HackSprint3@').trim().replace(/^["']|["']$/g, '');
 const ADMIN_TOKEN = Buffer.from(`${ADMIN_USER}:${ADMIN_PASS}`).toString('base64');
 const TEAM_SECRET = process.env.TEAM_SECRET || 'HackSprint2026_TeamPortal_Auth_Secret_Key';
 
@@ -118,10 +118,12 @@ function assert(condition, message) {
     assert(text.includes('REGISTRATION') || text.includes('registrationForm'), 'Expected registration page content');
   });
 
-  await runTest('T04', 'Core System', 'GET /admin serves admin operations console', async () => {
-    const res = await fetch(`${BASE_URL}/admin`);
-    assert(res.status === 200, `Expected 200, got ${res.status}`);
-    const text = await res.text();
+  await runTest('T04', 'Core System', 'GET /hack and /admin serves admin operations console', async () => {
+    const resHack = await fetch(`${BASE_URL}/hack`);
+    assert(resHack.status === 200, `Expected 200 for /hack, got ${resHack.status}`);
+    const resAdmin = await fetch(`${BASE_URL}/admin`);
+    assert(resAdmin.status === 200, `Expected 200 for /admin, got ${resAdmin.status}`);
+    const text = await resHack.text();
     assert(text.includes('ADMIN') || text.includes('adminLoginCard'), 'Expected admin portal HTML');
   });
 

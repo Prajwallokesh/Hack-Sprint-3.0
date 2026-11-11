@@ -1267,8 +1267,8 @@
             <label class="admin-label" for="adminUser">
               <i class="fa-solid fa-user-shield" style="color: var(--green);"></i> USERNAME
             </label>
-            <input type="text" id="adminUser" class="admin-login-input" value="admin" required
-              autocomplete="username" />
+            <input type="text" id="adminUser" class="admin-login-input" placeholder="Admin username" required
+              autocomplete="off" spellcheck="false" />
           </div>
 
           <div class="admin-field-group">
@@ -1276,8 +1276,8 @@
               <i class="fa-solid fa-key" style="color: var(--green);"></i> PASSWORD
             </label>
             <div class="pass-input-wrap">
-              <input type="password" id="adminPass" class="admin-login-input" value="HackSprint2026!" required
-                autocomplete="current-password" />
+              <input type="password" id="adminPass" class="admin-login-input" placeholder="••••••••••••" required
+                autocomplete="new-password" />
               <button type="button" class="btn-pass-toggle" id="btnTogglePass" aria-label="Toggle password visibility">
                 <i class="fa-regular fa-eye" id="passToggleIcon"></i>
               </button>
@@ -1988,7 +1988,9 @@
       loginError.style.display = 'none';
 
       const username = document.getElementById('adminUser').value.trim();
-      const password = document.getElementById('adminPass').value.trim();
+      const passEl = document.getElementById('adminPass');
+      const password = passEl.value.trim();
+      passEl.value = '';
 
       try {
         const res = await fetch('/api/admin/login', {
@@ -2024,20 +2026,14 @@
       });
     }
 
-    // Auto-fill default credentials
-    const btnAutoFill = document.getElementById('btnAutoFill');
-    if (btnAutoFill) {
-      btnAutoFill.addEventListener('click', () => {
-        const u = document.getElementById('adminUser');
-        const p = document.getElementById('adminPass');
-        if (u) u.value = 'admin';
-        if (p) p.value = 'HackSprint2026!';
-      });
-    }
 
     document.getElementById('btnLogout').addEventListener('click', () => {
       localStorage.removeItem('hacksprint_admin_token');
       authToken = '';
+      const u = document.getElementById('adminUser');
+      const p = document.getElementById('adminPass');
+      if (u) u.value = '';
+      if (p) p.value = '';
       dashboardScreen.style.display = 'none';
       adminNavLinks.style.display = 'none';
       loginScreen.style.display = 'block';

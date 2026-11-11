@@ -96,10 +96,17 @@ function normalizeMongoUri(uri) {
   return uri;
 }
 const MONGODB_URI = normalizeMongoUri(process.env.MONGODB_URI || 'mongodb://hacksprint-3:Qwert%40123@cluster0-shard-00-00.ntr55o.mongodb.net:27017,cluster0-shard-00-01.ntr55o.mongodb.net:27017,cluster0-shard-00-02.ntr55o.mongodb.net:27017/hacksprint3?ssl=true&replicaSet=atlas-e5tips-shard-0&authSource=admin');
-const ADMIN_USERNAME = (process.env.ADMIN_USERNAME || 'admin').trim().replace(/^["']|["']$/g, '');
-const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || 'HackSprint2026!').trim().replace(/^["']|["']$/g, '');
+const ADMIN_USERNAME = (process.env.ADMIN_USERNAME || 'Rishank').trim().replace(/^[\"']|[\"']$/g, '');
+const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || 'HackSprint3@').trim().replace(/^[\"']|[\"']$/g, '');
 const ADMIN_TOKEN = Buffer.from(`${ADMIN_USERNAME}:${ADMIN_PASSWORD}`).toString('base64');
-const DEFAULT_ADMIN_TOKEN = Buffer.from('admin:HackSprint2026!').toString('base64');
+
+function safeCompare(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string') return false;
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  if (bufA.length !== bufB.length) return false;
+  return crypto.timingSafeEqual(bufA, bufB);
+}
 
 // College Quotas: GEC Hassan (30), GEC Arsikere (5), GEC Mosalehosahalli (5)
 const COLLEGE_QUOTAS = {
@@ -358,7 +365,7 @@ async function syncCollegeQuotas() {
 // Connect to MongoDB
 mongoose.connect(MONGODB_URI)
   .then(async () => {
-    console.log(` Connected to MongoDB: ${MONGODB_URI}`);
+    console.log(` Connected to MongoDB: ${MONGODB_URI.replace(/:([^@]+)@/, ':****@')}`);
     await syncCollegeQuotas();
   })
   .catch((err) => {
@@ -373,7 +380,7 @@ function requireAdmin(req, res, next) {
   }
   const token = authHeader.replace(/^(Bearer|Basic)\s+/i, '').trim();
 
-  if (token === ADMIN_TOKEN || token === DEFAULT_ADMIN_TOKEN) {
+  if (safeCompare(token, ADMIN_TOKEN)) {
     return next();
   }
   return res.status(403).json({ error: 'Forbidden. Invalid admin credentials.' });
@@ -386,8 +393,12 @@ app.get('/register', (req, res) => {
   res.sendFile(path.join(__dirname, 'register.html'));
 });
 
+app.get('/hack', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hack.html'));
+});
+
 app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin.html'));
+  res.sendFile(path.join(__dirname, 'hack.html'));
 });
 
 app.get('/team', (req, res) => {
@@ -869,17 +880,20 @@ app.post('/api/register', rateLimitRegistrations, uploadScreenshot, async (req, 
 // 1. Admin Login
 app.post('/api/admin/login', (req, res) => {
   const { username, password } = req.body || {};
-  const cleanUser = (username || '').trim();
-  const cleanPass = (password || '').trim();
+  if (typeof username !== 'string' || typeof password !== 'string') {
+    return res.status(401).json({ error: 'Invalid username or password.' });
+  }
+  const cleanUser = username.trim();
+  const cleanPass = password.trim();
 
-  const isUserValid = cleanUser === ADMIN_USERNAME || cleanUser === 'admin';
-  const isPassValid = cleanPass === ADMIN_PASSWORD || cleanPass === 'HackSprint2026!';
+  const isUserValid = cleanUser.toLowerCase() === ADMIN_USERNAME.toLowerCase();
+  const isPassValid = safeCompare(cleanPass, ADMIN_PASSWORD);
 
   if (isUserValid && isPassValid) {
     return res.json({
       success: true,
-      token: ADMIN_TOKEN || DEFAULT_ADMIN_TOKEN,
-      username: cleanUser
+      token: ADMIN_TOKEN,
+      username: ADMIN_USERNAME
     });
   }
   return res.status(401).json({ error: 'Invalid username or password.' });
@@ -1837,5 +1851,5 @@ app.listen(PORT, () => {
   console.log(`\n>> HackSprint 3.0 Server is LIVE:`);
   console.log(`   ➜ Landing Page:  http://localhost:${PORT}/`);
   console.log(`   ➜ Register Page: http://localhost:${PORT}/register`);
-  console.log(`   ➜ Admin Portal:  http://localhost:${PORT}/admin\n`);
+  console.log(`   ➜ Admin Portal:  http://localhost:${PORT}/hack\n`);
 });

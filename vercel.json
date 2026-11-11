@@ -6,8 +6,12 @@
       "destination": "/register.html"
     },
     {
+      "source": "/hack",
+      "destination": "/hack.html"
+    },
+    {
       "source": "/admin",
-      "destination": "/admin.html"
+      "destination": "/hack.html"
     },
     {
       "source": "/api/:path*",
