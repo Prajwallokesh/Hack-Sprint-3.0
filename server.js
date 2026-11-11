@@ -490,6 +490,26 @@ app.get('/api/seats-status', async (req, res) => {
 // --------------------------------------------------------------------------
 // Public API: Team Registration (Hardened & Secure)
 // --------------------------------------------------------------------------
+// Helper to atomically find the next available seat number for a college quota (fills gaps & prevents duplicate key collisions)
+async function getNextAvailableSeatNumber(college, quotaLimit) {
+  try {
+    const existingSeats = await Registration.distinct('seatNumber', {
+      college,
+      isWaitlist: false,
+      seatNumber: { $ne: null }
+    });
+    const occupiedSet = new Set(existingSeats.map(Number));
+    for (let i = 1; i <= quotaLimit; i++) {
+      if (!occupiedSet.has(i)) {
+        return i;
+      }
+    }
+  } catch (err) {
+    console.error('Error finding next available seat number:', err.message);
+  }
+  return null;
+}
+
 app.post('/api/register', rateLimitRegistrations, uploadScreenshot, async (req, res) => {
   const cleanupFile = () => {
     if (req.file && req.file.path && fs.existsSync(req.file.path)) {
@@ -752,7 +772,7 @@ app.post('/api/register', rateLimitRegistrations, uploadScreenshot, async (req, 
       if (reserved) {
         // Seat successfully won!
         isWaitlist = false;
-        seatNumber = reserved.confirmedCount;
+        seatNumber = await getNextAvailableSeatNumber(college, quotaLimit) || reserved.confirmedCount;
         screenshotPath = `/uploads/payments/${req.file.filename}`;
         transactionId = rawTxId;
         expectedFee = college === 'GEC Hassan' ? 100 : 400;
@@ -824,18 +844,33 @@ app.post('/api/register', rateLimitRegistrations, uploadScreenshot, async (req, 
       registeredAt: registeredDate
     });
 
-    try {
-      await newRegistration.save();
-    } catch (saveErr) {
-      // Rollback reserved confirmed seat counter if document save failed!
-      if (!isWaitlist && seatNumber) {
-        await CollegeQuota.updateOne(
-          { college },
-          { $inc: { confirmedCount: -1 } }
-        );
+    let saveSuccess = false;
+    let maxRetries = 3;
+    while (!saveSuccess && maxRetries > 0) {
+      try {
+        await newRegistration.save();
+        saveSuccess = true;
+      } catch (saveErr) {
+        // If seatNumber had a collision due to any gap or concurrent race, allocate next available seat and retry
+        if (saveErr.code === 11000 && (saveErr.keyPattern?.seatNumber || (saveErr.message && saveErr.message.includes('seatNumber')))) {
+          maxRetries--;
+          const nextSeat = await getNextAvailableSeatNumber(college, quotaLimit);
+          if (nextSeat && maxRetries > 0) {
+            newRegistration.seatNumber = nextSeat;
+            seatNumber = nextSeat;
+            continue;
+          }
+        }
+        // Rollback reserved confirmed seat counter if document save permanently failed!
+        if (!isWaitlist && seatNumber) {
+          await CollegeQuota.updateOne(
+            { college },
+            { $inc: { confirmedCount: -1 } }
+          );
+        }
+        cleanupFile();
+        throw saveErr;
       }
-      cleanupFile();
-      throw saveErr;
     }
 
     const whatsappGroupUrl = isWaitlist ? WHATSAPP_WAITLIST_URL : WHATSAPP_CONFIRMED_URL;
@@ -869,6 +904,18 @@ app.post('/api/register', rateLimitRegistrations, uploadScreenshot, async (req, 
   } catch (err) {
     console.error('Error saving registration:', err);
     cleanupFile();
+    if (err.code === 11000) {
+      if (err.keyPattern?.teamName || (err.message && err.message.includes('teamName'))) {
+        return res.status(400).json({ error: 'A team with this name is already registered. Please choose another team name.' });
+      }
+      if (err.keyPattern?.['leader.usn'] || (err.message && err.message.includes('leader.usn'))) {
+        return res.status(400).json({ error: 'This Leader USN is already registered in another team.' });
+      }
+      if (err.keyPattern?.['members.usn'] || (err.message && err.message.includes('members.usn'))) {
+        return res.status(400).json({ error: 'One or more member USNs are already registered in another team.' });
+      }
+      return res.status(400).json({ error: 'Registration failed due to a duplicate record conflict. Please review your details and try again.' });
+    }
     return res.status(500).json({ error: err.message || 'Internal server error while saving registration.' });
   }
 });
