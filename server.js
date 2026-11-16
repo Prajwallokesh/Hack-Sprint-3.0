@@ -1568,12 +1568,14 @@ app.post('/api/admin/first-years/upload-excel', requireAdmin, excelUpload.single
       }
 
       validCount++;
+      // If mobile or email is present, match on contact to support shared placeholder USNs
+      const matchFilter = mobile ? { mobile } : (email ? { email } : { usn, name });
       ops.push({
         updateOne: {
-          filter: { usn },
+          filter: matchFilter,
           update: {
             $setOnInsert: { isAssigned: false, assignedTeamId: null, assignedTeamName: null, assignedAt: null },
-            $set: { name, mobile, email, branch, section }
+            $set: { name, usn, mobile, email, branch, section }
           },
           upsert: true
         }
@@ -1641,13 +1643,13 @@ app.get('/api/admin/first-years', requireAdmin, async (req, res) => {
 // 9.3 Manual Assign First-Year Student to Team
 app.post('/api/admin/first-years/assign', requireAdmin, async (req, res) => {
   try {
-    const { registrationId, studentUsn } = req.body;
-    if (!registrationId || !studentUsn) {
-      return res.status(400).json({ error: 'Both Registration ID and Student USN are required.' });
+    const { registrationId, studentUsn, studentId } = req.body;
+    if (!registrationId || (!studentUsn && !studentId)) {
+      return res.status(400).json({ error: 'Both Registration ID and Student (USN or ID) are required.' });
     }
 
     const cleanRegId = String(registrationId).trim().toUpperCase();
-    const cleanUsn = String(studentUsn).trim().toUpperCase();
+    const cleanUsn = studentUsn ? String(studentUsn).trim().toUpperCase() : '';
 
     const team = await Registration.findOne({
       $or: [
@@ -1661,8 +1663,16 @@ app.post('/api/admin/first-years/assign', requireAdmin, async (req, res) => {
       return res.status(400).json({ error: `Team "${team.teamName}" already has 2 assigned first-year builders.` });
     }
 
-    const student = await FirstYearStudent.findOne({ usn: cleanUsn });
-    if (!student) return res.status(404).json({ error: `Student with USN "${cleanUsn}" not found in first-year pool.` });
+    let student = null;
+    if (studentId && mongoose.Types.ObjectId.isValid(studentId)) {
+      student = await FirstYearStudent.findById(studentId);
+    } else if (studentUsn && mongoose.Types.ObjectId.isValid(studentUsn)) {
+      student = await FirstYearStudent.findById(studentUsn);
+    } else if (cleanUsn) {
+      student = await FirstYearStudent.findOne({ usn: cleanUsn });
+    }
+
+    if (!student) return res.status(404).json({ error: `Student not found in first-year pool.` });
 
     if (student.isAssigned) {
       return res.status(400).json({
@@ -1670,7 +1680,10 @@ app.post('/api/admin/first-years/assign', requireAdmin, async (req, res) => {
       });
     }
 
-    const alreadyOnTeam = team.assignedFirstYears?.some(s => s.usn === cleanUsn);
+    const alreadyOnTeam = team.assignedFirstYears?.some(s => 
+      (s.studentId && student._id && s.studentId.toString() === student._id.toString()) ||
+      (cleanUsn && s.usn === cleanUsn && s.name === student.name)
+    );
     if (alreadyOnTeam) {
       return res.status(400).json({ error: `Student ${student.name} is already assigned to this team.` });
     }
@@ -1707,13 +1720,13 @@ app.post('/api/admin/first-years/assign', requireAdmin, async (req, res) => {
 // 9.4 Manual Unassign First-Year Student from Team
 app.post('/api/admin/first-years/unassign', requireAdmin, async (req, res) => {
   try {
-    const { registrationId, studentUsn } = req.body;
-    if (!registrationId || !studentUsn) {
-      return res.status(400).json({ error: 'Both Registration ID and Student USN are required.' });
+    const { registrationId, studentUsn, studentId, studentName } = req.body;
+    if (!registrationId || (!studentUsn && !studentId && !studentName)) {
+      return res.status(400).json({ error: 'Both Registration ID and Student identifier are required.' });
     }
 
     const cleanRegId = String(registrationId).trim().toUpperCase();
-    const cleanUsn = String(studentUsn).trim().toUpperCase();
+    const cleanUsn = studentUsn ? String(studentUsn).trim().toUpperCase() : '';
 
     const team = await Registration.findOne({
       $or: [
@@ -1723,17 +1736,43 @@ app.post('/api/admin/first-years/unassign', requireAdmin, async (req, res) => {
     });
     if (!team) return res.status(404).json({ error: 'Team not found.' });
 
-    team.assignedFirstYears = (team.assignedFirstYears || []).filter(s => s.usn !== cleanUsn);
+    let targetStudentId = (studentId && mongoose.Types.ObjectId.isValid(studentId)) ? String(studentId) : null;
+    if (!targetStudentId && studentUsn && mongoose.Types.ObjectId.isValid(studentUsn)) {
+      targetStudentId = String(studentUsn);
+    }
+
+    let unassignedStudentId = targetStudentId;
+
+    team.assignedFirstYears = (team.assignedFirstYears || []).filter(s => {
+      if (targetStudentId && s.studentId && s.studentId.toString() === targetStudentId) {
+        return false;
+      }
+      if (studentName && s.name && s.name.trim().toLowerCase() === studentName.trim().toLowerCase()) {
+        if (!unassignedStudentId && s.studentId) unassignedStudentId = s.studentId.toString();
+        return false;
+      }
+      if (cleanUsn && cleanUsn !== '4GH26CS006' && s.usn === cleanUsn) {
+        if (!unassignedStudentId && s.studentId) unassignedStudentId = s.studentId.toString();
+        return false;
+      }
+      return true;
+    });
     await team.save();
 
-    await FirstYearStudent.updateOne(
-      { usn: cleanUsn },
-      { $set: { isAssigned: false, assignedTeamId: null, assignedTeamName: null, assignedAt: null } }
-    );
+    if (unassignedStudentId) {
+      await FirstYearStudent.findByIdAndUpdate(unassignedStudentId, {
+        $set: { isAssigned: false, assignedTeamId: null, assignedTeamName: null, assignedAt: null }
+      });
+    } else if (cleanUsn && cleanUsn !== '4GH26CS006') {
+      await FirstYearStudent.updateOne(
+        { usn: cleanUsn },
+        { $set: { isAssigned: false, assignedTeamId: null, assignedTeamName: null, assignedAt: null } }
+      );
+    }
 
     return res.json({
       success: true,
-      message: `Unassigned student ${cleanUsn} from "${team.teamName}". Student returned to pool.`,
+      message: `Unassigned student from "${team.teamName}". Student returned to pool.`,
       assignedFirstYears: team.assignedFirstYears
     });
   } catch (err) {

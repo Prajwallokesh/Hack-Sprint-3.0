@@ -758,10 +758,6 @@
         grid-template-columns: 1fr;
         gap: 20px;
       }
-      .fy-team-row {
-        grid-template-columns: 1fr;
-        gap: 14px;
-      }
     }
 
     @media (max-width: 960px) {
@@ -1096,13 +1092,16 @@
       background: #FFFFFF;
       border: var(--border-ink);
       box-shadow: 3px 3px 0 var(--ink);
-      padding: 16px;
+      padding: 16px 20px;
       margin-bottom: 16px;
       display: grid;
-      grid-template-columns: 260px 1fr 340px;
-      gap: 16px;
+      grid-template-columns: minmax(220px, 1.1fr) minmax(250px, 1.4fr) minmax(280px, 1.5fr);
+      gap: 18px;
       align-items: center;
       transition: transform 0.15s ease;
+      overflow: hidden;
+      box-sizing: border-box;
+      width: 100%;
     }
 
     .fy-team-row:hover {
@@ -1158,16 +1157,30 @@
     .fy-assign-controls {
       display: flex;
       gap: 8px;
+      align-items: center;
+      width: 100%;
+      min-width: 0;
     }
 
     .fy-student-select {
-      flex: 1;
+      flex: 1 1 0%;
+      min-width: 0 !important;
+      max-width: 100%;
       background: #FFFFFF;
       border: 1.5px solid var(--ink);
       font: 700 12px var(--mono);
       padding: 8px 10px;
       box-shadow: 2px 2px 0 var(--ink);
       outline: none;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      box-sizing: border-box;
+    }
+
+    .fy-assign-controls .button {
+      flex-shrink: 0 !important;
+      white-space: nowrap;
     }
 
     .fy-status-badge {
@@ -1193,9 +1206,34 @@
       border-color: #92400E;
     }
 
-    @media (max-width: 992px) {
+    @media (max-width: 1180px) {
+      .fy-team-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .fy-team-row > div:nth-child(3) {
+        grid-column: 1 / -1;
+        padding-top: 12px;
+        border-top: 1.5px dashed var(--line);
+      }
+    }
+
+    @media (max-width: 768px) {
       .fy-team-row {
         grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 14px 16px;
+      }
+      .fy-team-row > div:nth-child(3) {
+        grid-column: auto;
+      }
+      .fy-assign-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .fy-assign-controls .button {
+        width: 100%;
+        justify-content: center;
       }
     }
   </style>
@@ -2658,7 +2696,7 @@
                 <strong>${escapeHtml(s.name)}</strong> <code style="font-size: 11px;">(${escapeHtml(s.usn)})</code>
                 <span style="font-size: 11px; color: var(--muted); margin-left: 4px;">[${escapeHtml(s.branch || 'CSE')}]</span>
               </div>
-              <button type="button" class="fy-unassign-btn" onclick="unassignStudentFromTeam('${escapeHtml(team.registrationId)}', '${escapeHtml(s.usn)}')">✕ Unassign</button>
+              <button type="button" class="fy-unassign-btn" onclick="unassignStudentFromTeam('${escapeHtml(team.registrationId)}', '${escapeHtml(s.usn)}', '${escapeHtml(s.studentId || s._id || '')}', '${escapeHtml(s.name)}')">✕ Unassign</button>
             </div>
           `).join('');
         } else {
@@ -2672,7 +2710,7 @@
             assignControlHtml = `<div style="font: 700 11.5px var(--mono); color: var(--red); padding: 4px 0;"><i class="fa-solid fa-triangle-exclamation"></i> First-year pool empty. Upload more students above.</div>`;
           } else {
             const options = availableStudents.map(s => `
-              <option value="${escapeHtml(s.usn)}">${escapeHtml(s.usn)} - ${escapeHtml(s.name)} (${escapeHtml(s.branch || 'CSE')}-${escapeHtml(s.section || 'A')})</option>
+              <option value="${escapeHtml(s._id || s.usn)}">${escapeHtml(s.name)} (${escapeHtml(s.usn)} - Sec ${escapeHtml(s.section || 'A')})</option>
             `).join('');
             assignControlHtml = `
               <div class="fy-assign-controls" style="margin-top: 6px;">
@@ -2735,7 +2773,7 @@
       assignStudentToTeam(registrationId, selectEl.value);
     };
 
-    window.assignStudentToTeam = async function(registrationId, studentUsn) {
+    window.assignStudentToTeam = async function(registrationId, studentIdentifier) {
       try {
         const res = await fetch('/api/admin/first-years/assign', {
           method: 'POST',
@@ -2743,7 +2781,11 @@
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + authToken
           },
-          body: JSON.stringify({ registrationId, studentUsn })
+          body: JSON.stringify({ 
+            registrationId, 
+            studentId: studentIdentifier, 
+            studentUsn: studentIdentifier 
+          })
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to allot student.');
@@ -2755,8 +2797,9 @@
       }
     };
 
-    window.unassignStudentFromTeam = async function(registrationId, studentUsn) {
-      if (!confirm(`Are you sure you want to remove ${studentUsn} from this team and return them to the available pool?`)) {
+    window.unassignStudentFromTeam = async function(registrationId, studentUsn, studentId, studentName) {
+      const displayName = studentName ? `"${studentName}"` : (studentUsn || 'this student');
+      if (!confirm(`Are you sure you want to unassign ${displayName} from this team and return them to the available pool?`)) {
         return;
       }
       try {
@@ -2766,7 +2809,7 @@
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + authToken
           },
-          body: JSON.stringify({ registrationId, studentUsn })
+          body: JSON.stringify({ registrationId, studentUsn, studentId, studentName })
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to unassign student.');

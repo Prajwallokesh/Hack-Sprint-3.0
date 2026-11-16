@@ -9,7 +9,6 @@ const FirstYearStudentSchema = new mongoose.Schema({
   usn: {
     type: String,
     required: true,
-    unique: true,
     uppercase: true,
     trim: true,
     index: true
