@@ -1695,11 +1695,14 @@
       if (!container) return;
 
       const isHassan = team.college && team.college.includes('Hassan');
+      const coreCount = 1 + (team.members ? team.members.length : 0);
+      const fyCount = (team.assignedFirstYears ? team.assignedFirstYears.length : 0);
+      const activeCount = coreCount + fyCount;
       const subtitleEl = document.getElementById('squadArchitectureSubtitle');
       if (subtitleEl) {
-        subtitleEl.textContent = isHassan
-          ? '5-Builder squad architecture: Core builders paired with allocated 1st-year mentees for 24 hours of non-stop hacking.'
-          : 'Complete official registered squad for 24 hours of non-stop hacking.';
+        subtitleEl.innerHTML = isHassan
+          ? `<strong>${activeCount} / 5 Builders Confirmed</strong>: ${coreCount} Core Builders + ${fyCount} First-Year Mentees Allotted. ${coreCount < 3 ? '<span style="color: var(--green-dark); font-weight: 700;">(Slot open to add 3rd member below)</span>' : ''}`
+          : `<strong>${activeCount} Builders Confirmed</strong>: Complete official registered squad for 24 hours of non-stop hacking.`;
       }
 
       let html = '';

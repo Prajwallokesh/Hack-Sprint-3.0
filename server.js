@@ -1089,7 +1089,9 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
     const totalTeams = all.length;
     const waitlistTeams = all.filter(r => r.isWaitlist).length;
     const confirmedTeams = totalTeams - waitlistTeams;
-    const totalParticipants = all.reduce((sum, r) => sum + (r.totalMembers || 1), 0);
+    const coreParticipants = all.reduce((sum, r) => sum + (r.totalMembers || (1 + (r.members ? r.members.length : 0))), 0);
+    const assignedFyCount = all.reduce((sum, r) => sum + (r.assignedFirstYears ? r.assignedFirstYears.length : 0), 0);
+    const totalParticipants = coreParticipants + assignedFyCount;
     const hassanTeams = all.filter(r => r.college === 'GEC Hassan').length;
     const otherTeams = totalTeams - hassanTeams;
     const totalCollected = all.reduce((sum, r) => sum + (r.payment && r.payment.amount ? r.payment.amount : 0), 0);
@@ -1104,6 +1106,8 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
         confirmedTeams,
         waitlistTeams,
         totalParticipants,
+        coreParticipants,
+        assignedFyCount,
         hassanTeams,
         otherTeams,
         totalCollected,
