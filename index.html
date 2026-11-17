@@ -116,66 +116,65 @@
         aria-label="Close notification modal">&times;</button>
 
       <div class="modal-content">
-        <div class="modal-badge">
-          <span class="modal-badge-dot" aria-hidden="true"></span>
-          <span>REGISTRATIONS LIVE</span>
+        <div class="modal-badge modal-badge-closed">
+          <span class="modal-badge-dot modal-badge-dot-red" aria-hidden="true"></span>
+          <span>REGISTRATIONS CLOSED</span>
         </div>
 
         <h2 class="modal-title" id="postponedTitle">
-          REGISTER FOR<br /><span class="modal-title-accent">HACKSPRINT 3.0</span>
+          REGISTRATIONS CLOSED<br /><span class="modal-title-accent" style="color: var(--blue);">WELCOME TEAMS!</span>
         </h2>
 
         <p class="modal-lead" id="postponedDesc">
-          Team registrations are officially open! Join passionate student developers, designers, and innovators for
-          <strong>24 hours of non-stop building</strong> at Government Engineering College, Hassan.
+          Online team registrations for HackSprint 3.0 have officially closed. All registered squads can now access their <strong>Team Dashboard</strong> to view squad details, check 1st-year mentee allotment, and download their official <strong>Digital Entry Pass</strong>.
         </p>
 
-        <!-- Registration Deadline Alert -->
-        <div class="modal-deadline-banner">
-          <div class="modal-deadline-icon" aria-hidden="true">
-            <i class="fa-solid fa-hourglass-half"></i>
+        <!-- Digital Entry Pass & Spot Verification Alert -->
+        <div class="modal-pass-banner">
+          <div class="modal-pass-icon" aria-hidden="true">
+            <i class="fa-solid fa-id-card-clip"></i>
           </div>
-          <div class="modal-deadline-info">
-            <span class="modal-deadline-tag">REGISTRATION DEADLINE</span>
-            <strong class="modal-deadline-val">Registration closes on 17 Nov, 11:59:00 PM</strong>
+          <div class="modal-pass-info">
+            <span class="modal-pass-tag">DIGITAL ENTRY PASS &amp; GATE VERIFICATION</span>
+            <strong class="modal-pass-val">Download your team QR Pass for Spot Check-in on Nov 21!</strong>
           </div>
         </div>
 
-        <!-- Hackathon Key Highlights -->
-        <div class="modal-facts-grid" role="list" aria-label="Event Highlights">
+        <!-- Team Dashboard Highlights Grid -->
+        <div class="modal-facts-grid" role="list" aria-label="Team Portal Features">
           <div class="modal-fact-card" role="listitem">
-            <span class="modal-fact-icon" aria-hidden="true"><i class="fa-solid fa-clock"></i></span>
+            <span class="modal-fact-icon" aria-hidden="true"><i class="fa-solid fa-key"></i></span>
             <div class="modal-fact-info">
-              <span class="modal-fact-label">Duration</span>
-              <strong class="modal-fact-val">24h Offline Sprint</strong>
+              <span class="modal-fact-label">Team Login</span>
+              <strong class="modal-fact-val">Reg ID + Mobile</strong>
             </div>
           </div>
           <div class="modal-fact-card" role="listitem">
-            <span class="modal-fact-icon" aria-hidden="true"><i class="fa-solid fa-users"></i></span>
+            <span class="modal-fact-icon" aria-hidden="true"><i class="fa-solid fa-qrcode"></i></span>
             <div class="modal-fact-info">
-              <span class="modal-fact-label">Team Size</span>
-              <strong class="modal-fact-val">5 Members</strong>
+              <span class="modal-fact-label">Gate Pass</span>
+              <strong class="modal-fact-val">Digital QR Pass</strong>
             </div>
           </div>
           <div class="modal-fact-card" role="listitem">
-            <span class="modal-fact-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+            <span class="modal-fact-icon" aria-hidden="true"><i class="fa-solid fa-user-graduate"></i></span>
             <div class="modal-fact-info">
-              <span class="modal-fact-label">Venue</span>
-              <strong class="modal-fact-val">GEC Hassan</strong>
+              <span class="modal-fact-label">Mentees</span>
+              <strong class="modal-fact-val">2 Freshmen Allotted</strong>
             </div>
           </div>
           <div class="modal-fact-card" role="listitem">
-            <span class="modal-fact-icon" aria-hidden="true"><i class="fa-solid fa-lightbulb"></i></span>
+            <span class="modal-fact-icon" aria-hidden="true"><i class="fa-solid fa-calendar-check"></i></span>
             <div class="modal-fact-info">
-              <span class="modal-fact-label">Theme</span>
-              <strong class="modal-fact-val">Open Innovation</strong>
+              <span class="modal-fact-label">Offline Sprint</span>
+              <strong class="modal-fact-val">Nov 21–22 @ GEC Hassan</strong>
             </div>
           </div>
         </div>
 
         <div class="modal-actions">
-          <a href="/register" class="button button-primary modal-action-btn modal-btn-register">
-            Register Your Team Now <span aria-hidden="true">&rarr;</span>
+          <a href="/team" class="button button-primary modal-action-btn modal-btn-dashboard">
+            <i class="fa-solid fa-right-to-bracket" style="margin-right: 6px;"></i> Team Login &amp; Dashboard &rarr;
           </a>
           <button type="button" class="button button-ghost modal-action-btn modal-btn-explore" id="modalAcknowledgeBtn">
             Explore Hackathon &darr;

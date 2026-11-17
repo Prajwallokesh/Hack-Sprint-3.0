@@ -5962,6 +5962,78 @@ body.modal-open {
   margin-bottom: 14px;
 }
 
+/* Closed Registration Badge */
+.modal-badge-closed {
+  background: #FCE8E6;
+  color: #991B1B;
+  border: 1.5px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.modal-badge-dot-red {
+  background: #EA4335 !important;
+  box-shadow: 0 0 6px rgba(234, 67, 53, 0.7) !important;
+}
+
+/* Digital Pass Notice Banner in Modal */
+.modal-pass-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #F0FDF4;
+  border: 2px solid var(--ink);
+  box-shadow: 2.5px 2.5px 0 var(--ink);
+  padding: 10px 14px;
+  margin-bottom: 18px;
+}
+
+.modal-pass-icon {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--green);
+  color: #FFFFFF;
+  border: 1.5px solid var(--ink);
+  font-size: 16px;
+  flex-shrink: 0;
+  box-shadow: 1.5px 1.5px 0 var(--ink);
+}
+
+.modal-pass-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.modal-pass-tag {
+  font: 800 10px / 1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green-dark);
+}
+
+.modal-pass-val {
+  font: 800 clamp(0.92rem, 1.3vw, 1.02rem) / 1.25 var(--display);
+  color: #14532D;
+  letter-spacing: -0.01em;
+}
+
+.modal-btn-dashboard {
+  flex: 1.4;
+  justify-content: center;
+  text-align: center;
+  padding: 13px 18px;
+  font: 800 13.5px var(--mono);
+  text-decoration: none;
+  border-width: 2.5px;
+  border-color: var(--ink);
+  border-radius: 0;
+  background: var(--green);
+  color: var(--ink);
+}
+
 /* Registration Deadline Urgency Banner in Modal */
 .modal-deadline-banner {
   display: flex;
