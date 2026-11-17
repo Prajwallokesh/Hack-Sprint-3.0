@@ -1373,7 +1373,6 @@
             <div class="neo-kpi-bar" style="background: var(--red);"></div>
             <div class="neo-kpi-title">TOTAL BUILDERS</div>
             <div class="neo-kpi-value" id="metricBuilders">0</div>
-            <div id="metricBuildersSub" style="font: 700 11px var(--mono); color: var(--green-dark); margin-top: 4px; display: none;"></div>
           </div>
           <div class="neo-kpi-card">
             <div class="neo-kpi-bar" style="background: var(--green);"></div>
@@ -2134,11 +2133,6 @@
           const s = data.stats;
           document.getElementById('metricTeams').textContent = s.totalTeams;
           document.getElementById('metricBuilders').textContent = s.totalParticipants;
-          const buildersSub = document.getElementById('metricBuildersSub');
-          if (buildersSub && s.assignedFyCount > 0) {
-            buildersSub.textContent = `(${s.coreParticipants} Core + ${s.assignedFyCount} 1st-Yr)`;
-            buildersSub.style.display = 'block';
-          }
           document.getElementById('metricHassan').textContent = s.hassanTeams;
           document.getElementById('metricOthers').textContent = s.otherTeams;
           document.getElementById('metricRevenue').textContent = '₹' + s.totalCollected.toLocaleString('en-IN');
@@ -2249,12 +2243,7 @@
             <div style="font-weight: 600;">${leaderName}</div>
             <div style="font-family: var(--mono); font-size: 11px; color: var(--muted);">${leaderUsn}</div>
           </td>
-          <td>
-            <div style="font-family: var(--mono); font-weight: 800; font-size: 13.5px; color: var(--ink); white-space: nowrap;">
-              ${realCount} <span style="font-weight: 500; font-size: 11.5px; color: var(--muted);">builders</span>
-            </div>
-            ${fyCount > 0 ? `<div style="font: 700 10.5px var(--mono); color: var(--green-dark);">${coreCount} Core + ${fyCount} 1st-Yr</div>` : ''}
-          </td>
+          <td><span style="font-family: var(--mono); font-weight: 700;">${realCount}</span> builders</td>
           <td><strong style="font-family: var(--display); font-size: 16px;">₹${r.payment ? r.payment.amount : 0}</strong></td>
           <td><span class="neo-pill ${pillClass}">${displayStatus}</span></td>
           <td>
