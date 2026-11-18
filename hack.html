@@ -1535,12 +1535,17 @@
                 Allot 2 first-year builders to each registered GEC Hassan team. Dashboard entry passes unlock only after <strong>Payment is Verified AND 2 Freshmen are Allotted</strong>.
               </p>
             </div>
-            <div style="display: flex; gap: 10px; align-items: center;">
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
               <select id="fyTeamFilterSelect" class="neo-filter-select" style="font-size: 12px; padding: 6px 12px;">
                 <option value="all">All GEC Hassan Teams</option>
                 <option value="needs_allocation">Needs Freshmen (&lt; 2)</option>
                 <option value="ready">Fully Allotted (2/2)</option>
               </select>
+              <button type="button" class="button button-ghost" id="btnResetAllFyAllotments" 
+                style="padding: 6px 12px; font-size: 12px; color: var(--red); border-color: var(--red); font-weight: 700;"
+                onclick="resetAllFirstYearAllotments()" title="Unassign all first years and return them to the available pool">
+                <i class="fa-solid fa-arrows-rotate" style="margin-right: 5px;"></i> Reset All Allotments
+              </button>
             </div>
           </div>
 
@@ -2717,7 +2722,7 @@
             assignControlHtml = `<div style="font: 700 11.5px var(--mono); color: var(--red); padding: 4px 0;"><i class="fa-solid fa-triangle-exclamation"></i> First-year pool empty. Upload more students above.</div>`;
           } else {
             const options = availableStudents.map(s => `
-              <option value="${escapeHtml(s._id || s.usn)}">${escapeHtml(s.name)} (${escapeHtml(s.usn)} - Sec ${escapeHtml(s.section || 'A')})</option>
+              <option value="${escapeHtml(s._id)}" data-name="${escapeHtml(s.name)}">${escapeHtml(s.name)} (Sec ${escapeHtml(s.section || 'CS')})</option>
             `).join('');
             assignControlHtml = `
               <div class="fy-assign-controls" style="margin-top: 6px;">
@@ -2777,10 +2782,12 @@
         alert('Please choose a student from the dropdown list to allot.');
         return;
       }
-      assignStudentToTeam(registrationId, selectEl.value);
+      const selectedOption = selectEl.options[selectEl.selectedIndex];
+      const studentName = selectedOption ? selectedOption.getAttribute('data-name') : '';
+      assignStudentToTeam(registrationId, selectEl.value, studentName);
     };
 
-    window.assignStudentToTeam = async function(registrationId, studentIdentifier) {
+    window.assignStudentToTeam = async function(registrationId, studentId, studentName) {
       try {
         const res = await fetch('/api/admin/first-years/assign', {
           method: 'POST',
@@ -2790,8 +2797,8 @@
           },
           body: JSON.stringify({ 
             registrationId, 
-            studentId: studentIdentifier, 
-            studentUsn: studentIdentifier 
+            studentId,
+            studentName
           })
         });
         const data = await res.json();
@@ -2799,13 +2806,14 @@
         showToast(`✓ ${data.message}`);
         await loadRegistrations();
         await loadFirstYears();
+        await loadStats();
       } catch (err) {
         alert(err.message);
       }
     };
 
     window.unassignStudentFromTeam = async function(registrationId, studentUsn, studentId, studentName) {
-      const displayName = studentName ? `"${studentName}"` : (studentUsn || 'this student');
+      const displayName = studentName ? `"${studentName}"` : 'this student';
       if (!confirm(`Are you sure you want to unassign ${displayName} from this team and return them to the available pool?`)) {
         return;
       }
@@ -2816,13 +2824,36 @@
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + authToken
           },
-          body: JSON.stringify({ registrationId, studentUsn, studentId, studentName })
+          body: JSON.stringify({ registrationId, studentId, studentName, studentUsn })
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to unassign student.');
         showToast(`✓ ${data.message}`);
         await loadRegistrations();
         await loadFirstYears();
+        await loadStats();
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    window.resetAllFirstYearAllotments = async function() {
+      if (!confirm('⚠️ DANGER: Are you sure you want to UNASSIGN ALL first-year students from all teams?\n\nThis will clear all 1st-year team allotments and return all students back to the available pool.')) {
+        return;
+      }
+      try {
+        const res = await fetch('/api/admin/first-years/reset-all', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + authToken
+          }
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to reset first-year allotments.');
+        showToast(`✓ ${data.message}`);
+        await loadRegistrations();
+        await loadFirstYears();
+        await loadStats();
       } catch (err) {
         alert(err.message);
       }
